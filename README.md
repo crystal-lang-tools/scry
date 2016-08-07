@@ -1,6 +1,6 @@
 # Scry
 
-{<img src="https://travis-ci.org/kofno/scry.png?branch=master" />}[https://travis-ci.org/kofno/scry]
+[<img src="https://travis-ci.org/kofno/scry.png?branch=master" />](https://travis-ci.org/kofno/scry)
 
 Scry is a code analysis server for [Crystal](http://crystal-lang.org).
 It is an implementation of a [common language protocol](https://code.visualstudio.com/blogs/2016/06/27/common-language-protocol).
