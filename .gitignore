@@ -1,0 +1,8 @@
+/doc/
+/libs/
+/.crystal/
+/.shards/
+.DS_Store
+*.out
+
+
