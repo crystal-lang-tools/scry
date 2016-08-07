@@ -9,12 +9,19 @@ The server is implemented in Crystal.
 
 ## Installation
 
-The server will be distrubted as part of the [Crystal IDE](https://github.com/kofno/crystal-ide) extension
+Scry will be distrubted as part of the [Crystal IDE](https://github.com/kofno/crystal-ide) extension
 for VSCode.
 
 TODO: Binary distrubtions
 
-TODO: Distribute as a shard?
+You can also add it to your `shard.yml`:
+
+```yaml
+dependencies:
+  mysql:
+    github: kofno/scry
+    version: ~> 0.1
+```
 
 ## Usage
 
@@ -22,11 +29,24 @@ Install on your path and then run Scry at the command line.
 
     $> scry
 
-## Development
+## Development && Roadmap
 
-Close the repo and build using `crystal build`. Please observe the implicit code conventions.
+Ongoing, in my free time.
 
-Ask if you have questions.
+The goal is too implement all of the currently supported Language Server Features.
+
+ * Document Highlights: highlights all 'equal' symbols in a text document.
+ * Hover: provides hover information for a symbol selected in a text document.
+ * Signature Help: provides signature help for a symbol selected in a text document.
+ * Goto Definition: provides go to definition support for a symbol selected in a text document.
+ * Find References: finds all project-wide references for a symbol selected in a text document.
+ * List Document Symbols: lists all symbols defined in a text document.
+ * List Workspace Symbols: lists all project-wide symbols.
+ * Code Actions: compute commands for a given text document and range.
+ * CodeLens: compute CodeLens statistics for a given text document. (OK, maybe not this one)
+ * Document Formatting: this includes formatting of whole documents, document ranges and formatting on type.
+ * Rename: project-wide rename of a symbol.
+
 
 ## Contributing
 
