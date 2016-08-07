@@ -1,13 +1,13 @@
 require "json"
 require "./notification"
-require "../workspace"
+require "./diagnostic"
 
 module Scry
 
   struct PublishDiagnosticsNotification
 
     @uri : String
-    @diagnostics : Array(Workspace::Diagnostic)
+    @diagnostics : Array(Diagnostic)
 
     private property :uri
     private property :diagnostics

@@ -1,8 +1,7 @@
 require "json"
+require "../commands/*"
 
 module Scry
-
-
 
   struct RemoteProcedureCall
     JSON.mapping({
