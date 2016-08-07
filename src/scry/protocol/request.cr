@@ -32,7 +32,8 @@ module Scry
       Log.logger.debug raw_header
 
       if raw_header.nil?
-        raise IO::EOFError.new("Unexpected end of input")
+        Log.logger.warn("Connection with client lost")
+        nil
       else
         header = raw_header.chomp
         header.size == 0 ? nil : header

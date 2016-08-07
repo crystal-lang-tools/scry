@@ -3,6 +3,14 @@ require "../commands/*"
 
 module Scry
 
+  struct RemoteProcedureCallNoParams
+    JSON.mapping({
+      jsonrpc: String,
+      id: Int32,
+      method: String
+    }, true)
+  end
+
   struct RemoteProcedureCall
     JSON.mapping({
       jsonrpc: String,
@@ -16,13 +24,20 @@ module Scry
     JSON.mapping({
       jsonrpc: String,
       method: String,
-      params: DidChangeConfigurationParams | TextDocument
+      params: (
+        DidChangeConfigurationParams |
+        TextDocument |
+        DidChangeTextDocumentParams |
+        DidSaveTextDocumentParams |
+        DidChangeWatchedFilesParams |
+        DidCloseTextDocumentParams
+      )
     }, true)
   end
 
   class InvalidContentError < Exception; end
 
-  ProcedureType = RemoteProcedureCall | NotificationEvent
+  ProcedureType = RemoteProcedureCall | NotificationEvent | RemoteProcedureCallNoParams
 
   struct Procedure
 

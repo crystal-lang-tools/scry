@@ -20,6 +20,11 @@ module Scry
       procedure.is_a?(NotificationEvent).should be_true
     end
 
+    it "handles no-argument procedure calls" do
+      procedure = Procedure.new(SHUTDOWN_EXAMPLE).parse
+      procedure.is_a?(RemoteProcedureCallNoParams).should be_true
+    end
+
   end
 
 end

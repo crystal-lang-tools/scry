@@ -1,3 +1,5 @@
+require "json"
+
 module Scry
 
   struct BuildFailure
@@ -5,7 +7,7 @@ module Scry
       file: String,
       line: Int32,
       column: Int32,
-      size: Int32,
+      size: Int32 | Nil,
       message: String
     )
   end
@@ -43,7 +45,7 @@ module Scry
             range.field "end" do
               io.json_object do |pos|
                 pos.field "line", @bf.line
-                pos.field "character", @bf.column + @bf.size - 1
+                pos.field "character", @bf.column + (@bf.size || 0) - 1
               end
             end
           end

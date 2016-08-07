@@ -33,6 +33,7 @@ module Scry
     end
 
     private def to_diagnostics(ex)
+      Log.logger.debug(ex.to_json)
       build_failures = Array(BuildFailure).from_json(ex.to_json)
       build_failures
         .map { |bf| Diagnostic.new(bf) }
