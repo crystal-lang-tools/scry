@@ -28,6 +28,8 @@ module Scry
 
   def send_response(io, result, rpc)
     # Some things don't get responses
+    # TODO: Type guard this better
+    Log.logger.debug("No reponse sent")
   end
 
   def create_response(id, json)

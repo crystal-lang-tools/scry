@@ -26,11 +26,10 @@ module Scry
       method: String,
       params: (
         DidChangeConfigurationParams |
-        TextDocument |
+        DidOpenTextDocumentParams |
         DidChangeTextDocumentParams |
-        DidSaveTextDocumentParams |
-        DidChangeWatchedFilesParams |
-        DidCloseTextDocumentParams
+        DidOpOnTextDocumentParams |
+        DidChangeWatchedFilesParams
       )
     }, true)
   end

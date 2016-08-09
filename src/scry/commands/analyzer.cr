@@ -1,39 +1,40 @@
 require "../workspace"
-require "../protocol/text_document"
 require "compiler/crystal/**"
 
 module Scry
 
   class Analyzer
 
-    private getter! workspace : Workspace
-    private getter! document : TextDocument
+    private getter workspace : Workspace
+    private getter uri : String
+    private getter text : String
+    private getter filename : String
 
-    def initialize(@workspace, params : TextDocument)
-      @document = params
+    def initialize(@workspace, params : DidOpenTextDocumentParams)
+      @uri = params.text_document.uri
+      @filename = @uri.sub("file://", "")
+      @text = params.text_document.text
     end
 
-    def initialize(@workspace, anything)
-      raise "Can't analyze #{anything.inspect}"
+    def initialize(@workspace, params : DidOpOnTextDocumentParams)
+      @uri = params.text_document.uri
+      @filename = @uri.sub("file://", "")
+      @text = read_file
     end
 
     def run
-      source = Crystal::Compiler::Source.new(
-        document.text_document.uri.sub("file://", ""),
-        document.text_document.text
-      )
+      source = Crystal::Compiler::Source.new(filename, text)
       compiler = Crystal::Compiler.new
       compiler.color = false
       compiler.no_codegen = true
       compiler.compile source, source.filename + ".out"
 
-      { workspace, nil }
+      { workspace, [clean_diagnostic] }
     rescue ex : Crystal::Exception
       { workspace, to_diagnostics(ex) }
     end
 
     private def to_diagnostics(ex)
-      Log.logger.debug(ex.to_json)
       build_failures = Array(BuildFailure).from_json(ex.to_json)
       build_failures
         .map { |bf| Diagnostic.new(bf) }
@@ -43,10 +44,19 @@ module Scry
         }
     end
 
-    private def to_json(ex)
-      String.build { |io| ex.to_json(io) }
+    private def clean_diagnostic
+      PublishDiagnosticsNotification.new(
+        uri,
+        [] of Diagnostic
+      )
     end
 
+    private def read_file : String
+      File.read(filename)
+    rescue ex : IO::Error
+      Log.logger.warn ex.message
+      ""
+    end
 
   end
 

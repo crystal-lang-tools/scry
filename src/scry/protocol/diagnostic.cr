@@ -44,7 +44,7 @@ module Scry
             end
             range.field "end" do
               io.json_object do |pos|
-                pos.field "line", @bf.line
+                pos.field "line", @bf.line - 1
                 pos.field "character", @bf.column + (@bf.size || 0) - 1
               end
             end

@@ -2,7 +2,7 @@ require "json"
 
 module Scry
 
-  struct TextDocument
+  struct DidOpenTextDocumentParams
     JSON.mapping({
       text_document: { type: TextDocumentItem, key: "textDocument" }
     }, true)

@@ -23,44 +23,45 @@ module Scry
       end
     end
 
-    def dispatch(rpc : Scry::RemoteProcedureCall)
-      case rpc.method
-      when "initialize"
-        initializer = Initialize.new(rpc.params)
-        @workspace, response = initializer.run
-
-        response
-
-      else
-        raise UnrecognizedProcedureError.new(rpc.method)
-      end
+    def dispatch(rpc : Scry::RemoteProcedureCall | Scry::NotificationEvent)
+      dispatch(rpc.params, rpc.method)
     end
 
-    def dispatch(notification : NotificationEvent)
-      case notification.method
-      when "workspace/didChangeConfiguration"
-        updater = UpdateConfig.new(workspace, notification.params)
-        @workspace, response = updater.run
+    def dispatch(params : InitializeParams, method_name)
+      initializer = Initialize.new(params)
+      @workspace, response = initializer.run
+      response
+    end
 
-        response
+    def dispatch(params : DidChangeConfigurationParams, method_name)
+      updater = UpdateConfig.new(workspace, params)
+      @workspace, response = updater.run
+      response
+    end
 
-      when "textDocument/didOpen"
-        analyzer = Analyzer.new(workspace, notification.params)
-        @workspace, response = analyzer.run
+    def dispatch(params : DidOpenTextDocumentParams, method_name)
+      analyzer = Analyzer.new(workspace, params)
+      @workspace, response = analyzer.run
+      response
+    end
 
-        response
+    def dispatch(params : DidChangeTextDocumentParams, method_name)
+      # TODO: parse changes and return warning diagnostics
+      nil
+    end
 
-      when "textDocument/didChange"
-        #TODO: parse changes and return warning diagnostics
-        nil
+    def dispatch(params : DidChangeWatchedFilesParams, method_name)
+      #TODO: handle created, update, and deleted files
+      nil
+    end
+
+    def dispatch(params : DidOpOnTextDocumentParams, method_name)
+      case method_name
 
       when "textDocument/didSave"
-        #TODO: read file contents and analyzer
-        nil
-
-      when "workspace/didChangeWatchedFiles"
-        #TODO: handle created, update, and deleted files
-        nil
+        analyzer = Analyzer.new(workspace, params)
+        @workspace, response = analyzer.run
+        response
 
       when "textDocument/didClose"
         #TODO: handle closing a document
@@ -68,7 +69,7 @@ module Scry
 
       else
         raise UnrecognizedProcedureError.new(
-          "Unrecognized procedure: #{notification.method}"
+          "Didn't recognize procedures: #{method_name}"
         )
       end
     end

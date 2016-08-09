@@ -1,4 +1,5 @@
 require "json"
+require "./file_event"
 
 module Scry
 
