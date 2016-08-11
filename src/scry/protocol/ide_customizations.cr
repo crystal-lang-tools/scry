@@ -1,3 +1,5 @@
+require "json"
+
 module Scry
 
   struct IDECustomizations

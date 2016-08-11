@@ -12,6 +12,10 @@ module Scry
     private property :uri
     private property :diagnostics
 
+    def self.empty(uri)
+      new(uri, [] of Diagnostic)
+    end
+
     def initialize(@uri, @diagnostics)
     end
 

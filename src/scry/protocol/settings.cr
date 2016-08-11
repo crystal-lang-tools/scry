@@ -1,3 +1,6 @@
+require "json"
+require "./ide_customizations"
+
 module Scry
   struct Settings
     JSON.mapping({

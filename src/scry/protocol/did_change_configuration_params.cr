@@ -1,3 +1,6 @@
+require "json"
+require "./settings"
+
 module Scry
 
   struct DidChangeConfigurationParams

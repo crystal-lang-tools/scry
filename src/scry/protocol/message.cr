@@ -1,5 +1,10 @@
 require "json"
 require "./did_change_configuration_params"
+require "./did_open_text_document_params"
+require "./did_change_text_document_params"
+require "./did_op_on_text_document_params"
+require "./did_change_watched_files_params"
+require "./initialize_params"
 
 module Scry
 

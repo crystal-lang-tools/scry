@@ -6,6 +6,8 @@ module Scry
 
   EnvironmentConfig.new.run
 
+  SOME_FILE_PATH = File.expand_path("./fixtures/some_file.cr", __DIR__)
+
   INITIALIZATION_EXAMPLE =
     %({ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "processId": 1, "rootPath": "/foo", "capabilities": {} }})
 
@@ -16,10 +18,13 @@ module Scry
     %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///Users/foo/Projects/crystal_av/src/crystal_av/c_handler.cr","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
 
   DOC_CHANGE_EXAMPLE =
-    %({"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"file:///Users/ryan/Projects/scry/src/scry/response.cr","version":808},"contentChanges":[{"text":"module Scry\n\n  put this\n"}]}})
+    %({"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"file://#{SOME_FILE_PATH}","version":808},"contentChanges":[{"text":"module Scry\n\n  put this\n"}]}})
 
   WATCHED_FILE_CHANGED_EXAMPLE =
-    %({"jsonrpc":"2.0","method":"workspace/didChangeWatchedFiles","params":{"changes":[{"uri":"file:///Users/ryan/Projects/scry/src/scry/response.cr","type":2}]}})
+    %({"jsonrpc":"2.0","method":"workspace/didChangeWatchedFiles","params":{"changes":[{"uri":"file://#{SOME_FILE_PATH}","type":2}]}})
+
+  WATCHED_FILE_DELETED_EXAMPLE =
+    %({"jsonrpc":"2.0","method":"workspace/didChangeWatchedFiles","params":{"changes":[{"uri":"file://#{SOME_FILE_PATH}","type":3}]}})
 
   SHUTDOWN_EXAMPLE = %({"jsonrpc":"2.0","id":1,"method":"shutdown"})
 

@@ -2,6 +2,7 @@ require "json"
 require "./workspace"
 require "./update_config"
 require "./analyzer"
+require "./initialize"
 
 module Scry
 
@@ -84,8 +85,7 @@ module Scry
         response
 
       when FileEventType::Deleted
-        # send empty diagnostics for deleted files
-        nil
+        PublishDiagnosticsNotification.empty(file_event.uri)
 
       when FileEventType::Changed
         analyzer = Analyzer.new(workspace, file_event)
