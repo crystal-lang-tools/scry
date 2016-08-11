@@ -1,3 +1,6 @@
+require "./protocol/*"
+require "./log"
+
 module Scry
 
   class Response
@@ -9,9 +12,14 @@ module Scry
 
     def write(io)
       results.compact.each do |result|
-        io << prepend_header(result.to_json)
+        log_and_write io, prepend_header(result.to_json)
       end
       io.flush
+    end
+
+    private def log_and_write(io, content)
+      Log.logger.debug { %(Content SEND: #{content}) }
+      io << content
     end
 
     private def prepend_header(content : String)
