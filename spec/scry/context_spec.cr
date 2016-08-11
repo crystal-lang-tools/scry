@@ -9,14 +9,20 @@ module Scry
     it "dispatches commands" do
       context = Context.new
 
-      procedure = Procedure.new(INITIALIZATION_EXAMPLE).parse
+      procedure = Message.new(INITIALIZATION_EXAMPLE).parse
       result = context.dispatch(procedure)
       result.is_a?(ServerCapabilities).should be_true
 
-      procedure = Procedure.new(NOTIFICATION_EXAMPLE).parse
+      procedure = Message.new(CONFIG_CHANGE_EXAMPLE).parse
       context.dispatch(procedure)
 
-      procedure = Procedure.new(DOC_OPEN_EXAMPLE).parse
+      procedure = Message.new(DOC_OPEN_EXAMPLE).parse
+      context.dispatch(procedure)
+
+      procedure = Message.new(DOC_CHANGE_EXAMPLE).parse
+      context.dispatch(procedure)
+
+      procedure = Message.new(WATCHED_FILE_CHANGED_EXAMPLE).parse
       context.dispatch(procedure)
     end
 

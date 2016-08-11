@@ -1,9 +1,9 @@
 require "json"
-require "../commands/*"
+require "./did_change_configuration_params"
 
 module Scry
 
-  struct RemoteProcedureCallNoParams
+  struct RequestMessageNoParams
     JSON.mapping({
       jsonrpc: String,
       id: Int32,
@@ -11,7 +11,7 @@ module Scry
     }, true)
   end
 
-  struct RemoteProcedureCall
+  struct RequestMessage
     JSON.mapping({
       jsonrpc: String,
       id: Int32,
@@ -20,7 +20,7 @@ module Scry
     }, true)
   end
 
-  struct NotificationEvent
+  struct NotificationMessage
     JSON.mapping({
       jsonrpc: String,
       method: String,
@@ -36,9 +36,9 @@ module Scry
 
   class InvalidContentError < Exception; end
 
-  ProcedureType = RemoteProcedureCall | NotificationEvent | RemoteProcedureCallNoParams
+  MessageType = RequestMessage | NotificationMessage | RequestMessageNoParams
 
-  struct Procedure
+  struct Message
 
     def initialize(@json : String)
     end
@@ -48,7 +48,7 @@ module Scry
     end
 
     def parse
-      ProcedureType.from_json(@json || "")
+      MessageType.from_json(@json || "")
     end
 
   end

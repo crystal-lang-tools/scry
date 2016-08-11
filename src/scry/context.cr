@@ -1,6 +1,7 @@
 require "json"
 require "./workspace"
-require "./commands/*"
+require "./update_config"
+require "./analyzer"
 
 module Scry
 
@@ -12,56 +13,56 @@ module Scry
 
     private property! workspace : Workspace
 
-    def dispatch(rpc : Scry::RemoteProcedureCallNoParams)
-      case rpc.method
+    def dispatch(msg : Scry::RequestMessageNoParams)
+      case msg.method
       when "shutdown"
         # TODO: Perform shutdown and respond
-        ""
 
-      else
-        raise UnrecognizedProcedureError.new(rpc.method)
       end
     end
 
-    def dispatch(rpc : Scry::RemoteProcedureCall | Scry::NotificationEvent)
-      dispatch(rpc.params, rpc.method)
+    def dispatch(msg : RequestMessage)
+      dispatchRequest(msg.params, msg)
     end
 
-    def dispatch(params : InitializeParams, method_name)
-      initializer = Initialize.new(params)
+    def dispatch(msg : NotificationMessage)
+      dispatchNotification(msg.params, msg)
+    end
+
+    private def dispatchRequest(params : InitializeParams, msg)
+      initializer = Initialize.new(params, msg.id)
       @workspace, response = initializer.run
       response
     end
 
-    def dispatch(params : DidChangeConfigurationParams, method_name)
+    private def dispatchNotification(params : DidChangeConfigurationParams, msg)
       updater = UpdateConfig.new(workspace, params)
       @workspace, response = updater.run
       response
     end
 
-    def dispatch(params : DidOpenTextDocumentParams, method_name)
+    private def dispatchNotification(params : DidOpenTextDocumentParams, msg)
       analyzer = Analyzer.new(workspace, params)
       @workspace, response = analyzer.run
       response
     end
 
-    def dispatch(params : DidChangeTextDocumentParams, method_name)
+    private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
       # TODO: parse changes and return warning diagnostics
       nil
     end
 
-    def dispatch(params : DidChangeWatchedFilesParams, method_name)
-      #TODO: handle created, update, and deleted files
-      nil
+    private def dispatchNotification(params : DidChangeWatchedFilesParams, msg)
+      params.changes.map { |file_event|
+        handle_file_event(file_event)
+      }.compact
     end
 
-    def dispatch(params : DidOpOnTextDocumentParams, method_name)
-      case method_name
+    private def dispatchNotification(params : DidOpOnTextDocumentParams, msg)
+      case msg.method
 
       when "textDocument/didSave"
-        analyzer = Analyzer.new(workspace, params)
-        @workspace, response = analyzer.run
-        response
+        nil
 
       when "textDocument/didClose"
         #TODO: handle closing a document
@@ -69,9 +70,30 @@ module Scry
 
       else
         raise UnrecognizedProcedureError.new(
-          "Didn't recognize procedures: #{method_name}"
+          "Didn't recognize procedure: #{msg.method}"
         )
       end
+    end
+
+    private def handle_file_event(file_event : FileEvent)
+      case file_event.type
+
+      when FileEventType::Created
+        analyzer = Analyzer.new(workspace, file_event)
+        @workspace, response = analyzer.run
+        response
+
+      when FileEventType::Deleted
+        # send empty diagnostics for deleted files
+        nil
+
+      when FileEventType::Changed
+        analyzer = Analyzer.new(workspace, file_event)
+        @workspace, response = analyzer.run
+        response
+
+      end
+
     end
 
   end

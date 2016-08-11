@@ -18,9 +18,11 @@ module Scry
     def to_json(io)
       Notification
         .new("textDocument/publishDiagnostics")
-        .compose_json(io) { |object|
-          object.field "uri", uri
-          object.field "diagnostics", diagnostics
+        .compose_json(io) { |io|
+          io.json_object do |object|
+            object.field "uri", uri
+            object.field "diagnostics", diagnostics
+          end
         }
     end
 

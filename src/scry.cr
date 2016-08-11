@@ -6,36 +6,6 @@ require "json"
 module Scry
   extend self
 
-  def send_response(io, result, rpc : RemoteProcedureCall)
-    json = create_response(rpc.id, result.to_json)
-    out = Response.new(json).to_s
-
-    Log.logger.debug { "SENT Response: #{out}" }
-    io << out
-    io.flush
-  end
-
-  def send_response(io, results : Array(PublishDiagnosticsNotification), rpc)
-    results.each do |notification|
-      Log.logger.debug(notification.to_json)
-      out = Response.new(notification.to_json).to_s
-
-      Log.logger.debug { "SENT Notification: #{out}" }
-      io << out
-    end
-    io.flush
-  end
-
-  def send_response(io, result, rpc)
-    # Some things don't get responses
-    # TODO: Type guard this better
-    Log.logger.debug("No reponse sent")
-  end
-
-  def create_response(id, json)
-    "{ \"jsonrpc\": \"2.0\", \"id\": \"#{id}\", \"result\": #{json} }"
-  end
-
   def start
 
     Log.logger.info { "Scry is looking into your code..." }
@@ -46,9 +16,10 @@ module Scry
 
     loop do
       content = Request.new(STDIN).read
-      request = Procedure.new(content).parse
-      result = context.dispatch(request)
-      send_response(STDOUT, result, request)
+      request = Message.new(content).parse
+      results = context.dispatch(request)
+      response = Response.new([results].flatten)
+      response.write(STDOUT)
     end
 
     Log.logger.info { "...your session has ended" }

@@ -1,4 +1,5 @@
-require "../../spec_helper"
+require "../spec_helper"
+require "../../src/scry/initialize"
 
 module Scry
 
@@ -10,11 +11,11 @@ module Scry
           processId: 1,
           rootPath: "/Users/foo/some_project",
           capabilities: {} of String => String
-        }.to_json)
+        }.to_json),
+        32
       )
       workspace, response = initer.run
       workspace.should_not be_nil
-      response.to_json.should eq(%({"capabilities":{"textDocumentSync":1}}))
     end
 
   end

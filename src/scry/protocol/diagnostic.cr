@@ -5,23 +5,37 @@ module Scry
   struct BuildFailure
     JSON.mapping(
       file: String,
-      line: Int32,
+      line: Int32 | Nil,
       column: Int32,
       size: Int32 | Nil,
       message: String
     )
   end
 
+  enum DiagnosticServerity
+    Error = 1
+    Warning
+    Information
+    Hint
+  end
+
   class Diagnostic
 
-    @bf : BuildFailure
+    private getter filename : String
+    private getter line : Int32
+    private getter column : Int32
+    private getter size : Int32
+    private getter message : String
 
     def initialize(bf : BuildFailure)
-      @bf = bf
+      @filename = bf.file
+      @line = bf.line || 0
+      @column = bf.column
+      @size = bf.size || 0
+      @message = bf.message
     end
 
-    def filename
-      @bf.file
+    def initialize(@filename, @line, @column, @size, @message)
     end
 
     def uri
@@ -38,23 +52,24 @@ module Scry
           io.json_object do |range|
             range.field "start" do
               io.json_object do |pos|
-                pos.field "line", @bf.line - 1
-                pos.field "character", @bf.column - 1
+                pos.field "line", line - 1
+                pos.field "character", column - 1
               end
             end
             range.field "end" do
               io.json_object do |pos|
-                pos.field "line", @bf.line - 1
-                pos.field "character", @bf.column + (@bf.size || 0) - 1
+                pos.field "line", line - 1
+                pos.field "character", column + size - 1
               end
             end
           end
         end
-        object.field "severity", 1 # Right now, everything is an error
+        object.field "severity", DiagnosticServerity::Error
         object.field "source", "Scry [Crystal]"
-        object.field "message", @bf.message
+        object.field "message", message
       end
     end
+
   end
 
 end

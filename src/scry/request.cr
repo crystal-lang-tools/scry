@@ -1,5 +1,5 @@
 require "./headers"
-require "../log"
+require "./log"
 
 module Scry
 

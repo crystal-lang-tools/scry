@@ -1,5 +1,5 @@
 require "../spec_helper"
-require "../../src/scry/protocol/headers"
+require "../../src/scry/headers"
 
 module Scry
 

@@ -1,4 +1,4 @@
-require "../workspace"
+require "./workspace"
 require "compiler/crystal/**"
 
 module Scry
@@ -18,6 +18,12 @@ module Scry
 
     def initialize(@workspace, params : DidOpOnTextDocumentParams)
       @uri = params.text_document.uri
+      @filename = @uri.sub("file://", "")
+      @text = read_file
+    end
+
+    def initialize(@workspace, file_event : FileEvent)
+      @uri = file_event.uri
       @filename = @uri.sub("file://", "")
       @text = read_file
     end
