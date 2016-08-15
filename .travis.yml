@@ -7,7 +7,7 @@ services:
 
 before_install:
   - docker build -t kofno/scry .
-  - docker run kofno/scry /bin/sh -c "cd /opt/scry"
+
 
 script:
-  - crystal spec
+  - docker run kofno/scry /bin/sh -c "cd /opt/scry; crystal spec"
