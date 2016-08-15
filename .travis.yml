@@ -1,1 +1,13 @@
-language: crystal
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t kofno/scry .
+  - docker run kofno/scry /bin/sh -c "cd /opt/scry"
+
+script:
+  - crystal spec
