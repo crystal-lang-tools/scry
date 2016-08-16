@@ -29,7 +29,7 @@ module Scry
 
     def initialize(bf : BuildFailure)
       @filename = bf.file
-      @line = bf.line || 0
+      @line = bf.line || 1
       @column = bf.column
       @size = bf.size || 0
       @message = bf.message

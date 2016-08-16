@@ -2,7 +2,8 @@
 /libs/
 /.crystal/
 /.shards/
+/build
 .DS_Store
 *.out
-
+linux_build.sh
 

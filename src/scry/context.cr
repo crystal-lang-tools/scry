@@ -44,12 +44,12 @@ module Scry
 
     private def dispatchNotification(params : DidOpenTextDocumentParams, msg)
       analyzer = Analyzer.new(workspace, params)
-      @workspace, response = analyzer.run
+      response = analyzer.run
       response
     end
 
     private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
-      # TODO: parse changes and return warning diagnostics
+      # TODO: Parse file on change
       nil
     end
 
@@ -81,7 +81,7 @@ module Scry
 
       when FileEventType::Created
         analyzer = Analyzer.new(workspace, file_event)
-        @workspace, response = analyzer.run
+        response = analyzer.run
         response
 
       when FileEventType::Deleted
@@ -89,7 +89,7 @@ module Scry
 
       when FileEventType::Changed
         analyzer = Analyzer.new(workspace, file_event)
-        @workspace, response = analyzer.run
+        response = analyzer.run
         response
 
       end

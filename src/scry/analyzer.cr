@@ -36,14 +36,16 @@ module Scry
       compiler.no_codegen = true
       compiler.compile source, source.filename + ".out"
 
-      { workspace, [clean_diagnostic] }
+      [clean_diagnostic]
     rescue ex : Crystal::Exception
-      { workspace, to_diagnostics(ex) }
+      to_diagnostics(ex)
     end
 
     private def to_diagnostics(ex)
       build_failures = Array(BuildFailure).from_json(ex.to_json)
       build_failures
+        .uniq
+        .first(workspace.max_number_of_problems)
         .map { |bf| Diagnostic.new(bf) }
         .group_by { |diag| diag.uri }
         .map { |file, diagnostics|
@@ -52,10 +54,7 @@ module Scry
     end
 
     private def clean_diagnostic
-      PublishDiagnosticsNotification.new(
-        uri,
-        [] of Diagnostic
-      )
+      PublishDiagnosticsNotification.empty(uri)
     end
 
     private def read_file : String
