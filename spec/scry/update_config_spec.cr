@@ -17,6 +17,10 @@ module Scry
                   settings.field "crystal-ide" do
                     io.json_object do |crystal_ide|
                       crystal_ide.field "maxNumberOfProblems", 20
+                      crystal_ide.field "backend", "scry"
+                      crystal_ide.field "customCommand", "crystal"
+                      crystal_ide.field "customCommandArgs", [] of String
+                      crystal_ide.field "logLevel", "debug"
                     end
                   end
                 end
