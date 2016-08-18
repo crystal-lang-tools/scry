@@ -1,4 +1,5 @@
 require "./workspace"
+require "./log"
 
 module Scry
 

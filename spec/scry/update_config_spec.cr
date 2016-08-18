@@ -1,5 +1,6 @@
 require "../spec_helper"
 require "json"
+require "../../src/scry/update_config"
 
 module Scry
 
