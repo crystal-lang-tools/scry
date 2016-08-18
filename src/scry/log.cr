@@ -9,7 +9,7 @@ module Scry
     end
 
     private def self.initialize_logger
-      log_filename = File.expand_path("../../scry.out", __DIR__)
+      log_filename = File.expand_path("scry.out", Dir.current)
       log_file = File.open(log_filename, "w")
       logger = Logger.new(log_file)
       logger.level = Logger::DEBUG
