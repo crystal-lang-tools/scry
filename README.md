@@ -24,7 +24,7 @@ You can also add it to your `shard.yml`:
 dependencies:
   mysql:
     github: kofno/scry
-    version: ~> 0.2
+    version: ~> 0.3
 ```
 
 ## Usage
