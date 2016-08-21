@@ -5,13 +5,11 @@ module Scry
 
   class ParseAnalyzer
 
-    def initialize(@workspace, @params : DidChangeTextDocumentParams)
+    def initialize(@workspace : Workspace, @text_document : TextDocument)
     end
 
-    def call
-      params.content_changes.map { |change|
-        parse_source change.text
-      }
+    def run
+      @text_document.text.map { |t| parse_source t }.flatten.uniq
     end
 
     private def parse_source(source : String)
@@ -25,7 +23,27 @@ module Scry
     end
 
     private def filename
-      params.text_document.uri.sub("file://", "")
+      @text_document.filename
+    end
+
+    private def uri
+      @text_document.uri
+    end
+
+    private def clean_diagnostic
+      PublishDiagnosticsNotification.empty(uri)
+    end
+
+    private def to_diagnostics(ex)
+      build_failures = Array(BuildFailure).from_json(ex.to_json)
+      build_failures
+        .uniq
+        .first(@workspace.max_number_of_problems)
+        .map { |bf| Diagnostic.new(bf) }
+        .group_by { |diag| diag.uri }
+        .map { |file, diagnostics|
+          PublishDiagnosticsNotification.new(file, diagnostics)
+        }
     end
 
   end

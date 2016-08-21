@@ -43,14 +43,20 @@ module Scry
     end
 
     private def dispatchNotification(params : DidOpenTextDocumentParams, msg)
-      analyzer = Analyzer.new(workspace, params)
-      response = analyzer.run
-      response
+      text_document = TextDocument.new(params)
+
+      unless text_document.in_memory?
+        analyzer = Analyzer.new(workspace, text_document)
+        response = analyzer.run
+        response
+      end
     end
 
     private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
-      # TODO: Parse file on change
-      nil
+      text_document = TextDocument.new(params)
+      analyzer = ParseAnalyzer.new(workspace, text_document)
+      response = analyzer.run
+      response
     end
 
     private def dispatchNotification(params : DidChangeWatchedFilesParams, msg)
@@ -60,13 +66,14 @@ module Scry
     end
 
     private def dispatchNotification(params : DidOpOnTextDocumentParams, msg)
+      text_document = TextDocument.new(params)
+
       case msg.method
 
       when "textDocument/didSave"
         nil
 
       when "textDocument/didClose"
-        #TODO: handle closing a document
         nil
 
       else
@@ -77,18 +84,20 @@ module Scry
     end
 
     private def handle_file_event(file_event : FileEvent)
+      text_document = TextDocument.new(file_event)
+
       case file_event.type
 
       when FileEventType::Created
-        analyzer = Analyzer.new(workspace, file_event)
+        analyzer = Analyzer.new(workspace, text_document)
         response = analyzer.run
         response
 
       when FileEventType::Deleted
-        PublishDiagnosticsNotification.empty(file_event.uri)
+        PublishDiagnosticsNotification.empty(text_document.uri)
 
       when FileEventType::Changed
-        analyzer = Analyzer.new(workspace, file_event)
+        analyzer = Analyzer.new(workspace, text_document)
         response = analyzer.run
         response
 

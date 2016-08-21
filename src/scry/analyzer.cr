@@ -1,5 +1,6 @@
 require "./workspace"
 require "./log"
+require "./text_document"
 require "compiler/crystal/**"
 
 module Scry
@@ -7,30 +8,17 @@ module Scry
   class Analyzer
 
     private getter workspace : Workspace
-    private getter uri : String
-    private getter text : String
-    private getter filename : String
+    private getter text_document : TextDocument
 
-    def initialize(@workspace, params : DidOpenTextDocumentParams)
-      @uri = params.text_document.uri
-      @filename = @uri.sub("file://", "")
-      @text = params.text_document.text
-    end
-
-    def initialize(@workspace, params : DidOpOnTextDocumentParams)
-      @uri = params.text_document.uri
-      @filename = @uri.sub("file://", "")
-      @text = read_file
-    end
-
-    def initialize(@workspace, file_event : FileEvent)
-      @uri = file_event.uri
-      @filename = @uri.sub("file://", "")
-      @text = read_file
+    def initialize(@workspace, @text_document)
     end
 
     def run
-      source = Crystal::Compiler::Source.new(filename, text)
+      text.map { |t| analyze(t) }.flatten.uniq
+    end
+
+    private def analyze(some_text)
+      source = Crystal::Compiler::Source.new(filename, some_text)
       compiler = Crystal::Compiler.new
       compiler.color = false
       compiler.no_codegen = true
@@ -57,11 +45,16 @@ module Scry
       PublishDiagnosticsNotification.empty(uri)
     end
 
-    private def read_file : String
-      File.read(filename)
-    rescue ex : IO::Error
-      Log.logger.warn ex.message
-      ""
+    private def filename
+      text_document.filename
+    end
+
+    private def text
+      text_document.text
+    end
+
+    private def uri
+      text_document.uri
     end
 
   end

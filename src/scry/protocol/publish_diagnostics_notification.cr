@@ -34,5 +34,9 @@ module Scry
       String.build { |io| to_json(io) }
     end
 
+    def empty?
+      diagnostics.empty?
+    end
+
   end
 end
