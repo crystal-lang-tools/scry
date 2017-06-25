@@ -10,8 +10,9 @@ module Scry
       @workspace = Workspace.new(
         root_path: params.root_path,
         process_id: params.process_id,
-        max_number_of_problems: 100
+        problems_limit: 100
       )
+      ENV["CRYSTAL_PATH"] = %(#{@workspace.root_path}/lib:#{ENV["CRYSTAL_PATH"]})
     end
 
     def run
