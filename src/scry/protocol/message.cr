@@ -25,6 +25,12 @@ module Scry
     }, true)
   end
 
+  struct Trace
+    JSON.mapping(
+      value: String
+    )
+  end
+
   struct NotificationMessage
     JSON.mapping({
       jsonrpc: String,
@@ -34,7 +40,8 @@ module Scry
         DidOpenTextDocumentParams |
         DidChangeTextDocumentParams |
         DidOpOnTextDocumentParams |
-        DidChangeWatchedFilesParams
+        DidChangeWatchedFilesParams |
+        Trace
       )
     }, true)
   end
