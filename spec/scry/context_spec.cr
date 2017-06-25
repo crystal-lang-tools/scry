@@ -1,11 +1,8 @@
 require "../spec_helper"
 require "../../src/scry/context"
 
-
 module Scry
-
   describe Context do
-
     it "dispatches commands" do
       context = Context.new
 
@@ -29,8 +26,5 @@ module Scry
       result = context.dispatch(procedure)
       result.to_json.should eq(%([{"jsonrpc":"2.0","method":"textDocument/publishDiagnostics","params":{"uri":"file://#{SOME_FILE_PATH}","diagnostics":[]}}]))
     end
-
-
   end
-
 end
