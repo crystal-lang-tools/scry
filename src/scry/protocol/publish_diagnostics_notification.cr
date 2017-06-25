@@ -3,9 +3,7 @@ require "./notification"
 require "./diagnostic"
 
 module Scry
-
-  struct PublishDiagnosticsNotification
-
+  struct PublishDiagnosticsNotification < Notification
     @uri : String
     @diagnostics : Array(Diagnostic)
 
@@ -17,26 +15,34 @@ module Scry
     end
 
     def initialize(@uri, @diagnostics)
+      super("textDocument/publishDiagnostics", @uri, @diagnostics)
     end
 
-    def to_json(io)
-      Notification
-        .new("textDocument/publishDiagnostics")
-        .compose_json(io) { |io|
-          io.json_object do |object|
-            object.field "uri", uri
-            object.field "diagnostics", diagnostics
-          end
-        }
-    end
+    # def to_json
+    #   Notification
+    #     .new("textDocument/publishDiagnostics")
+    #     .compose_json {
+    #     JSON.build do |json|
+    #       json.object do
+    #         json.field "uri", uri
+    #         json.field "diagnostics" do
+    #           json.array do
+    #             diagnostics.each do |diag|
+    #               json.raw diag.to_json
+    #             end
+    #           end
+    #         end
+    #       end
+    #     end
+    #   }
+    # end
 
-    def to_json
-      String.build { |io| to_json(io) }
-    end
+    # def to_json
+    #   String.build { |io| to_json(io) }
+    # end
 
     def empty?
       diagnostics.empty?
     end
-
   end
 end

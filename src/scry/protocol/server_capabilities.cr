@@ -1,6 +1,5 @@
 module Scry
-
-  struct ServerCapabilities
+  struct ServerCapabilities < ResponseMessage
 
     enum TextDocumentSyncKind
       None
@@ -8,30 +7,29 @@ module Scry
       Incremental
     end
 
-    @text_document_sync : TextDocumentSyncKind
-
     def initialize(@msg_id : Int32)
-      @text_document_sync = TextDocumentSyncKind::Full
+      super(@msg_id, TextDocumentSyncKind::Full.value)
     end
 
-    def to_json(io)
-      ResponseMessage
-        .new(@msg_id)
-        .compose_json(io) {
-          io.json_object do |cap|
-            cap.field "capabilities" do
-              io.json_object do |object|
-                object.field "textDocumentSync", @text_document_sync
-              end
-            end
-          end
-        }
-    end
+    # def to_json
+    #   ResponseMessage
+    #     .new(@msg_id)
+    #     .compose_json {
+    #     JSON.build do |json|
+    #       json.object do
+    #         json.field "capabilities" do
+    #           json.object do
+    #             json.field "textDocumentSync", @text_document_sync.value
+    #           end
+    #         end
+    #       end
+    #     end
+    #   }
+    # end
 
-    def to_json
-      String.build { |io| to_json(io) }
-    end
+    # def to_json
+    #   String.build { |io| to_json(io) }
+    # end
 
   end
-
 end
