@@ -1,75 +1,78 @@
 require "json"
 
 module Scry
-
   struct BuildFailure
     JSON.mapping(
       file: String,
-      line: Int32 | Nil,
+      line: Int32?,
       column: Int32,
-      size: Int32 | Nil,
+      size: Int32?,
       message: String
     )
   end
 
   enum DiagnosticServerity
-    Error = 1
+    Error       = 1
     Warning
     Information
     Hint
   end
 
-  class Diagnostic
+  struct LineColumn
+    JSON.mapping(
+      line: Int32,
+      character: Int32
+    )
 
-    private getter filename : String
-    private getter line : Int32
-    private getter column : Int32
-    private getter size : Int32
-    private getter message : String
+    def initialize(@line, @character)
+    end
+  end
+
+  struct DiagnosticRange
+    JSON.mapping(
+      "start": LineColumn,
+      "end": LineColumn
+    )
+
+    def initialize(@start, @end)
+    end
+  end
+
+  class Diagnostic
+    JSON.mapping(
+      range: DiagnosticRange,
+      severity: Int32,
+      source: String,
+      message: String
+    )
+    private getter filename = ""
+    private getter line = 0
+    private getter column = 1
+    private getter size = 1
+
+    # private getter message : String
 
     def initialize(bf : BuildFailure)
-      @filename = bf.file
-      @line = bf.line || 1
-      @column = bf.column
-      @size = bf.size || 0
-      @message = bf.message
+      initialize(bf.file, bf.line || 0, bf.column, bf.size || 1, bf.message)
     end
 
     def initialize(@filename, @line, @column, @size, @message)
+      @range = DiagnosticRange.new(
+        LineColumn.new(line - 1, column - 1),
+        LineColumn.new(line - 1, column + size - 1)
+      )
+      @severity = DiagnosticServerity::Error.value
+      @source = "Scry [Crystal]"
     end
 
     def uri
-      "file://#{filename}"
-    end
-
-    def to_json
-      String.build { |io| to_json(io) }
-    end
-
-    def to_json(io)
-      io.json_object do |object|
-        object.field "range" do
-          io.json_object do |range|
-            range.field "start" do
-              io.json_object do |pos|
-                pos.field "line", line - 1
-                pos.field "character", column - 1
-              end
-            end
-            range.field "end" do
-              io.json_object do |pos|
-                pos.field "line", line - 1
-                pos.field "character", column + size - 1
-              end
-            end
-          end
-        end
-        object.field "severity", DiagnosticServerity::Error
-        object.field "source", "Scry [Crystal]"
-        object.field "message", message
+      if filename.starts_with?("untitled:")
+        filename
+      else
+        "file://#{filename}"
       end
     end
 
-  end
 
+  end
 end

@@ -9,7 +9,7 @@ module Scry
       results = [] of PublishDiagnosticsNotification | ServerCapabilities | Nil
       results << nil
 
-      io = MemoryIO.new
+      io = IO::Memory.new
       response = Response.new(results)
       response.write(io)
       io.to_s.should eq("")
@@ -24,7 +24,7 @@ module Scry
         [diagnostic]
       )
 
-      io = MemoryIO.new
+      io = IO::Memory.new
       response = Response.new(results)
       response.write(io)
       io.to_s[0...19].should eq("Content-Length: 283")
@@ -36,7 +36,7 @@ module Scry
       results = [] of PublishDiagnosticsNotification | ServerCapabilities | Nil
       results << server_cap
 
-      io = MemoryIO.new
+      io = IO::Memory.new
       response = Response.new(results)
       response.write(io)
       io.to_s.should eq(%(Content-Length: 74\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1}}}))

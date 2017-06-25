@@ -6,7 +6,7 @@ module Scry
   describe Request do
 
     it "reads content from IO" do
-      io = MemoryIO.new(SIMPLE_MESSAGE)
+      io = IO::Memory.new(SIMPLE_MESSAGE)
       Request.new(io).read.should eq("Hello")
     end
 

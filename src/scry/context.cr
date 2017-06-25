@@ -5,20 +5,18 @@ require "./analyzer"
 require "./initialize"
 
 module Scry
-
   class UnrecognizedProcedureError < Exception; end
 
   class InvalidRequestError < Exception; end
 
   class Context
-
     private property! workspace : Workspace
 
     def dispatch(msg : Scry::RequestMessageNoParams)
       case msg.method
       when "shutdown"
         # TODO: Perform shutdown and respond
-
+        exit(0)
       end
     end
 
@@ -69,13 +67,10 @@ module Scry
       text_document = TextDocument.new(params)
 
       case msg.method
-
       when "textDocument/didSave"
         nil
-
       when "textDocument/didClose"
         nil
-
       else
         raise UnrecognizedProcedureError.new(
           "Didn't recognize procedure: #{msg.method}"
@@ -83,28 +78,27 @@ module Scry
       end
     end
 
+    private def dispatchNotification(params : Trace, msg)
+      Log.logger.info { msg }
+      Log.logger.info { params }
+      nil
+    end
+
     private def handle_file_event(file_event : FileEvent)
       text_document = TextDocument.new(file_event)
 
       case file_event.type
-
       when FileEventType::Created
         analyzer = Analyzer.new(workspace, text_document)
         response = analyzer.run
         response
-
       when FileEventType::Deleted
         PublishDiagnosticsNotification.empty(text_document.uri)
-
       when FileEventType::Changed
         analyzer = Analyzer.new(workspace, text_document)
         response = analyzer.run
         response
-
       end
-
     end
-
   end
-
 end

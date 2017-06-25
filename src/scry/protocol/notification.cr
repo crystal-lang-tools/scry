@@ -1,20 +1,23 @@
 module Scry
-
-  struct Notification
-
-    @method : String
-
-    def initialize(@method)
+  struct DiagnosticParams
+    JSON.mapping(
+      uri: String,
+      diagnostics: Array(Diagnostic)
+    )
+    def initialize(@uri, @diagnostics)
     end
+  end
 
-    def compose_json(io)
-      io.json_object do |object|
-        object.field "jsonrpc", "2.0"
-        object.field "method", @method
-        object.field "params" do
-          yield io
-        end
-      end
+  abstract struct Notification
+    JSON.mapping(
+      jsonrpc: String,
+      method: String,
+      params: DiagnosticParams
+    )
+
+    def initialize(@method, uri : String, diagnostics : Array(Diagnostic))
+      @jsonrpc = "2.0"
+      @params = DiagnosticParams.new(uri, diagnostics)
     end
 
   end

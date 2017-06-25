@@ -1,5 +1,6 @@
 require "./workspace"
 require "./log"
+
 require "./text_document"
 require "compiler/crystal/**"
 
@@ -22,6 +23,7 @@ module Scry
       compiler = Crystal::Compiler.new
       compiler.color = false
       compiler.no_codegen = true
+      compiler.debug = Crystal::Debug::None
       compiler.compile source, source.filename + ".out"
 
       [clean_diagnostic]
