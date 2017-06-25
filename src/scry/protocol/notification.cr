@@ -20,16 +20,5 @@ module Scry
       @params = DiagnosticParams.new(uri, diagnostics)
     end
 
-    # def compose_json
-    #   JSON.build do |object|
-    #     object.object do
-    #       object.field "", "2.0"
-    #       object.field "", @method
-    #       object.field "" do
-    #         yield
-    #       end
-    #     end
-    #   end
-    # end
   end
 end
