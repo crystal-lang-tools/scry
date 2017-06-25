@@ -18,28 +18,6 @@ module Scry
       super("textDocument/publishDiagnostics", @uri, @diagnostics)
     end
 
-    # def to_json
-    #   Notification
-    #     .new("textDocument/publishDiagnostics")
-    #     .compose_json {
-    #     JSON.build do |json|
-    #       json.object do
-    #         json.field "uri", uri
-    #         json.field "diagnostics" do
-    #           json.array do
-    #             diagnostics.each do |diag|
-    #               json.raw diag.to_json
-    #             end
-    #           end
-    #         end
-    #       end
-    #     end
-    #   }
-    # end
-
-    # def to_json
-    #   String.build { |io| to_json(io) }
-    # end
 
     def empty?
       diagnostics.empty?

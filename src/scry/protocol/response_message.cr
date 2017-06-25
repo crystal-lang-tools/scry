@@ -27,16 +27,5 @@ module Scry
       @result = ResponseResult.new(ResponseTextDocumentSync.new(textDocumentSync))
     end
 
-    # def compose_json
-    #   JSON.build do |object|
-    #     object.object do
-    #       object.field "jsonrpc", "2.0"
-    #       object.field "id", @id
-    #       object.field "result" do
-    #         yield
-    #       end
-    #     end
-    #   end
-    # end
   end
 end
