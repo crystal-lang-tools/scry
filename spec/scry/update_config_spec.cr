@@ -13,11 +13,14 @@ module Scry
             params.object do
               params.field "settings" do
                 params.object do
-                  params.field "crystal-lang" do
+                  params.field "crystal-ide" do
                     params.object do
                       params.field "backend", "scry"
                       params.field "customCommand", "crystal"
-                      params.field "customCommandArgs", [] of String
+                      params.field "customCommandArgs" do
+                        params.array do
+                        end
+                      end
                       params.field "logLevel", "debug"
                     end
                   end
