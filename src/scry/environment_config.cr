@@ -11,6 +11,7 @@ module Scry
     def run
       @config.each do |k, v|
         ENV[k] = v
+        Log.logger.info { [k, v] }
       end
     end
 
@@ -20,7 +21,7 @@ module Scry
         .map { |line| line.split("=") }
         .map { |pair| Tuple(String, String).from(pair) }
         .reduce(Hash(String, String).new) { |memo, (k, v)|
-          memo[k] = v.chomp[1..-1]
+          memo[k] = v.chomp[1..-2]
           memo
         }
     end
