@@ -1,8 +1,10 @@
-# Scry for vscode-crystal-lang
+# Scry
 
 [![Join the chat at https://gitter.im/crystal-scry/Lobby](https://badges.gitter.im/crystal-scry/Lobby.svg)](https://gitter.im/crystal-scry/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/kofno/scry.svg?branch=master)](https://travis-ci.org/kofno/scry)
+
+> This is repo is configured to work with [vscode-crystal-lang](https://marketplace.visualstudio.com/items?itemName=faustinoaq.crystal-lang)
 
 Scry is a code analysis server for [Crystal](http://crystal-lang.org).
 It is an implementation of a [common language protocol](https://code.visualstudio.com/blogs/2016/06/27/common-language-protocol).
