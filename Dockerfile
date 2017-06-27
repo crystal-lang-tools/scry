@@ -1,4 +1,4 @@
-FROM crystallang/crystal:0.18.7
+FROM crystallang/crystal:0.22.0
 
 
 

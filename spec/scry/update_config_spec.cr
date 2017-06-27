@@ -13,10 +13,10 @@ module Scry
             params.object do
               params.field "settings" do
                 params.object do
-                  params.field "crystal-ide" do
+                  params.field "crystal-lang" do
                     params.object do
                       params.field "backend", "scry"
-                      params.field "maxNumberOfProblems", 20
+                      params.field "problemsLimit", 20
                       params.field "customCommand", "crystal"
                       params.field "customCommandArgs" do
                         params.array do

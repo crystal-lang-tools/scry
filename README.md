@@ -13,7 +13,7 @@ The server is implemented in Crystal.
 
 ## Installation
 
-Scry will be distrubted as part of the [Crystal Language](https://github.com/faustinoaq/vscode-crystal-lang/tree/support-scry) extension
+Scry will be distrubuted as part of the [Crystal Language](https://github.com/faustinoaq/vscode-crystal-lang/tree/support-scry) extension
 for VSCode.
 
 ## Development && Roadmap
