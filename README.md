@@ -16,23 +16,6 @@ The server is implemented in Crystal.
 Scry will be distrubted as part of the [Crystal Language](https://github.com/faustinoaq/vscode-crystal-lang/tree/support-scry) extension
 for VSCode.
 
-TODO: Binary distrubtions
-
-You can also add it to your `shard.yml`:
-
-```yaml
-dependencies:
-  mysql:
-    github: kofno/scry
-    version: ~> 0.3
-```
-
-## Usage
-
-Install on your path and then run Scry at the command line.
-
-    $> scry
-
 ## Development && Roadmap
 
 Ongoing, in my free time.
