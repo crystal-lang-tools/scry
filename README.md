@@ -1,4 +1,4 @@
-# Scry
+# Scry for vscode-crystal-lang
 
 [![Join the chat at https://gitter.im/crystal-scry/Lobby](https://badges.gitter.im/crystal-scry/Lobby.svg)](https://gitter.im/crystal-scry/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -13,7 +13,7 @@ The server is implemented in Crystal.
 
 ## Installation
 
-Scry will be distrubted as part of the [Crystal IDE](https://github.com/kofno/crystal-ide) extension
+Scry will be distrubted as part of the [Crystal Language](https://github.com/faustinoaq/vscode-crystal-lang/tree/support-scry) extension
 for VSCode.
 
 TODO: Binary distrubtions
@@ -51,7 +51,6 @@ The goal is too implement all of the currently supported Language Server Feature
  * Document Formatting: this includes formatting of whole documents, document ranges and formatting on type.
  * Rename: project-wide rename of a symbol.
 
-
 ## Contributing
 
 1. Fork it ( https://github.com/kofno/scry/fork )
@@ -63,3 +62,4 @@ The goal is too implement all of the currently supported Language Server Feature
 ## Contributors
 
 - [kofno](https://github.com/kofno) Ryan L. Bell - creator, maintainer
+- [faustinoaq](https://github.com/faustinoaq) Faustino Aguilar - contributor
