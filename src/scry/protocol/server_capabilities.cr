@@ -1,16 +1,29 @@
 module Scry
+  enum TextDocumentSyncKind
+    None
+    Full
+    Incremental
+  end
+
+  struct CrystalServerCapabilities
+    JSON.mapping(
+      documentFormattingProvider: Bool,
+      textDocumentSync: TextDocumentSyncKind
+    )
+    def initialize(
+      @documentFormattingProvider,
+      @textDocumentSync
+    )
+    end
+  end
+
   struct ServerCapabilities < ResponseMessage
-
-    enum TextDocumentSyncKind
-      None
-      Full
-      Incremental
+    def initialize(msg_id : Int32)
+      capabilities = CrystalServerCapabilities.new(
+        documentFormattingProvider: true,
+        textDocumentSync: TextDocumentSyncKind::Full
+      )
+      super(msg_id, capabilities)
     end
-
-    def initialize(@msg_id : Int32)
-      super(@msg_id, TextDocumentSyncKind::Full.value)
-    end
-
-
   end
 end

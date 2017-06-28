@@ -18,7 +18,6 @@ module Scry
       super("textDocument/publishDiagnostics", @uri, @diagnostics)
     end
 
-
     def empty?
       diagnostics.empty?
     end

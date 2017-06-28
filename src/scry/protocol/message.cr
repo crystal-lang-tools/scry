@@ -12,8 +12,9 @@ module Scry
     JSON.mapping({
       jsonrpc: String,
       id: Int32,
-      method: String
-    }, true)
+      method: String,
+      params: Nil?
+    })
   end
 
   struct RequestMessage
@@ -29,6 +30,29 @@ module Scry
     JSON.mapping(
       value: String
     )
+  end
+
+  struct DocumentOptions
+    JSON.mapping({
+      tabSize: Int32,
+      insertSpaces: Bool
+    }, true)
+  end
+
+  struct FormattingParams
+    JSON.mapping({
+      text_document: { type: TextDocumentIdentifier, key: "textDocument" },
+      options: DocumentOptions
+    }, true)
+  end
+
+  struct FormattingMessage
+    JSON.mapping({
+      jsonrpc: String,
+      id: Int32,
+      method: String,
+      params: FormattingParams
+    }, true)
   end
 
   struct NotificationMessage
@@ -48,7 +72,7 @@ module Scry
 
   class InvalidContentError < Exception; end
 
-  MessageType = RequestMessage | NotificationMessage | RequestMessageNoParams
+  MessageType = RequestMessage | NotificationMessage | RequestMessageNoParams | FormattingMessage
 
   struct Message
 

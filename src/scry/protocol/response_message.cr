@@ -1,15 +1,8 @@
 module Scry
-  struct ResponseTextDocumentSync
-    JSON.mapping(
-      textDocumentSync: Int32
-    )
-    def initialize(@textDocumentSync)
-    end
-  end
 
   struct ResponseResult
     JSON.mapping(
-      capabilities: ResponseTextDocumentSync
+      capabilities: CrystalServerCapabilities
     )
     def initialize(@capabilities)
     end
@@ -22,9 +15,11 @@ module Scry
       result: ResponseResult
     )
 
-    def initialize(@id, textDocumentSync : Int32)
+    def initialize(@id, crystal_server_capabilities)
       @jsonrpc = "2.0"
-      @result = ResponseResult.new(ResponseTextDocumentSync.new(textDocumentSync))
+      @result = ResponseResult.new(
+        crystal_server_capabilities
+      )
     end
 
   end

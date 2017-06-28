@@ -9,20 +9,27 @@ module Scry
   def start
 
     Log.logger.info { "Scry is looking into your code..." }
+    at_exit do
+      Log.logger.info { "...your session has ended" }
+    end
 
     EnvironmentConfig.new.run
 
     context = Context.new
-
+    
     loop do
-      content = Request.new(STDIN).read
-      request = Message.new(content).parse
-      results = context.dispatch(request)
-      response = Response.new([results].flatten)
-      response.write(STDOUT)
+      begin
+        content = Request.new(STDIN).read
+        request = Message.new(content).parse
+        results = context.dispatch(request)
+      rescue ex
+        results = [ErrorMessage.new(ex)]
+      ensure
+        Log.logger.info { GC.stats }
+        response = Response.new([results].flatten)
+        response.write(STDOUT)
+      end
     end
-
-    Log.logger.info { "...your session has ended" }
   rescue ex
     Log.logger.error {
       (ex.message || "Unknown error") + "\n" + ex.backtrace.join("\n")
@@ -34,4 +41,3 @@ module Scry
 end
 
 Scry.start
-

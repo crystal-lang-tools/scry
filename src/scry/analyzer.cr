@@ -24,7 +24,10 @@ module Scry
       compiler.color = false
       compiler.no_codegen = true
       compiler.debug = Crystal::Debug::None
-      compiler.compile source, source.filename + ".out"
+      # compiler.compile source, source.filename + ".out"
+      # Is like ParseAnalyzer
+      # Compiler is a bit unresponsible in some projects
+      compiler.top_level_semantic(source)
 
       [clean_diagnostic]
     rescue ex : Crystal::Exception

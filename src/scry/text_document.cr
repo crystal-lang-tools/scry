@@ -5,6 +5,7 @@ module Scry
     getter uri : String
     getter text : Array(String)
     getter filename : String
+    getter id : Int32 = 0
 
     def initialize(params : DidOpenTextDocumentParams)
       @uri = params.text_document.uri
@@ -32,6 +33,13 @@ module Scry
 
     def initialize(@uri, @text)
       @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
+    end
+
+    def initialize(format : FormattingMessage)
+      @uri = format.params.text_document.uri
+      @id = format.id
+      @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
+      @text = [read_file]
     end
 
     def in_memory?

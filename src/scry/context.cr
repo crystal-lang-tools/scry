@@ -21,10 +21,12 @@ module Scry
     end
 
     def dispatch(msg : RequestMessage)
+      Log.logger.info { msg }
       dispatchRequest(msg.params, msg)
     end
 
     def dispatch(msg : NotificationMessage)
+      Log.logger.info { msg }
       dispatchNotification(msg.params, msg)
     end
 
@@ -82,6 +84,15 @@ module Scry
       Log.logger.info { msg }
       Log.logger.info { params }
       nil
+    end
+
+    def dispatch(msg : FormattingMessage)
+      Log.logger.info { msg }
+      text_document = TextDocument.new(msg)
+      formatter = Formatter.new(text_document)
+      response = formatter.run
+      File.write("b.out", response.to_json)
+      response
     end
 
     private def handle_file_event(file_event : FileEvent)

@@ -1,3 +1,4 @@
+require "json"
 require "./protocol/*"
 require "./log"
 
@@ -5,7 +6,13 @@ module Scry
 
   class Response
 
-    private getter results : Array(PublishDiagnosticsNotification | ServerCapabilities | Nil)
+    private getter results : Array(
+      PublishDiagnosticsNotification |
+      PublishFormatNotification |
+      ServerCapabilities |
+      ErrorMessage |
+      Nil
+    )
 
     def initialize(@results)
     end
