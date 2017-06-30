@@ -35,5 +35,5 @@ module Scry
     %({"textDocument":{"uri":"#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
 
   IMPLEMENTATIONS_RESPONSE_EXAMPLE =
-    %({"jsonrpc":"2.0","id":0,"result":[{"uri":"file:///home/main/Projects/Online/scry/spec/fixtures/some_file.cr","range":{"start":{"line":1,"character":1},"end":{"line":1,"character":1}}}]})
+    %({"jsonrpc":"2.0","id":0,"result":[{"uri":"file:///opt/scry/spec/fixtures/some_file.cr","range":{"start":{"line":1,"character":1},"end":{"line":1,"character":1}}}]})
 end
