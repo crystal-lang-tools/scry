@@ -10,11 +10,13 @@ module Scry
     end
 
     def run
-      search(
-        @text_document.filename,
-        @text_document.text.first,
-        @text_document.position.not_nil!
-      )
+      if position = @text_document.position
+        search(
+          @text_document.filename,
+          @text_document.text.first,
+          position
+        )
+      end
     end
 
     # NOTE: compiler is a bit heavy in some projects.
