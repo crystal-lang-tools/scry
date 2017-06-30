@@ -22,11 +22,7 @@ module Scry
         request = Message.new(content).parse
         results = context.dispatch(request)
       rescue ex
-        begin
-          results = [ResponseMessage.new(request.not_nil!.id, ex)]
-        rescue
-          Log.logger.fatal("Should never happen.")
-        end
+        results = [ResponseMessage.new(ex)]
       ensure
         response = Response.new([results].flatten)
         response.write(STDOUT)
