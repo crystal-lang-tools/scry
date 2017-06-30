@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/kofno/scry.svg?branch=master)](https://travis-ci.org/kofno/scry)
 
+![Scry logo](https://i.imgur.com/ticTfT8.png)
+
 > This is repo is configured to work with [vscode-crystal-lang](https://marketplace.visualstudio.com/items?itemName=faustinoaq.crystal-lang)
 
 Scry is a code analysis server for [Crystal](http://crystal-lang.org).
@@ -15,36 +17,41 @@ The server is implemented in Crystal.
 
 ## Installation
 
-Scry will be distrubuted as part of the [Crystal Language](https://github.com/faustinoaq/vscode-crystal-lang/tree/support-scry) extension
-for VSCode.
+Scry will be distrubuted as part of editors extensions, see:
+
+- [atom-scry](https://github.com/atom-crystal/scry)
+- [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
+- [vscode-crystal-lang](https://github.com/faustinoaq/vscode-crystal-lang)
 
 ## Development && Roadmap
 
-Ongoing, in my free time.
+Ongoing, in [owr](https://github.com/kofno/scry#contributors) free time.
 
 The goal is too implement all of the currently supported Language Server Features.
 
- * Document Highlights: highlights all 'equal' symbols in a text document.
- * Hover: provides hover information for a symbol selected in a text document.
- * Signature Help: provides signature help for a symbol selected in a text document.
- * Goto Definition: provides go to definition support for a symbol selected in a text document.
- * Find References: finds all project-wide references for a symbol selected in a text document.
- * List Document Symbols: lists all symbols defined in a text document.
- * List Workspace Symbols: lists all project-wide symbols.
- * Code Actions: compute commands for a given text document and range.
- * CodeLens: compute CodeLens statistics for a given text document. (OK, maybe not this one)
- * Document Formatting: this includes formatting of whole documents, document ranges and formatting on type.
- * Rename: project-wide rename of a symbol.
+- [Diagnostics](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_publishDiagnostics) **(WIP)**: provides problem detection for text document.
+- [Document Formatting](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_formatting) **(WIP)**: this includes formatting of whole documents, document ranges and formatting on type.
+- [Goto Definition](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_definition): **(WIP)** provides go to definition support for a symbol selected in a text document.
+- [Document Highlights](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_documentHighlight): highlights all 'equal' symbols in a text document.
+- [Hover](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_hover): provides hover information for a symbol selected in a text document.
+- [Signature Help](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_signatureHelp): provides signature help for a symbol selected in a text document.
+- [Find References](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_references): finds all project-wide references for a symbol selected in a text document.
+- [List Document Symbols](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_documentSymbol): lists all symbols defined in a text document.
+- [List Workspace Symbols](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#workspace_symbol): lists all project-wide symbols.
+- [Code Actions:](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_codeAction) compute commands for a given text document and range.
+- [CodeLens](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_codeLens): compute CodeLens statistics for a given text document. (OK, maybe not this one)
+- [rename](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_rename): project-wide rename of a symbol.
 
 ## Contributing
 
-1. Fork it ( https://github.com/kofno/scry/fork )
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
+1. Fork it <https://github.com/kofno/scry/fork>
+2. Create your feature branch `git checkout -b my-new-feature`
+3. Commit your changes `git commit -am 'Add some feature'`
+4. Push to the branch `git push origin my-new-feature`
 5. Create a new Pull Request
 
 ## Contributors
 
-- [kofno](https://github.com/kofno) Ryan L. Bell - creator, maintainer
-- [faustinoaq](https://github.com/faustinoaq) Faustino Aguilar - contributor
+- [@kofno](https://github.com/kofno) Ryan L. Bell - creator, maintainer
+- [@keplersj](https://github.com/keplersj) Kepler Sticka-Jones - contributor
+- [@faustinoaq](https://github.com/faustinoaq) Faustino Aguilar - contributor
