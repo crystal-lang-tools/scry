@@ -6,8 +6,6 @@
 
 ![Scry logo](https://i.imgur.com/ticTfT8.png)
 
-> This is repo is configured to work with [vscode-crystal-lang](https://marketplace.visualstudio.com/items?itemName=faustinoaq.crystal-lang)
-
 Scry is a code analysis server for [Crystal](http://crystal-lang.org).
 It is an implementation of a [common language protocol](https://code.visualstudio.com/blogs/2016/06/27/common-language-protocol).
 It is being built as a server for VSCode, but is compatible with any
