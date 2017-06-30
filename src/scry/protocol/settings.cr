@@ -8,18 +8,21 @@ module Scry
   # Replace the key to match your client config.
   struct Settings
     JSON.mapping({
-      crystal_config: {type: Customizations, key: "crystal-lang"},
+      crystal_config: {type: Customizations, key: "crystal-ide"},
     }, true)
   end
 
   # Replace mappings to match your client config,
   # also you need to rename attributes in all the project.
   #
-  # Currently configured for vscode-crystal-lang
+  # Currently configured for vscode-crystal-ide
   struct Customizations
-    JSON.mapping(
+    JSON.mapping({
       max_number_of_problems: {type: Int32, key: "maxNumberOfProblems"},
-      log_level: {type: String, key: "logLevel"}
-    )
+      backend:                String,
+      custom_command:         {type: String, key: "customCommand"},
+      custom_command_args:    {type: Array(String), key: "customCommandArgs"},
+      log_level:              {type: String, key: "logLevel"},
+    })
   end
 end
