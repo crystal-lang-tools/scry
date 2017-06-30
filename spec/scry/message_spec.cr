@@ -1,10 +1,7 @@
 require "../spec_helper"
-require "../../src/scry/protocol/message"
 
 module Scry
-
   describe Message do
-
     it "creates an initialization request" do
       procedure = Message.new(INITIALIZATION_EXAMPLE).parse
       procedure.is_a?(RequestMessage).should be_true
@@ -22,9 +19,7 @@ module Scry
 
     it "handles no-argument procedure calls" do
       procedure = Message.new(SHUTDOWN_EXAMPLE).parse
-      procedure.is_a?(RequestMessageNoParams).should be_true
+      procedure.is_a?(RequestMessage).should be_true
     end
-
   end
-
 end

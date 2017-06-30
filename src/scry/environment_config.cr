@@ -1,7 +1,5 @@
 module Scry
-
-  class EnvironmentConfig
-
+  struct EnvironmentConfig
     @config : Hash(String, String)
 
     def initialize
@@ -11,7 +9,6 @@ module Scry
     def run
       @config.each do |k, v|
         ENV[k] = v
-        Log.logger.info { [k, v] }
       end
     end
 
@@ -20,18 +17,13 @@ module Scry
         .lines
         .map { |line| line.split("=") }
         .map { |pair| Tuple(String, String).from(pair) }
-        .reduce(Hash(String, String).new) { |memo, (k, v)|
-          memo[k] = v.chomp[1..-2]
-          memo
-        }
+        .reduce(Hash(String, String).new) { |memo, (k, v)| memo[k] = v.chomp[1..-2]; memo }
     end
 
     private def crystal_env
-      String.build { |io|
+      String.build do |io|
         Process.run("crystal", ["env"], output: io)
-      }
+      end
     end
-
   end
-
 end

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="67.263336mm"
+   height="87.154968mm"
+   viewBox="0 0 67.263336 87.154968"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="scry.svg"
+   inkscape:version="0.92.1 r"
+   inkscape:export-filename="/home/main/scry.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2">
+    <linearGradient
+       spreadMethod="pad"
+       inkscape:collect="always"
+       x1="80.336998"
+       y1="779.96002"
+       x2="688.98999"
+       gradientUnits="userSpaceOnUse"
+       y2="779.96002"
+       id="linearGradient4807">
+      <stop
+         offset="0"
+         style="stop-color:#1a1a1a;stop-opacity:1"
+         id="stop4801" />
+      <stop
+         offset=".50419"
+         style="stop-color:#b6b6b6;stop-opacity:0.98823529"
+         id="stop4803" />
+      <stop
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0.97254902"
+         id="stop4805" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4795"
+       y2="779.96002"
+       gradientUnits="userSpaceOnUse"
+       x2="688.98999"
+       y1="779.96002"
+       x1="80.336998"
+       inkscape:collect="always"
+       spreadMethod="pad">
+      <stop
+         id="stop4789"
+         style="stop-color:#787878;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop4791"
+         style="stop-color:#a9aeff;stop-opacity:.98824"
+         offset=".50419" />
+      <stop
+         id="stop4793"
+         style="stop-color:#000562;stop-opacity:.97345"
+         offset="1" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       x="-0.1453"
+       y="-0.23777001"
+       width="1.2905999"
+       height="1.4755"
+       id="filter8471">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="9.6834703"
+         id="feGaussianBlur8473" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       r="146.62"
+       gradientTransform="matrix(1.2184,-2.0973e-7,2.3291e-7,1.3531,-111.1,-109.98)"
+       cx="508.70999"
+       cy="311.51001"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient8510"
+       xlink:href="#linearGradient8512">
+      <stop
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1"
+         id="stop7885" />
+      <stop
+         offset=".66797"
+         style="stop-color:#776791;stop-opacity:1"
+         id="stop7891" />
+      <stop
+         offset="1"
+         style="stop-color:#d9d9d9"
+         id="stop7887" />
+    </radialGradient>
+    <linearGradient
+       inkscape:collect="always"
+       x1="80.336998"
+       y1="779.96002"
+       x2="688.98999"
+       gradientUnits="userSpaceOnUse"
+       y2="779.96002"
+       id="linearGradient8512"
+       xlink:href="#linearGradient4795">
+      <stop
+         offset="0"
+         style="stop-color:#000562"
+         id="stop8477" />
+      <stop
+         offset=".50419"
+         style="stop-color:#a9aeff;stop-opacity:.98824"
+         id="stop8483" />
+      <stop
+         offset="1"
+         style="stop-color:#000562;stop-opacity:.97345"
+         id="stop8479" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4807"
+       id="linearGradient4799"
+       gradientUnits="userSpaceOnUse"
+       x1="80.336998"
+       y1="779.96002"
+       x2="688.98999"
+       y2="779.96002"
+       gradientTransform="matrix(0.11177611,0,0,0.11177611,31.040395,91.39321)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#radialGradient8510"
+       id="radialGradient4812"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.27948504,-4.8109321e-8,5.342651e-8,0.31038345,-68.662712,43.886021)"
+       cx="508.70999"
+       cy="311.51001"
+       r="146.62" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4862"
+       x="-0.14264864"
+       width="1.2852973"
+       y="-0.27221784"
+       height="1.5444357">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.1659026"
+         id="feGaussianBlur4864" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="127.60045"
+     inkscape:cy="154.06559"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-39.882195,-103.35124)">
+    <g
+       id="g4879">
+      <ellipse
+         ry="35.924736"
+         rx="33.631668"
+         cy="140.5703"
+         cx="73.513863"
+         id="path7791"
+         style="fill:url(#radialGradient4812);fill-opacity:1;fill-rule:evenodd;stroke-width:0.22938693" />
+      <ellipse
+         ry="48.871815"
+         rx="79.972061"
+         cy="248.19868"
+         cx="519.81842"
+         id="path7793"
+         style="fill:#ffffff;fill-rule:evenodd;filter:url(#filter8471)"
+         transform="matrix(0.24535974,0,0,0.24122402,-54.599107,60.874979)" />
+    </g>
+    <path
+       d="m 51.156742,167.39985 c 15.478755,12.02487 30.404219,11.93433 45.488405,-0.75673 2.67592,5.9342 6.714393,13.24883 0.841674,17.15652 -16.121468,8.94209 -32.705689,8.94209 -46.626286,0 -4.911442,-2.5552 -1.676642,-10.01291 0.296207,-16.39979 z"
+       style="fill:url(#linearGradient4799);fill-opacity:1;fill-rule:evenodd;stroke-width:0.11177611"
+       sodipodi:nodetypes="ccccc"
+       id="rect8254"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g4875"
+       transform="translate(0,3.7041668)">
+      <g
+         id="g4868">
+        <text
+           id="text4824"
+           y="144.50174"
+           x="55.464039"
+           style="font-style:normal;font-weight:normal;font-size:19.3667469px;line-height:18.33187103px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.36312649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4862)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Macondo Swash Caps';-inkscape-font-specification:'Macondo Swash Caps';stroke-width:0.36312649px"
+             y="144.50174"
+             x="55.464039"
+             id="tspan4822"
+             sodipodi:role="line">Scry</tspan></text>
+      </g>
+      <text
+         id="text4559"
+         y="144.50174"
+         x="55.464039"
+         style="font-style:normal;font-weight:normal;font-size:19.3667469px;line-height:18.33187103px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.36312649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Macondo Swash Caps';-inkscape-font-specification:'Macondo Swash Caps';stroke-width:0.36312649px"
+           y="144.50174"
+           x="55.464039"
+           id="tspan4557"
+           sodipodi:role="line">Scry</tspan></text>
+    </g>
+  </g>
+</svg>

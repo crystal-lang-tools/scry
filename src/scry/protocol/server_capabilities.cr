@@ -1,16 +1,43 @@
+require "json"
+
 module Scry
-  struct ServerCapabilities < ResponseMessage
+  enum TextDocumentSyncKind
+    None
+    Full
+    Incremental
+  end
 
-    enum TextDocumentSyncKind
-      None
-      Full
-      Incremental
+  # Specify Sever capabilities supported,
+  # Currently Crystal supports:
+  #
+  # - Go to definition or Implementation (WIP)
+  # - Diagnostics (WIP)
+  # - Formatting (WIP)
+  # - Symbols https://github.com/crystal-lang/crystal/blob/1f3e8b0e742b55c1feb5584dc932e87034365f48/samples/compiler/visitor_example.cr
+  # - Rename https://github.com/crystal-lang/crystal/blob/1f3e8b0e742b55c1feb5584dc932e87034365f48/samples/compiler/transformer_example.cr
+  # - Completion https://github.com/TechMagister/cracker
+  # - Hover
+  # - Code Actions
+  # - Signature Help
+  # - Range Formatting
+  #
+  # Features not supported by Crystal yet:
+  #
+  # - CodeLens
+  # - Find References
+  #
+  # To enable more capabilities, See: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
+  struct ServerCapabilities
+    JSON.mapping(
+      textDocumentSync: TextDocumentSyncKind,
+      documentFormattingProvider: Bool,
+      definitionProvider: Bool
+    )
+
+    def initialize
+      @textDocumentSync = TextDocumentSyncKind::Full
+      @documentFormattingProvider = true
+      @definitionProvider = true
     end
-
-    def initialize(@msg_id : Int32)
-      super(@msg_id, TextDocumentSyncKind::Full.value)
-    end
-
-
   end
 end

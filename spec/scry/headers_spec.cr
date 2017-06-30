@@ -1,10 +1,7 @@
 require "../spec_helper"
-require "../../src/scry/headers"
 
 module Scry
-
   describe Headers do
-
     it "returns content length" do
       headers = Headers.new
       headers.add "Content-Length: 5"
@@ -16,7 +13,5 @@ module Scry
       headers.add "Content-Type: application/json"
       expect_raises(MalformedHeaderError) { headers.content_length }
     end
-
   end
-
 end

@@ -1,13 +1,8 @@
-require "./headers"
 require "./log"
+require "./headers"
 
 module Scry
-
-  class Request
-
-    private getter :io
-    private getter :headers
-
+  struct Request
     def initialize(@io : IO)
       @headers = Headers.new
       @content = uninitialized String | Nil
@@ -23,13 +18,13 @@ module Scry
       loop do
         header = read_header
         break if header.nil?
-        headers.add header
+        @headers.add(header)
       end
     end
 
     private def read_header
-      raw_header = io.gets
-      Log.logger.debug raw_header
+      raw_header = @io.gets
+      Log.logger.debug(raw_header)
 
       if raw_header.nil?
         Log.logger.warn("Connection with client lost")
@@ -41,15 +36,13 @@ module Scry
     end
 
     private def read_content
-      @content = io.gets(content_length)
-      Log.logger.debug { @content }
+      @content = @io.gets(content_length)
+      Log.logger.debug(@content)
       @content
     end
 
     private def content_length
-      headers.content_length
+      @headers.content_length
     end
-
   end
-
 end

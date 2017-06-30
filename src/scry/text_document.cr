@@ -1,10 +1,21 @@
+require "./protocol/file_event"
+require "./protocol/document_formatting_params"
+require "./protocol/did_open_text_document_params"
+require "./protocol/did_change_text_document_params"
+require "./protocol/did_change_watched_files_params"
+require "./protocol/did_change_configuration_params"
+
 module Scry
-
-  class TextDocument
-
+  struct TextDocument
+    getter id : Int32 | Nil
     getter uri : String
-    getter text : Array(String)
     getter filename : String
+    getter text : Array(String)
+    getter position : Position?
+
+    def initialize(@uri, @text)
+      @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
+    end
 
     def initialize(params : DidOpenTextDocumentParams)
       @uri = params.text_document.uri
@@ -12,43 +23,53 @@ module Scry
       @text = [params.text_document.text]
     end
 
-    def initialize(params : DidOpOnTextDocumentParams)
-      @uri = params.text_document.uri
-      @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
-      @text = [read_file]
-    end
-
-    def initialize(file_event : FileEvent)
-      @uri = file_event.uri
-      @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
-      @text = [read_file]
-    end
-
+    # Used by ParseAnalyzer
     def initialize(change : DidChangeTextDocumentParams)
       @uri = change.text_document.uri
       @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
       @text = change.content_changes.map { |change| change.text }
     end
 
-    def initialize(@uri, @text)
+    # Used by Analyzer
+    def initialize(file_event : FileEvent)
+      @uri = file_event.uri
       @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
+      @text = [read_file]
+    end
+
+    def initialize(params : DocumentFormattingParams, @id)
+      @uri = params.text_document.uri
+      @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
+      if untitled?
+        @text = [""]
+      else
+        @text = [read_file]
+      end
+    end
+
+    def initialize(params : TextDocumentPositionParams, @id)
+      @uri = params.text_document.uri
+      @position = params.position
+      @filename = @uri.sub(/^file:\/\/|^inmemory:\/\//, "")
+      @text = [read_file]
     end
 
     def in_memory?
       uri.starts_with?("inmemory://")
     end
 
+    def untitled?
+      uri.starts_with?("untitled:")
+    end
+
     private def read_file : String
       File.read(filename)
     rescue ex : IO::Error
-      Log.logger.warn ex.message
+      Log.logger.warn(ex.message)
       ""
     rescue ex : Errno
-      Log.logger.warn ex.message
+      Log.logger.warn(ex.message)
       ""
     end
-
-
   end
-
 end

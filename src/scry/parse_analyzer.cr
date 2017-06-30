@@ -1,51 +1,26 @@
-require "./workspace"
 require "compiler/crystal/**"
 
+require "./workspace"
+require "./text_document"
+require "./publish_diagnostic"
+
 module Scry
-
-  class ParseAnalyzer
-
+  struct ParseAnalyzer
     def initialize(@workspace : Workspace, @text_document : TextDocument)
+      @diagnostic = PublishDiagnostic.new(@workspace, @text_document.uri)
     end
 
     def run
-      @text_document.text.map { |t| parse_source t }.flatten.uniq
+      @text_document.text.map { |t| parse_source(t) }.flatten.uniq
     end
 
     private def parse_source(source : String)
       parser = Crystal::Parser.new(source)
-      parser.filename = filename
+      parser.filename = @text_document.filename
       parser.parse
-
-      [clean_diagnostic]
+      [@diagnostic.clean]
     rescue ex : Crystal::Exception
-      to_diagnostics(ex)
+      @diagnostic.from(ex)
     end
-
-    private def filename
-      @text_document.filename
-    end
-
-    private def uri
-      @text_document.uri
-    end
-
-    private def clean_diagnostic
-      PublishDiagnosticsNotification.empty(uri)
-    end
-
-    private def to_diagnostics(ex)
-      build_failures = Array(BuildFailure).from_json(ex.to_json)
-      build_failures
-        .uniq
-        .first(@workspace.max_number_of_problems)
-        .map { |bf| Diagnostic.new(bf) }
-        .group_by { |diag| diag.uri }
-        .map { |file, diagnostics|
-          PublishDiagnosticsNotification.new(file, diagnostics)
-        }
-    end
-
   end
-
 end

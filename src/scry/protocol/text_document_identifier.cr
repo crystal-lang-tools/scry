@@ -1,11 +1,9 @@
 require "json"
 
 module Scry
-
   struct TextDocumentIdentifier
     JSON.mapping({
-      uri: String
+      uri: String,
     }, true)
   end
-
 end

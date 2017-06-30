@@ -1,64 +1,29 @@
-require "./workspace"
-require "./log"
-
-require "./text_document"
 require "compiler/crystal/**"
+require "./workspace"
+require "./text_document"
+require "./publish_diagnostic"
 
 module Scry
-
-  class Analyzer
-
-    private getter workspace : Workspace
-    private getter text_document : TextDocument
-
-    def initialize(@workspace, @text_document)
+  struct Analyzer
+    def initialize(@workspace : Workspace, @text_document : TextDocument)
+      @diagnostic = PublishDiagnostic.new(@workspace, @text_document.uri)
     end
 
     def run
-      text.map { |t| analyze(t) }.flatten.uniq
+      @text_document.text.map { |t| analyze(t) }.flatten.uniq
     end
 
-    private def analyze(some_text)
-      source = Crystal::Compiler::Source.new(filename, some_text)
+    # NOTE: compiler is a bit heavy in some projects.
+    private def analyze(source)
+      source = Crystal::Compiler::Source.new(@text_document.filename, source)
       compiler = Crystal::Compiler.new
       compiler.color = false
       compiler.no_codegen = true
       compiler.debug = Crystal::Debug::None
-      compiler.compile source, source.filename + ".out"
-
-      [clean_diagnostic]
+      compiler.compile(source, source.filename + ".out")
+      [@diagnostic.clean]
     rescue ex : Crystal::Exception
-      to_diagnostics(ex)
+      @diagnostic.from(ex)
     end
-
-    private def to_diagnostics(ex)
-      build_failures = Array(BuildFailure).from_json(ex.to_json)
-      build_failures
-        .uniq
-        .first(workspace.max_number_of_problems)
-        .map { |bf| Diagnostic.new(bf) }
-        .group_by { |diag| diag.uri }
-        .map { |file, diagnostics|
-          PublishDiagnosticsNotification.new(file, diagnostics)
-        }
-    end
-
-    private def clean_diagnostic
-      PublishDiagnosticsNotification.empty(uri)
-    end
-
-    private def filename
-      text_document.filename
-    end
-
-    private def text
-      text_document.text
-    end
-
-    private def uri
-      text_document.uri
-    end
-
   end
-
 end
