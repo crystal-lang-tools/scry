@@ -1,26 +1,32 @@
+require "./response_error"
+require "./text_edit"
+require "./location"
+
 module Scry
+  # Add a response type when needed
+  alias ResponseTypes = Array(TextEdit) | Array(Location)
 
-  struct ResponseResult
-    JSON.mapping(
-      capabilities: CrystalServerCapabilities
-    )
-    def initialize(@capabilities)
-    end
-  end
-
-  abstract struct ResponseMessage
-    JSON.mapping(
+  struct ResponseMessage
+    JSON.mapping({
       jsonrpc: String,
-      id: Int32,
-      result: ResponseResult
-    )
+      id:      Int32 | String | Nil,
+      result:  ResponseTypes?,
+      error:   ResponseError?,
+    }, true)
 
-    def initialize(@id, crystal_server_capabilities)
-      @jsonrpc = "2.0"
-      @result = ResponseResult.new(
-        crystal_server_capabilities
+    @jsonrpc = "2.0"
+
+    def initialize(@id, @result)
+    end
+
+    def initialize(@result)
+    end
+
+    def initialize(@id, ex : Exception)
+      @error = ResponseError.new(
+        ex.message || "Unknown error",
+        ex.backtrace
       )
     end
-
   end
 end

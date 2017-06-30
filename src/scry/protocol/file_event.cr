@@ -1,18 +1,16 @@
 require "json"
 
 module Scry
-
   enum FileEventType
     Created = 1
-    Changed
-    Deleted
+    Changed = 2
+    Deleted = 3
   end
 
   struct FileEvent
     JSON.mapping({
-      uri: String,
-      type: FileEventType
-    })
+      uri:  String,
+      type: FileEventType,
+    }, true)
   end
-
 end

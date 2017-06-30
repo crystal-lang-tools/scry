@@ -1,14 +1,11 @@
 module Scry
+  class MalformedHeaderError < Exception
+  end
 
-  class MalformedHeaderError < Exception; end
+  struct Headers
+    record ContentLength, value : Int32
 
-  class Headers
-
-    record ContentLength,
-      value : Int32
-
-    record ContentType,
-      value : String
+    record ContentType, value : String
 
     private getter :headers
 
@@ -62,7 +59,5 @@ module Scry
         )
       end
     end
-
   end
-
 end

@@ -1,14 +1,19 @@
 require "json"
 
 module Scry
-
   struct InitializeParams
     JSON.mapping({
-      process_id: { type: Int64, key: "processId" },
-      root_path: { type: String, key: "rootPath" },
+      process_id:   {type: Int64 | Int32, key: "processId"},
+      root_uri:     {type: String, key: "rootPath"},
       capabilities: JSON::Any,
-      trace: String
+      trace:        String,
     }, true)
-  end
 
+    def initialize
+      @process_id = 0
+      @root_uri = ""
+      @capabilities = JSON.parse("{}")
+      @trace = ""
+    end
+  end
 end

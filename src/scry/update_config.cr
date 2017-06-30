@@ -1,45 +1,36 @@
-require "./workspace"
 require "./log"
+require "./workspace"
+require "./protocol/did_change_configuration_params"
 
 module Scry
-
-  class UpdateConfig
-
+  struct UpdateConfig
     LOG_LEVELS = {
       "debug" => Logger::DEBUG,
       "info"  => Logger::INFO,
       "warn"  => Logger::WARN,
       "error" => Logger::ERROR,
-      "fatal" => Logger::FATAL
+      "fatal" => Logger::FATAL,
     }
-
-    private getter! workspace : Workspace
-    private getter! settings : DidChangeConfigurationParams
 
     def initialize(@workspace : Workspace, @settings : DidChangeConfigurationParams)
     end
 
-    def initialize(@workspace : Workspace, settings)
+    def initialize(@workspace : Workspace, @settings)
       raise "Can't update settings with #{settings.inspect}"
     end
 
     def run
-      workspace.max_number_of_problems =
-        ide_customizations.max_number_of_problems
-
-      Log.logger.level = log_level(ide_customizations.log_level)
-
-      { workspace, nil }
+      @workspace.max_number_of_problems = customizations.max_number_of_problems
+      Log.logger.level = log_level(customizations.log_level || "error")
+      {@workspace, nil}
     end
 
-    private def ide_customizations
-      settings.settings.crystal_ide
+    private def customizations
+      @settings.settings.crystal_config
     end
 
     private def log_level(level : String)
       LOG_LEVELS[level]
     end
-
   end
-
 end

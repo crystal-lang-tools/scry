@@ -1,11 +1,10 @@
-require "./text_document_identifier"
-require "./position"
+require "./formatting_options"
 
 module Scry
-  struct TextDocumentPositionParams
+  struct DocumentFormattingParams
     JSON.mapping({
       text_document: {type: TextDocumentIdentifier, key: "textDocument"},
-      position:      Position?,
+      options:       FormattingOptions,
     }, true)
   end
 end

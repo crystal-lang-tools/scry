@@ -1,78 +1,49 @@
-require "json"
+require "./range"
+require "./position"
 
 module Scry
-  struct BuildFailure
-    JSON.mapping(
-      file: String,
-      line: Int32?,
-      column: Int32,
-      size: Int32?,
-      message: String
-    )
-  end
-
   enum DiagnosticServerity
     Error       = 1
-    Warning
-    Information
-    Hint
+    Warning     = 2
+    Information = 3
+    Hint        = 4
   end
 
-  struct LineColumn
-    JSON.mapping(
-      line: Int32,
-      character: Int32
-    )
-
-    def initialize(@line, @character)
-    end
-  end
-
-  struct DiagnosticRange
-    JSON.mapping(
-      "start": LineColumn,
-      "end": LineColumn
-    )
-
-    def initialize(@start, @end)
-    end
-  end
-
-  class Diagnostic
-    JSON.mapping(
-      range: DiagnosticRange,
+  # Represents a diagnostic, such as a compiler error or warning.
+  # Diagnostic objects are only valid in the scope of a resource.
+  # See: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#diagnostic
+  struct Diagnostic
+    JSON.mapping({
+      range:    Range,
       severity: Int32,
-      source: String,
-      message: String
-    )
-    private getter filename = ""
-    private getter line = 0
-    private getter column = 1
-    private getter size = 1
+      source:   String,
+      message:  String,
+    }, true)
 
-    # private getter message : String
+    @filename = ""
+
+    # `uri` and `@filename` aren't part of Diagnostic interface of LSP,
+    # however They're useful to group failures by file.
+    def uri
+      if @filename.starts_with?("untitled:")
+        @filename
+      else
+        "file://#{@filename}"
+      end
+    end
 
     def initialize(bf : BuildFailure)
-      initialize(bf.file, bf.line || 0, bf.column, bf.size || 1, bf.message)
-    end
-
-    def initialize(@filename, @line, @column, @size, @message)
-      @range = DiagnosticRange.new(
-        LineColumn.new(line - 1, column - 1),
-        LineColumn.new(line - 1, column + size - 1)
+      @filename = bf.file
+      @message = bf.message
+      line = bf.line || 0
+      column = bf.column
+      size = bf.size || 1
+      @range = Range.new(
+        Position.new(line - 1, column - 1),
+        Position.new(line - 1, column + size - 1)
       )
       @severity = DiagnosticServerity::Error.value
       @source = "Scry [Crystal]"
     end
-
-    def uri
-      if filename.starts_with?("untitled:")
-        filename
-      else
-        "file://#{filename}"
-      end
-    end
-
-
   end
 end
