@@ -1,9 +1,7 @@
 require "spec"
-require "../src/scry/environment_config"
-
+require "../src/scry/**"
 
 module Scry
-
   EnvironmentConfig.new.run
 
   SOME_FILE_PATH = File.expand_path("./fixtures/some_file.cr", __DIR__)
@@ -12,7 +10,7 @@ module Scry
     %({ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "processId": 1, "rootPath": "/foo", "capabilities": {} , "trace": "off"}})
 
   CONFIG_CHANGE_EXAMPLE =
-    %({"jsonrpc":"2.0","method":"workspace/didChangeConfiguration","params":{"settings":{"crystal-lang":{"problemsLimit":100,"backend":"scry","customCommand":"crystal","customCommandArgs":[],"logLevel":"debug"}}}})
+    %({"jsonrpc":"2.0","method":"workspace/didChangeConfiguration","params":{"settings":{"crystal-lang":{"maxNumberOfProblems":100,"logLevel":"debug"}}}})
 
   DOC_OPEN_EXAMPLE =
     %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///Users/foo/Projects/crystal_av/src/crystal_av/c_handler.cr","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
@@ -28,4 +26,14 @@ module Scry
 
   SHUTDOWN_EXAMPLE = %({"jsonrpc":"2.0","id":1,"method":"shutdown"})
 
+  BUILD_ERROR_EXAMPLE = %({"file":"/home/aa.cr","line":4,"column":1,"size":1,"message":"Oh no!, an Error"})
+
+  FORMATTER_RESPONSE_EXAMPLE =
+    %({"jsonrpc":"2.0","result":[{"range":{"start":{"line":0,"character":0},"end":{"line":0,"character":6}},"newText":"1 + 1"},{"range":{"start":{"line":1,"character":0},"end":{"line":1,"character":6}},"newText":""}]})
+
+  TEXTDOCUMENT_POSITION_PARAM_EXAMPLE =
+    %({"textDocument":{"uri":"#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
+
+  IMPLEMENTATIONS_RESPONSE_EXAMPLE =
+    %({"jsonrpc":"2.0","id":0,"result":[{"uri":"file:///home/main/Projects/Online/scry/spec/fixtures/some_file.cr","range":{"start":{"line":1,"character":1},"end":{"line":1,"character":1}}}]})
 end

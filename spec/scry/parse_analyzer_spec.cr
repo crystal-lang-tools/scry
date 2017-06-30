@@ -1,11 +1,7 @@
 require "../spec_helper"
-require "../../src/scry/parse_analyzer"
-require "../../src/scry/text_document"
 
 module Scry
-
   describe ParseAnalyzer do
-
     it "only analyzes syntax" do
       good_syntax = %(require "foo"\n\nputs something)
       workspace = Workspace.new("/foo", 1.to_i64, 100)
@@ -13,7 +9,7 @@ module Scry
       analyzer = ParseAnalyzer.new(workspace, text_document)
       results = analyzer.run
       results.should eq(
-        [PublishDiagnosticsNotification.empty("inmemory://model/3")]
+        [PublishDiagnostic.new(workspace, "inmemory://model/3").clean]
       )
     end
 
@@ -24,9 +20,8 @@ module Scry
       analyzer = ParseAnalyzer.new(workspace, text_document)
       results = analyzer.run
       publishable_diagnostic = results.first
-      publishable_diagnostic.empty?.should be_false
+      params = publishable_diagnostic.params.as(PublishDiagnosticsParams)
+      params.diagnostics.empty?.should be_false
     end
-
   end
-
 end

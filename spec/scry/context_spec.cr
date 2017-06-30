@@ -1,5 +1,4 @@
 require "../spec_helper"
-require "../../src/scry/context"
 
 module Scry
   describe Context do
@@ -8,7 +7,7 @@ module Scry
 
       procedure = Message.new(INITIALIZATION_EXAMPLE).parse
       result = context.dispatch(procedure)
-      result.is_a?(ServerCapabilities).should be_true
+      result.is_a?(Initialize).should be_true
 
       procedure = Message.new(CONFIG_CHANGE_EXAMPLE).parse
       context.dispatch(procedure)
