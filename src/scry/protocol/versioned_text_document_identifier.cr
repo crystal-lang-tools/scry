@@ -1,12 +1,10 @@
 require "json"
 
 module Scry
-
   struct VersionedTextDocumentIdentifier
     JSON.mapping({
+      uri:     String,
       version: Int32,
-      uri: String
     }, true)
   end
-
 end
