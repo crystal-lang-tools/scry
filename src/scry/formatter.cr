@@ -15,7 +15,6 @@ module Scry
       format(@text_document.text.first)
     end
 
-    # NOTE: Unexpected end of JSON input will happen with character like �
     private def format(source)
       result = Crystal.format(source)
       unless source == result

@@ -9,7 +9,7 @@ module Scry
   struct Settings
     JSON.mapping({
       crystal_config: {type: Customizations, key: "crystal-ide"},
-    }, true)
+    })
   end
 
   # Replace mappings to match your client config,

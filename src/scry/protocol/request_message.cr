@@ -6,7 +6,7 @@ module Scry
       jsonrpc: String,
       id:      Int32,
       method:  String,
-      params:  {type: InitializeParams, default: InitializeParams.new},
+      params:  InitializeParams?,
     })
   end
 end

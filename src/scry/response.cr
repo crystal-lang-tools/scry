@@ -25,7 +25,7 @@ module Scry
     end
 
     private def prepend_header(content : String)
-      "Content-Length: #{content.size}\r\n\r\n#{content}"
+      "Content-Length: #{content.bytesize}\r\n\r\n#{content}"
     end
   end
 end

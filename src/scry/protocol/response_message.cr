@@ -23,8 +23,6 @@ module Scry
     end
 
     def initialize(ex : Exception)
-      # HACK: Avoid use not_nil! and is valid ResponseError according to LSP
-      @id = 0
       @error = ResponseError.new(
         ex.message || "Unknown error",
         ex.backtrace

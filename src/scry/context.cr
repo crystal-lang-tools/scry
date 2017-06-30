@@ -26,7 +26,9 @@ module Scry
     def dispatch(msg : RequestMessage)
       exit(0) if msg.method == "shutdown"
       Log.logger.debug(msg.method)
-      dispatchRequest(msg.params, msg)
+      if params = msg.params
+        dispatchRequest(params, msg)
+      end
     end
 
     def dispatch(msg : NotificationMessage)
