@@ -1,4 +1,3 @@
-.PONY darwin linux
 darwin:
 	/bin/bash -c "crystal build src/scry.cr --release --no-debug -o bin/darwin/scry"
 
