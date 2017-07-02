@@ -21,6 +21,10 @@ Scry will be distrubuted as part of editors extensions, see:
 - [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
 - [vscode-crystal-lang](https://github.com/faustinoaq/vscode-crystal-lang)
 
+## Known issues
+
+- Some diagnostics don't dissapear after fixing the code.
+
 ## Development && Roadmap
 
 Ongoing, in [our](https://github.com/kofno/scry#contributors) free time.
