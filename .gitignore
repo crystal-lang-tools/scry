@@ -5,3 +5,5 @@
 /bin/
 .DS_Store
 *.out
+build/
+linux_build.sh
