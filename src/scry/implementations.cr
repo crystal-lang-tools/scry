@@ -39,6 +39,10 @@ module Scry
         end
         ResponseMessage.new(@text_document.id, locations)
       end
+    rescue ex
+      nil
+    ensure
+      GC.collect
     end
   end
 end

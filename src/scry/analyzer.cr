@@ -5,12 +5,22 @@ require "./publish_diagnostic"
 
 module Scry
   struct Analyzer
+    @@source = [] of String
+
     def initialize(@workspace : Workspace, @text_document : TextDocument)
       @diagnostic = PublishDiagnostic.new(@workspace, @text_document.uri)
     end
 
     def run
-      @text_document.text.map { |t| analyze(t) }.flatten.uniq
+      if @@source != @text_document.text
+        @@source = @text_document.text
+        @@source.map do |text|
+          unless @text_document.filename.starts_with?("/usr/lib") ||
+                 @text_document.filename.starts_with?("#{@workspace.root_uri}/lib")
+            analyze(text)
+          end
+        end.flatten.uniq
+      end
     end
 
     # NOTE: compiler is a bit heavy in some projects.
@@ -24,6 +34,8 @@ module Scry
       [@diagnostic.clean]
     rescue ex : Crystal::Exception
       @diagnostic.from(ex)
+    ensure
+      GC.collect
     end
   end
 end
