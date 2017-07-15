@@ -1,20 +1,24 @@
 language: generic
-
 sudo: required
-
 services:
-  - docker
-
+- docker
 before_install:
-  - docker build -t kofno/scry .
-
+- docker build -t kofno/scry .
 script:
-  - docker run kofno/scry /bin/sh -c "cd /opt/scry; crystal spec"
-
+- docker run kofno/scry /bin/sh -c "cd /opt/scry; crystal spec"
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/94bc44167f5a3d9fa7a8
-    on_success: change  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: never     # options: [always|never|change] default: always
+    - https://webhooks.gitter.im/e/94bc44167f5a3d9fa7a8
+    on_success: change
+    on_failure: always
+    on_start: never
+deploy:
+  provider: releases
+  api_key:
+    secure: O6F1MwtIi/yjHVAd6hVfsIsqvaLNiC4IyIchRjn9/VgVfGGLmVnpuP45y1x9IW3G+ZRNcxPMTjD0E4x5rMSnOysHjMCyUPraQw669LlcUeCXvuSl8i1+nLIb+KdIKHX7raB3J8TwED3NfJ8GOS3kzj/tsPKBISIRGRh0/uaEjNnok0UbCgfTSBVwGYBIj+co0O5Lz7ceVWeg/1z9kc851oPnqN9AWOyQe0pC6VyDvi98R3hHBLAEIdEhFD0zWqoWTEm/HwKybTW/rwxE1MK5Dqol4hiDJ5jhyMGJXUEWlprXinbUuC3a1qc1SZGlGFCcTbP4XTQIqwQyzwsk/gfO/8H3C++SctVYhNKrScK9ZCgwjrm95wUDlOZmXnt1y90drEMKZyjjPXFp+r4jZsKijyBg/FJWL7rRTPsVbD4EJiUxaK2pOS7rySR1tvlyY66zjdNINgx5lt3Udiqlh4LRfqHI2asRIchqpoM5kBPHiP0g/7zJRZNU8QcTm4qM0Hujult9d3j2ahBY41XMVa7Any03LE7rcbLVUo3YkEm3amalo1zGigaU0YPxuQgJUNXZgfKwvaoWtyB3e413fkHHksgjWp/dsuZKI18q481oXPlaSoQ6dQ5DcZxsv7RfXzFXU9WM7lFpkpScJ4E3sbXB9sC9ThQL+Ron+IGslNTKiJc=
+  file:
+    - "bin/linux/scry"
+    - "bin/darwin/scry"
+  on:
+    repo: kofno/scry
