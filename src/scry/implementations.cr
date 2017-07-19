@@ -40,7 +40,7 @@ module Scry
         ResponseMessage.new(@text_document.id, locations)
       end
     rescue ex
-      nil
+      Log.logger.error("A error was found while searching definitions\n#{ex}")
     ensure
       GC.collect
     end
