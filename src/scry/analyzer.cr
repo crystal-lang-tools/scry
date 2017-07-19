@@ -5,22 +5,23 @@ require "./publish_diagnostic"
 
 module Scry
   struct Analyzer
-    @@source = [] of String
-
     def initialize(@workspace : Workspace, @text_document : TextDocument)
       @diagnostic = PublishDiagnostic.new(@workspace, @text_document.uri)
     end
 
     def run
-      if @@source != @text_document.text
-        @@source = @text_document.text
-        @@source.map do |text|
-          unless @text_document.filename.starts_with?("/usr/lib") ||
-                 @text_document.filename.starts_with?("#{@workspace.root_uri}/lib")
-            analyze(text)
-          end
-        end.flatten.uniq
+      @text_document.text.map do |text|
+        unless inside_path?
+          analyze(text)
+        end
+      end.flatten.uniq
+    end
+
+    private def inside_path?
+      ENV["CRYSTAL_PATH"].split(':').each do |path|
+        return true if @text_document.filename.starts_with?(path)
       end
+      false
     end
 
     # NOTE: compiler is a bit heavy in some projects.
