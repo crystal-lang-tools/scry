@@ -41,6 +41,7 @@ module Scry
       end
     rescue ex
       Log.logger.error("A error was found while searching definitions\n#{ex}")
+      nil
     ensure
       GC.collect
     end
