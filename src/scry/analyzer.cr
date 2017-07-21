@@ -10,7 +10,18 @@ module Scry
     end
 
     def run
-      @text_document.text.map { |t| analyze(t) }.flatten.uniq
+      @text_document.text.map do |text|
+        unless inside_path?
+          analyze(text)
+        end
+      end.flatten.uniq
+    end
+
+    private def inside_path?
+      ENV["CRYSTAL_PATH"].split(':').each do |path|
+        return true if @text_document.filename.starts_with?(path)
+      end
+      false
     end
 
     # NOTE: compiler is a bit heavy in some projects.
@@ -24,6 +35,8 @@ module Scry
       [@diagnostic.clean]
     rescue ex : Crystal::Exception
       @diagnostic.from(ex)
+    ensure
+      GC.collect
     end
   end
 end
