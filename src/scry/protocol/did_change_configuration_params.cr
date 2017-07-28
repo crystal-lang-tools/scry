@@ -3,7 +3,7 @@ require "./settings"
 module Scry
   struct DidChangeConfigurationParams
     JSON.mapping({
-      settings: Settings,
+      settings: SettingsCrystalIDE | SettingsCrystalLang,
     }, true)
   end
 end
