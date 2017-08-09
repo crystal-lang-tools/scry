@@ -1,10 +1,11 @@
 require "logger"
+require "tempfile"
 
 module Scry
   class Log
     private def self.initialize_logger
-      log_filename = File.expand_path(".scry.out", Dir.current)
-      log_file = File.open(log_filename, "w")
+      tmpfile = Tempfile.new("scry.out")
+      log_file = File.open(tmpfile.path, "w")
       logger = Logger.new(log_file)
       logger.level = Logger::DEBUG
       logger
