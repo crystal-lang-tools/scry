@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/crystal-scry/Lobby](https://badges.gitter.im/crystal-scry/Lobby.svg)](https://gitter.im/crystal-scry/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/kofno/scry.svg?branch=master)](https://travis-ci.org/kofno/scry)
+[![Build Status](https://travis-ci.org/crystal-lang-tools/scry.svg?branch=master)](https://travis-ci.org/crystal-lang-tools/scry)
 
 ![Scry logo](https://i.imgur.com/ticTfT8.png)
 
@@ -17,7 +17,7 @@ The server is implemented in Crystal.
 
 Scry will be distrubuted as part of editors extensions, see:
 
-- [ide-crystal](https://github.com/atom-crystal/ide-crystal) for Atom
+- [ide-crystal](https://github.com/crystal-lang-tools/atom-crystal) for Atom
 - [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
 - [vscode-crystal-lang](https://github.com/faustinoaq/vscode-crystal-lang)
 
@@ -46,7 +46,7 @@ The goal is too implement all of the currently supported Language Server Feature
 
 ## Contributing
 
-1. Fork it <https://github.com/kofno/scry/fork>
+1. Fork it <https://github.com/crystal-lang-tools/scry/fork>
 2. Create your feature branch `git checkout -b my-new-feature`
 3. Commit your changes `git commit -am 'Add some feature'`
 4. Push to the branch `git push origin my-new-feature`
