@@ -17,7 +17,7 @@ The server is implemented in Crystal.
 
 Scry will be distrubuted as part of editors extensions, see:
 
-- [atom-scry](https://github.com/atom-crystal/scry)
+- [ide-crystal](https://github.com/atom-crystal/ide-crystal) for Atom
 - [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
 - [vscode-crystal-lang](https://github.com/faustinoaq/vscode-crystal-lang)
 
