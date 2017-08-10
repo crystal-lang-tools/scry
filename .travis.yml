@@ -71,4 +71,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    repo: kofno/scry
+    repo: crystal-lang-tools/scry
