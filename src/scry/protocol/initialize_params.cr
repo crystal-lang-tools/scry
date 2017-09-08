@@ -8,6 +8,5 @@ module Scry
       capabilities: JSON::Any,
       trace:        String?,
     })
-
   end
 end

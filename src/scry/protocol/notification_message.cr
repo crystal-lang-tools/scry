@@ -12,8 +12,6 @@ module Scry
                             DidChangeTextDocumentParams |
                             DidChangeWatchedFilesParams |
                             DidOpenTextDocumentParams |
-                            DocumentFormattingParams |
-                            TextDocumentPositionParams |
                             PublishDiagnosticsParams |
                             Trace)
 
