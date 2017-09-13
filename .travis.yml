@@ -24,8 +24,7 @@ install:
   osx)
     rm -f /usr/local/bin/shards
     brew update
-    brew install crystal-lang
-    brew install llvm
+    brew install llvm crystal-lang
     brew link llvm --force
     ;;
   *)
