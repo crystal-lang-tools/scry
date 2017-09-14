@@ -27,7 +27,7 @@ install:
     rm -f /usr/local/bin/shards
     brew update
     brew install llvm@4 crystal-lang
-    brew link llvm --force
+    brew link llvm@4 --force
     ;;
   *)
     exit 1;;
