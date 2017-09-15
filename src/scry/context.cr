@@ -42,6 +42,35 @@ module Scry
       response
     end
 
+    # Also used by methods like Go to Definition
+    private def dispatchRequest(params : TextDocumentPositionParams, msg)
+      case msg.method
+      when "textDocument/didSave"
+        nil
+      when "textDocument/didClose"
+        nil
+      when "textDocument/definition"
+        text_document = TextDocument.new(params, msg.id)
+        definitions = Implementations.new(text_document)
+        response = definitions.run
+        Log.logger.debug(response)
+        response
+      else
+        raise UnrecognizedProcedureError.new("Didn't recognize procedure: #{msg.method}")
+      end
+    end
+
+    private def dispatchRequest(params : DocumentFormattingParams, msg)
+      text_document = TextDocument.new(params, msg.id)
+
+      unless text_document.untitled?
+        formatter = Formatter.new(@workspace, text_document)
+        response = formatter.run
+        Log.logger.debug(response)
+        response
+      end
+    end
+
     private def dispatchNotification(params : DidChangeConfigurationParams, msg)
       updater = UpdateConfig.new(@workspace, params)
       @workspace, response = updater.run
@@ -69,35 +98,6 @@ module Scry
       params.changes.map { |file_event|
         handle_file_event(file_event)
       }.compact
-    end
-
-    # Also used by methods like Go to Definition
-    private def dispatchNotification(params : TextDocumentPositionParams, msg)
-      case msg.method
-      when "textDocument/didSave"
-        nil
-      when "textDocument/didClose"
-        nil
-      when "textDocument/definition"
-        text_document = TextDocument.new(params, msg.id)
-        definitions = Implementations.new(text_document)
-        response = definitions.run
-        Log.logger.debug(response)
-        response
-      else
-        raise UnrecognizedProcedureError.new("Didn't recognize procedure: #{msg.method}")
-      end
-    end
-
-    private def dispatchNotification(params : DocumentFormattingParams, msg)
-      text_document = TextDocument.new(params, msg.id)
-
-      unless text_document.untitled?
-        formatter = Formatter.new(@workspace, text_document)
-        response = formatter.run
-        Log.logger.debug(response)
-        response
-      end
     end
 
     private def handle_file_event(file_event : FileEvent)
