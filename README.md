@@ -23,7 +23,7 @@ Scry will be distrubuted as part of editors extensions, see:
 
 ## Known issues
 
-- Some diagnostics don't dissapear after fixing the code.
+- Some diagnostics don't disappear after fixing the code.
 
 ## Development && Roadmap
 
