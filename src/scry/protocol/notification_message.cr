@@ -18,7 +18,6 @@ module Scry
   struct NotificationMessage
     JSON.mapping({
       jsonrpc: String,
-      id:      Int32?,
       method:  String,
       params:  NotificationType,
     }, true)
