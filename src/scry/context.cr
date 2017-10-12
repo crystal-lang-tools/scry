@@ -45,10 +45,6 @@ module Scry
     # Also used by methods like Go to Definition
     private def dispatchRequest(params : TextDocumentPositionParams, msg)
       case msg.method
-      when "textDocument/didSave"
-        nil
-      when "textDocument/didClose"
-        nil
       when "textDocument/definition"
         text_document = TextDocument.new(params, msg.id)
         definitions = Implementations.new(text_document)
@@ -69,6 +65,13 @@ module Scry
         Log.logger.debug(response)
         response
       end
+    end
+
+    # Used by:
+    # - `textDocument/didSave`
+    # - `textDocument/didClose`
+    private def dispatchNotification(params : TextDocumentParams, msg)
+      nil
     end
 
     private def dispatchNotification(params : DidChangeConfigurationParams, msg)

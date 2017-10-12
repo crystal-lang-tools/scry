@@ -1,4 +1,5 @@
 require "./initialize_params"
+require "./text_document_position_params"
 
 module Scry
   struct RequestMessage

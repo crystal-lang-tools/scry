@@ -12,7 +12,11 @@ module Scry
 
   DOC_OPEN_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///Users/foo/Projects/crystal_av/src/crystal_av/c_handler.cr","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
 
+  DOC_CLOSE_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didClose","params":{"textDocument":{ "uri":"file://#{SOME_FILE_PATH}" }}})
+
   DOC_CHANGE_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"version":808,"uri":"file://#{SOME_FILE_PATH}"},"contentChanges":[{"text":"module Scry\\n\\n  put this\\n"}]}})
+
+  DID_SAVE_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didSave","params":{"textDocument":{ "uri":"file://#{SOME_FILE_PATH}" }}})
 
   WATCHED_FILE_CHANGED_EXAMPLE = %({"jsonrpc":"2.0","method":"workspace/didChangeWatchedFiles","params":{"changes":[{"uri":"file://#{SOME_FILE_PATH}","type":2}]}})
 
