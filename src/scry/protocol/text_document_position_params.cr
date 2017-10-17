@@ -5,7 +5,7 @@ module Scry
   struct TextDocumentPositionParams
     JSON.mapping({
       text_document: {type: TextDocumentIdentifier, key: "textDocument"},
-      position:      Position?,
+      position:      Position,
     }, true)
   end
 end

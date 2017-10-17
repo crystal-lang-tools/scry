@@ -21,5 +21,15 @@ module Scry
       procedure = Message.new(SHUTDOWN_EXAMPLE).parse
       procedure.is_a?(RequestMessage).should be_true
     end
+
+    it "creates a didSave notification" do
+      procedure = Message.new(DID_SAVE_EXAMPLE).parse
+      procedure.is_a?(NotificationMessage).should be_true
+    end
+
+    it "creates a didClose notification" do
+      procedure = Message.new(DOC_CLOSE_EXAMPLE).parse
+      procedure.is_a?(NotificationMessage).should be_true
+    end
   end
 end
