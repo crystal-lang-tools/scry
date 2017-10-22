@@ -5,6 +5,7 @@ require "./did_open_text_document_params"
 require "./text_document_params"
 require "./document_formatting_params"
 require "./publish_diagnostics_params"
+require "./void_params"
 require "./trace"
 
 module Scry
@@ -14,6 +15,7 @@ module Scry
                             DidOpenTextDocumentParams |
                             TextDocumentParams |
                             PublishDiagnosticsParams |
+                            VoidParams |
                             Trace)
 
   struct NotificationMessage

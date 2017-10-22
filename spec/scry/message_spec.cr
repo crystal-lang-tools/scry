@@ -31,5 +31,10 @@ module Scry
       procedure = Message.new(DOC_CLOSE_EXAMPLE).parse
       procedure.is_a?(NotificationMessage).should be_true
     end
+
+    it "creates a initialized notification" do
+      procedure = Message.new(INITIALIZED_EXAMPLE).parse
+      procedure.is_a?(NotificationMessage).should be_true
+    end
   end
 end

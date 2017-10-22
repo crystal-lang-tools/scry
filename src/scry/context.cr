@@ -131,5 +131,9 @@ module Scry
     private def dispatchNotification(params : PublishDiagnosticsParams, msg)
       nil
     end
+
+    private def dispatchNotification(params : VoidParams, msg)
+      nil
+    end
   end
 end
