@@ -29,4 +29,6 @@ module Scry
   FORMATTER_RESPONSE_EXAMPLE = %({"jsonrpc":"2.0","result":[{"range":{"start":{"line":0,"character":0},"end":{"line":0,"character":6}},"newText":"1 + 1"},{"range":{"start":{"line":1,"character":0},"end":{"line":2,"character":6}},"newText":""}]})
 
   TEXTDOCUMENT_POSITION_PARAM_EXAMPLE = %({"textDocument":{"uri":"#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
+
+  INITIALIZED_EXAMPLE = %({"jsonrpc": "2.0", "method": "initialized", "params": {}})
 end
