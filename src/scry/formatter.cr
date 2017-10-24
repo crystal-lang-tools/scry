@@ -18,24 +18,15 @@ module Scry
     private def format(source)
       result = Crystal.format(source)
       unless source == result
-        new_lines = result.split('\n')
         old_lines = source.split('\n')
-        max_line_num = [old_lines.size, new_lines.size].max # => max amount of lines
-        max_size = [source.size, result.size].max           # => max amount of characters
-        text_edits = new_lines.map_with_index do |line_data, line_num|
-          # Ensure to replace all old document
-          if line_num == new_lines.size - 1
-            line_num_end = max_line_num
-          else
-            line_num_end = line_num
-          end
-          range = Range.new(
-            Position.new(line_num, 0),
-            Position.new(line_num_end, max_size) # => Max column posible to replace old column
-          )
-          TextEdit.new(range, line_data)
-        end
-        ResponseMessage.new(@text_document.id, text_edits)
+        max_size = [source.size, result.size].max # => max amount of characters
+
+        range = Range.new(
+          Position.new(0, 0),
+          Position.new(old_lines.size, max_size) # => Max column posible to replace old column
+        )
+
+        ResponseMessage.new(@text_document.id, [TextEdit.new(range, result)])
       end
     end
   end
