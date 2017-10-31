@@ -31,13 +31,15 @@ module Scry
     JSON.mapping(
       textDocumentSync: TextDocumentSyncKind,
       documentFormattingProvider: Bool,
-      definitionProvider: Bool
+      definitionProvider: Bool,
+      documentSymbolProvider: Bool
     )
 
     def initialize
       @textDocumentSync = TextDocumentSyncKind::Full
       @documentFormattingProvider = true
       @definitionProvider = true
+      @documentSymbolProvider = true
     end
   end
 end

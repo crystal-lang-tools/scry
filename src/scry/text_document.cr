@@ -54,6 +54,12 @@ module Scry
       @text = [read_file]
     end
 
+    def initialize(params : TextDocumentParams, @id)
+      @uri = params.text_document.uri
+      @filename = uri_to_filename
+      @text = [read_file]
+    end
+
     def uri_to_filename
       @uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\//, "")
     end
@@ -64,6 +70,10 @@ module Scry
 
     def untitled?
       uri.starts_with?("untitled:")
+    end
+
+    def source
+      @text.first
     end
 
     private def read_file : String

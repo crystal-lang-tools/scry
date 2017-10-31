@@ -1,10 +1,11 @@
 require "./response_error"
 require "./text_edit"
 require "./location"
+require "./symbol_information"
 
 module Scry
   # Add a response type when needed
-  alias ResponseTypes = Array(TextEdit) | Array(Location)
+  alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation)
 
   struct ResponseMessage
     JSON.mapping({
