@@ -6,6 +6,7 @@ require "./implementations"
 require "./update_config"
 require "./parse_analyzer"
 require "./publish_diagnostic"
+require "./symbol"
 
 module Scry
   class UnrecognizedProcedureError < Exception
@@ -62,6 +63,17 @@ module Scry
       unless text_document.untitled?
         formatter = Formatter.new(@workspace, text_document)
         response = formatter.run
+        Log.logger.debug(response)
+        response
+      end
+    end
+
+    private def dispatchRequest(params : TextDocumentParams, msg)
+      case msg.method
+      when "textDocument/documentSymbol"
+        text_document = TextDocument.new(params, msg.id)
+        symbol_processor = SymbolProcessor.new(text_document)
+        response = symbol_processor.run
         Log.logger.debug(response)
         response
       end

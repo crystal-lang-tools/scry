@@ -5,7 +5,8 @@ module Scry
   struct RequestMessage
     alias RequestType = (TextDocumentPositionParams |
                          InitializeParams |
-                         DocumentFormattingParams)?
+                         DocumentFormattingParams |
+                         TextDocumentParams)?
 
     JSON.mapping({
       jsonrpc: String,
