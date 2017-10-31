@@ -38,8 +38,8 @@ The goal is too implement all of the currently supported Language Server Feature
 - [Hover](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_hover): provides hover information for a symbol selected in a text document.
 - [Signature Help](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_signatureHelp): provides signature help for a symbol selected in a text document.
 - [Find References](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_references): finds all project-wide references for a symbol selected in a text document.
-- [List Document Symbols](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_documentSymbol): lists all symbols defined in a text document.
-- [List Workspace Symbols](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#workspace_symbol): lists all project-wide symbols.
+- [List Document Symbols](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_documentSymbol): **(WIP)** lists all symbols defined in a text document.
+- [List Workspace Symbols](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#workspace_symbol): **(WIP)** lists all project-wide symbols.
 - [Code Actions:](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_codeAction) compute commands for a given text document and range.
 - [CodeLens](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_codeLens): compute CodeLens statistics for a given text document. (OK, maybe not this one)
 - [rename](https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#textDocument_rename): project-wide rename of a symbol.
