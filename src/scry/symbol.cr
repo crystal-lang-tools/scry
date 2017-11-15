@@ -48,6 +48,18 @@ module Scry
       process_node node, node.name, SymbolKind::Function
       true
     end
+    
+    def visit(node : Crystal::Alias)
+      process_node node, node.name, SymbolKind::Constant
+      true
+    end
+
+    def visit(node : Crystal::Assign)
+      if node.target.is_a?(Crystal::Path)
+        process_node node, node.target.as(Crystal::Path).names.last, SymbolKind::Constant
+      end
+      true
+    end
 
     def visit(node : Crystal::Expressions)
       true
