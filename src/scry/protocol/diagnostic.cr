@@ -2,7 +2,7 @@ require "./range"
 require "./position"
 
 module Scry
-  enum DiagnosticServerity
+  enum DiagnosticSeverity
     Error       = 1
     Warning     = 2
     Information = 3
@@ -42,7 +42,7 @@ module Scry
         Position.new(line - 1, column - 1),
         Position.new(line - 1, column + size - 1)
       )
-      @severity = DiagnosticServerity::Error.value
+      @severity = DiagnosticSeverity::Error.value
       @source = "Scry [Crystal]"
     end
   end
