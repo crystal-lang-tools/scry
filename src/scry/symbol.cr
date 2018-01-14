@@ -48,7 +48,7 @@ module Scry
       process_node node, node.name, SymbolKind::Function
       true
     end
-    
+
     def visit(node : Crystal::Alias)
       process_node node, node.name, SymbolKind::Constant
       true
@@ -66,6 +66,16 @@ module Scry
     end
 
     def visit(node : Crystal::ASTNode)
+      true
+    end
+
+    def visit(node : Crystal::Var)
+      process_node node, node.name, SymbolKind::Property
+      true
+    end
+
+    def visit(node : Crystal::InstanceVar)
+      process_node node, node.name, SymbolKind::Variable
       true
     end
 
