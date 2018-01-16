@@ -79,6 +79,18 @@ module Scry
       end
     end
 
+    private def dispatchRequest(params : CompletionParams, msg)
+      case msg.method
+      when "textDocument/completion"
+        text_document = TextDocument.new(params, msg.id)
+        # TODO: implement completion
+        symbol_processor = SymbolProcessor.new(text_document)
+        response = symbol_processor.run
+        Log.logger.debug(response)
+        response
+      end
+    end
+
     # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`

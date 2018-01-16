@@ -47,7 +47,7 @@ module Scry
       end
     end
 
-    def initialize(params : TextDocumentPositionParams, @id)
+    def initialize(params : TextDocumentPositionParams | CompletionParams, @id)
       @uri = params.text_document.uri
       @position = params.position
       @filename = uri_to_filename

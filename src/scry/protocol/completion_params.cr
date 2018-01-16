@@ -1,5 +1,4 @@
-require "./text_document_identifier"
-require "./position"
+require "./text_document_params"
 require "./completion_context"
 
 module Scry
