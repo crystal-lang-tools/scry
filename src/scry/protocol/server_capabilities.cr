@@ -6,6 +6,16 @@ module Scry
     Full
     Incremental
   end
+  struct CompletionOptions
+    JSON.mapping(
+      resolveProvider: Bool,
+      triggerCharacters: Array(String)
+    )
+    def initialize
+      @resolveProvider = false
+      @triggerCharacters = ["."]
+    end
+  end
 
   # Specify Sever capabilities supported,
   # Currently Crystal supports:
@@ -32,7 +42,8 @@ module Scry
       textDocumentSync: TextDocumentSyncKind,
       documentFormattingProvider: Bool,
       definitionProvider: Bool,
-      documentSymbolProvider: Bool
+      documentSymbolProvider: Bool,
+      completionOptions: CompletionOptions
     )
 
     def initialize
@@ -40,6 +51,7 @@ module Scry
       @documentFormattingProvider = true
       @definitionProvider = true
       @documentSymbolProvider = true
+      @completionOptions = CompletionOptions.new
     end
   end
 end
