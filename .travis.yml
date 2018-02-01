@@ -18,8 +18,11 @@ install:
   set -x
   case $TRAVIS_OS_NAME in
   linux)
+    deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty main
+    deb-src http://apt.llvm.org/trusty/ llvm-toolchain-trusty main
+    deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main
     curl https://dist.crystal-lang.org/apt/setup.sh | sudo bash
-    sudo apt-get install -y --allow-unauthenticated crystal libgmp-dev llvm-4.0-dev build-essential
+    sudo apt-get install -y --allow-unauthenticated crystal libgmp-dev libstdc++ llvm-5.0-dev build-essential
     ;;
   osx)
     rm -f /usr/local/bin/shards
