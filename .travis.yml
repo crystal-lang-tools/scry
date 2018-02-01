@@ -6,5 +6,5 @@ services:
   - docker
 
 before_install:
-  - docker pull crystallang/crystal
-  - docker run crystallang/crystal /bin/sh -c "cd /root/scry; crystal spec"
+  - docker pull crystallang/crystal:0.24.1
+  - docker run -v `pwd`:/root/scry crystallang/crystal /bin/sh -c "cd /root/scry; crystal spec"
