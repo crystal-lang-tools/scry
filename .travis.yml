@@ -1,7 +1,5 @@
 language: generic
 
-group: deprecated-2017Q3
-
 matrix:
   include:
     - os: linux
@@ -21,13 +19,13 @@ install:
   case $TRAVIS_OS_NAME in
   linux)
     curl https://dist.crystal-lang.org/apt/setup.sh | sudo bash
-    sudo apt-get install -y --allow-unauthenticated crystal libgmp-dev llvm-3.8-dev build-essential
+    sudo apt-get install -y --allow-unauthenticated crystal libgmp-dev llvm-5.0-dev build-essential
     ;;
   osx)
     rm -f /usr/local/bin/shards
     brew update
-    brew install llvm@4 crystal-lang
-    brew link llvm@4 --force
+    brew install llvm@5 crystal-lang
+    brew link llvm@5 --force
     ;;
   *)
     exit 1;;
