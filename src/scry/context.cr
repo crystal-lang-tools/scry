@@ -84,6 +84,7 @@ module Scry
       when "textDocument/completion"
         text_document = TextDocument.new(params, msg.id)
         # TODO: implement completion
+        # symbol_processor = Scry::Completion::Completion.new(text_document)
         symbol_processor = SymbolProcessor.new(text_document)
         response = symbol_processor.run
         Log.logger.debug(response)
