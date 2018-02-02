@@ -1,5 +1,5 @@
 require "compiler/crystal/syntax"
-
+require "../protocol/completion_item"
 require "./db"
 require "./db_visitor"
 
@@ -10,6 +10,7 @@ module Scry::Completion
 
     @db : Db
     @visitor : DbVisitor
+    @text_document: TextDocument
 
     @processed_files = 0
 
@@ -18,16 +19,22 @@ module Scry::Completion
     #   gen.processed_files
     # end
 
-    def initialize(@paths : Array(String))
+
+    # def initialize(@paths : Array(String))
+    #   @db = Db.new
+    #   @visitor = DbVisitor.new @db
+    #   compute_paths
+    # end
+
+    def initialize(@text_document : TextDocument)
       @db = Db.new
       @visitor = DbVisitor.new @db
-      compute_paths
     end
 
-    def initialize(@db : Db, @paths : Array(String))
-      @visitor = DbVisitor.new @db
-      compute_paths
+    def run
+      ResponseMessage.new( @text_document.id, [CompletionItem.new("Cenas", CompletionItemKind::Method, "Cenas")])
     end
+
 
     def compute_paths
       @paths.each do |path|

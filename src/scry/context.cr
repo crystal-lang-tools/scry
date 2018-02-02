@@ -7,6 +7,7 @@ require "./update_config"
 require "./parse_analyzer"
 require "./publish_diagnostic"
 require "./symbol"
+require "./completion/completion"
 
 module Scry
   class UnrecognizedProcedureError < Exception
@@ -83,10 +84,8 @@ module Scry
       case msg.method
       when "textDocument/completion"
         text_document = TextDocument.new(params, msg.id)
-        # TODO: implement completion
-        # symbol_processor = Scry::Completion::Completion.new(text_document)
-        symbol_processor = SymbolProcessor.new(text_document)
-        response = symbol_processor.run
+        completion = Completion::Completion.new(text_document)
+        response = completion.run
         Log.logger.debug(response)
         response
       end

@@ -48,9 +48,9 @@ module Scry
 
     def initialize
       @textDocumentSync = TextDocumentSyncKind::Full
-      @documentFormattingProvider = true
-      @definitionProvider = true
-      @documentSymbolProvider = true
+      @documentFormattingProvider = false
+      @definitionProvider = false
+      @documentSymbolProvider = false
       @completionOptions = CompletionOptions.new
     end
   end
