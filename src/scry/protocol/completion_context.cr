@@ -1,5 +1,3 @@
-require "json"
-
 module Scry
   enum CompletionTriggerKind
     Invoked          = 1
