@@ -7,7 +7,7 @@ require "./update_config"
 require "./parse_analyzer"
 require "./publish_diagnostic"
 require "./symbol"
-require "./completion/completion"
+require "./completion"
 
 module Scry
   class UnrecognizedProcedureError < Exception
@@ -54,9 +54,10 @@ module Scry
         Log.logger.debug(response)
         response
       when "textDocument/completion"
-          text_document = TextDocument.new(params, msg.id)
-          completion = Completion::Completion.new(text_document)
-          response = completion.run
+          text_document = @workspace.get_file(params.text_document)
+          completion = Completion.new(text_document, params.context, params.position)
+          results = completion.run
+          response = ResponseMessage.new(msg.id, results)
           Log.logger.debug(response)
           response
       else
@@ -90,6 +91,10 @@ module Scry
     # - `textDocument/didSave`
     # - `textDocument/didClose`
     private def dispatchNotification(params : TextDocumentParams, msg)
+      case msg.method
+      when "textDocument/didClose"
+        @workspace.drop_file(params)
+      end
       nil
     end
 
@@ -100,8 +105,8 @@ module Scry
     end
 
     private def dispatchNotification(params : DidOpenTextDocumentParams, msg)
+      @workspace.put_file(params)
       text_document = TextDocument.new(params)
-
       unless text_document.in_memory?
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
@@ -110,6 +115,7 @@ module Scry
     end
 
     private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
+      @workspace.put_file(params)
       text_document = TextDocument.new(params)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
       response = analyzer.run
