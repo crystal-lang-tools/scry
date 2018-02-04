@@ -43,7 +43,7 @@ module Scry
       documentFormattingProvider: Bool,
       definitionProvider: Bool,
       documentSymbolProvider: Bool,
-      completionOptions: CompletionOptions
+      completionProvider: CompletionOptions
     )
 
     def initialize
@@ -51,7 +51,7 @@ module Scry
       @documentFormattingProvider = false
       @definitionProvider = false
       @documentSymbolProvider = false
-      @completionOptions = CompletionOptions.new
+      @completionProvider = CompletionOptions.new
     end
   end
 end

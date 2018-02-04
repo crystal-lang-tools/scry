@@ -31,11 +31,11 @@ module Scry
     JSON.mapping({
       label:         String,
       kind:          CompletionItemKind,
-      detail:        String
+      detail:        String,
       # documentation: String, #  | Markup
-      # sortText:      String,
-      # filterText:    String,
-      # insertText:    String,
+      sortText:      String,
+      filterText:    String,
+      insertText:    String
       # command: Command,
       # data: JSON::Any,
       # insertTestFormat: String,
@@ -44,7 +44,9 @@ module Scry
       # commitCharacters: Array(String)
     }, true)
     def initialize(@label, @kind, @detail)
-
+      @sortText = @label
+      @filterText = @label
+      @insertText = @label
     end
   end
 end
