@@ -7,8 +7,7 @@ module Scry
     alias RequestType = (TextDocumentPositionParams |
                          InitializeParams |
                          DocumentFormattingParams |
-                         TextDocumentParams |
-                         CompletionParams)?
+                         TextDocumentParams)?
 
     JSON.mapping({
       jsonrpc: String,

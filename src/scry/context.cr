@@ -53,6 +53,12 @@ module Scry
         response = definitions.run
         Log.logger.debug(response)
         response
+      when "textDocument/completion"
+          text_document = TextDocument.new(params, msg.id)
+          completion = Completion::Completion.new(text_document)
+          response = completion.run
+          Log.logger.debug(response)
+          response
       else
         raise UnrecognizedProcedureError.new("Didn't recognize procedure: #{msg.method}")
       end
@@ -75,17 +81,6 @@ module Scry
         text_document = TextDocument.new(params, msg.id)
         symbol_processor = SymbolProcessor.new(text_document)
         response = symbol_processor.run
-        Log.logger.debug(response)
-        response
-      end
-    end
-
-    private def dispatchRequest(params : CompletionParams, msg)
-      case msg.method
-      when "textDocument/completion"
-        text_document = TextDocument.new(params, msg.id)
-        completion = Completion::Completion.new(text_document)
-        response = completion.run
         Log.logger.debug(response)
         response
       end
