@@ -26,16 +26,24 @@ module Scry
     Operator      = 24
     TypeParameter = 25
   end
-
+  struct MarkupContent
+    JSON.mapping({
+      kind: String,
+      value: String
+    })
+    def initialize(@kind, @value)
+    end
+  end
   struct CompletionItem
     JSON.mapping({
       label:         String,
       kind:          CompletionItemKind,
       detail:        String,
-      documentation: {type: String, nilable: true}, #  | Markup
+      documentation: {type: MarkupContent, nilable: true}, #  | Markup
       sortText:      String,
       filterText:    String,
       insertText:    String,
+      insertTextFormat: {type: Int8, nilable: true},
       # command: Command,
       data: {type: JSON::Any, nilable: true}
       # insertTestFormat: String,
@@ -43,7 +51,7 @@ module Scry
       # additionalTextEdits:  Array(TextEdit),
       # commitCharacters: Array(String)
     }, true)
-    def initialize(@label, @kind, @detail, @data = nil, @documentation = nil)
+    def initialize(@label, @kind, @detail, @data, @documentation = nil)
       @sortText = @label
       @filterText = @label
       @insertText = @label

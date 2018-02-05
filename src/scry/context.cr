@@ -87,6 +87,16 @@ module Scry
       end
     end
 
+    private def dispatchRequest(params : CompletionItem, msg)
+      case msg.method
+      when "completionItem/resolve"
+        results = Completion.resolve(params)
+        response = ResponseMessage.new(msg.id, results)
+        Log.logger.debug(response)
+        response
+      end
+    end
+
     # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`

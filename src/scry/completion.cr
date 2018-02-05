@@ -53,7 +53,6 @@ module Scry
     end
 
     def find
-      return find_module(@import)
       case @import
       when /^\./
         find_relative(@import)
@@ -63,18 +62,28 @@ module Scry
     end
 
     def find_relative(path)
-      [] of CompletionItem
+      file_dir = File.dirname(@text_document.filename)
+      path_glob = File.expand_path(path, file_dir)
+      paths = Dir.glob(["#{path_glob}*/*.cr", "#{path_glob}*.cr"]).map do |i|
+        [i, i[(file_dir.size + 1)..-4]]
+      end
+      paths.map do |path_module_name|
+        path, module_name = path_module_name
+        data = JSON.parse({"path": path, "type": "import_module_context"}.to_json)
+        CompletionItem.new(module_name, CompletionItemKind::Module, module_name, data).as(CompletionItem)
+      end
     end
 
     def find_module(path)
       paths = Crystal::CrystalPath.default_path.split(":")
                                   .select{|e| File.exists?(e)}
                                   .flat_map do |e|
-                                    Dir.glob("#{e}/*.cr").map { |i| [i, i[(e.size+1)..-4]]}.as(Array(Array(String)))
+                                    Dir.glob("#{e}/#{path}*/*.cr").map { |i| [i, i[(e.size+1)..-4]]}.as(Array(Array(String)))
                                   end
        paths.map do |path_module_name|
         path, module_name = path_module_name
-        CompletionItem.new(module_name, CompletionItemKind::Module, path, {"path": path}.as(JSON::Any), "TEXT").as(CompletionItem)
+        data = JSON.parse({"path": path, "type": "import_module_context"}.to_json)
+        CompletionItem.new(module_name, CompletionItemKind::Module, "module #{module_name}", data).as(CompletionItem)
       end
     end
 
@@ -103,6 +112,17 @@ module Scry
         ImportModuleContext.new($~["import"], @text_document)
       else
         raise UnrecognizedContext.new("Couldn't identify context of: #{line}")
+      end
+    end
+
+    def self.resolve(params : CompletionItem)
+      data = params.data.as(JSON::Any)
+      if(data["type"] == "import_module_context")
+        path = data["path"].as_s
+        file = File.new(path)
+        doc = file.each_line.first(5).join("\n")
+        params.documentation = MarkupContent.new("markdown", "```crystal \n#{doc} \n ```")
+        params
       end
     end
   end

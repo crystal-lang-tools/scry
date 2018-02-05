@@ -12,7 +12,7 @@ module Scry
       triggerCharacters: Array(String)
     )
     def initialize
-      @resolveProvider = false
+      @resolveProvider = true
       @triggerCharacters = [".", "\""]
     end
   end
