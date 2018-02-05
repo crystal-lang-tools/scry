@@ -69,10 +69,12 @@ module Scry
     def find_module(path)
       paths = Crystal::CrystalPath.default_path.split(":")
                                   .select{|e| File.exists?(e)}
-                                  .map{|e| Dir.glob("#{e}/*.cr").map{|i| i[(e.size+1)..-4]} }
-                                  .flatten
-      paths.map do |path|
-        CompletionItem.new(path, CompletionItemKind::File, path)
+                                  .flat_map do |e|
+                                    Dir.glob("#{e}/*.cr").map { |i| [i, i[(e.size+1)..-4]]}.as(Array(Array(String)))
+                                  end
+       paths.map do |path_module_name|
+        path, module_name = path_module_name
+        CompletionItem.new(module_name, CompletionItemKind::Module, path, {"path": path}.as(JSON::Any), "TEXT").as(CompletionItem)
       end
     end
 
