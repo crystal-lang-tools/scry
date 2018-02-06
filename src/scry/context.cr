@@ -7,8 +7,8 @@ require "./update_config"
 require "./parse_analyzer"
 require "./publish_diagnostic"
 require "./symbol"
-require "./completion"
-
+require "./completion_provider"
+require "./completion_resolver"
 module Scry
   class UnrecognizedProcedureError < Exception
   end
@@ -55,7 +55,7 @@ module Scry
         response
       when "textDocument/completion"
           text_document = @workspace.get_file(params.text_document)
-          completion = Completion.new(text_document, params.context, params.position)
+          completion = CompletionProvider.new(text_document, params.context, params.position)
           results = completion.run
           response = ResponseMessage.new(msg.id, results)
           Log.logger.debug(response)
@@ -90,7 +90,8 @@ module Scry
     private def dispatchRequest(params : CompletionItem, msg)
       case msg.method
       when "completionItem/resolve"
-        results = Completion.resolve(params)
+        resolver = CompletionResolver.new(msg.id, params)
+        results = resolver.run
         response = ResponseMessage.new(msg.id, results)
         Log.logger.debug(response)
         response

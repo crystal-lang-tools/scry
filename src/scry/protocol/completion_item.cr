@@ -34,6 +34,17 @@ module Scry
     def initialize(@kind, @value)
     end
   end
+
+  struct RequireModuleContextData
+    JSON.mapping({
+      require_module_context: Bool,
+      path: String
+    })
+    def initialize(@path)
+      @require_module_context = true
+    end
+  end
+  alias CompletionItemData = RequireModuleContextData
   struct CompletionItem
     JSON.mapping({
       label:         String,
@@ -45,7 +56,7 @@ module Scry
       insertText:    String,
       insertTextFormat: {type: Int8, nilable: true},
       # command: Command,
-      data: {type: JSON::Any, nilable: true}
+      data: {type: CompletionItemData, nilable: true}
       # insertTestFormat: String,
       # textEdit: TextEdit,
       # additionalTextEdits:  Array(TextEdit),
