@@ -1,40 +1,35 @@
+
 module Scry::Completion
   class RequireModuleContext < Context
+    RELATIVE_IMPORT_REGEX = /^\./
     def initialize(@import : String, @text_document : TextDocument)
     end
 
     def find
       case @import
-      when /^\./
-        find_relative(@import)
+      when RELATIVE_IMPORT_REGEX
+        file_dir = File.dirname(@text_document.filename)
+        complete_in([file_dir])
       else
-        find_module(@import)
+        lookup_paths = ENV["CRYSTAL_PATH"].split(":")
+        complete_in(lookup_paths)
       end
     end
 
-    def find_relative(path)
-      file_dir = File.dirname(@text_document.filename)
-      path_glob = File.expand_path(path, file_dir)
-      paths = Dir.glob(["#{path_glob}*/*.cr", "#{path_glob}*.cr"]).map do |i|
-        [i, i[(file_dir.size + 1)..-4]]
+    def complete_in(paths)
+      found_paths = paths.flat_map do |root_path|
+        Dir.glob("#{root_path}/#{@import}*/", "#{root_path}/#{@import}*.cr")
       end
-      paths.map do |path_module_name|
-        path, module_name = path_module_name
-        data = Scry::RequireModuleContextData.new(path)
-        CompletionItem.new(module_name, CompletionItemKind::Module, module_name, data).as(CompletionItem)
-      end
-    end
-
-    def find_module(path)
-      paths = Crystal::CrystalPath.default_path.split(":")
-                                               .select { |e| File.exists?(e) }
-                                               .flat_map do |e|
-        Dir.glob("#{e}/#{path}*/*.cr").map { |i| [i, i[(e.size + 1)..-4]] }.as(Array(Array(String)))
-      end
-      paths.map do |path_module_name|
-        path, module_name = path_module_name
-        data = Scry::RequireModuleContextData.new(path)
-        CompletionItem.new(module_name, CompletionItemKind::Module, "module #{module_name}", data).as(CompletionItem)
+      found_paths.map do |path|
+        label = File.directory?(path) ? File.basename(path)+"/" : File.basename(path)
+        insert_text = label
+        CompletionItem.new(
+          label: label,
+          insertText: insert_text,
+          kind: CompletionItemKind::Module,
+          detail: label,
+          data: RequireModuleContextData.new(path)
+        )
       end
     end
   end

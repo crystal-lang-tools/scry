@@ -26,6 +26,12 @@ module Scry
     Operator      = 24
     TypeParameter = 25
   end
+
+  enum InsertTextFormat
+    PlainText = 1
+    Snippet = 2
+  end
+
   struct MarkupContent
     JSON.mapping({
       kind: String,
@@ -54,7 +60,7 @@ module Scry
       sortText:      String,
       filterText:    String,
       insertText:    String,
-      insertTextFormat: {type: Int8, nilable: true},
+      insertTextFormat: InsertTextFormat,
       # command: Command,
       data: {type: CompletionItemData, nilable: true}
       # insertTestFormat: String,
@@ -62,10 +68,11 @@ module Scry
       # additionalTextEdits:  Array(TextEdit),
       # commitCharacters: Array(String)
     }, true)
-    def initialize(@label, @kind, @detail, @data, @documentation = nil)
+    def initialize(@label, @kind, @detail, @data, insertText = nil, @documentation = nil)
       @sortText = @label
       @filterText = @label
-      @insertText = @label
+      @insertText = insertText || @label
+      @insertTextFormat = InsertTextFormat::PlainText
     end
   end
 end

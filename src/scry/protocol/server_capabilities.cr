@@ -13,7 +13,7 @@ module Scry
     )
     def initialize
       @resolveProvider = true
-      @triggerCharacters = [".", "\""]
+      @triggerCharacters = [".", "\"", "/"]
     end
   end
 
