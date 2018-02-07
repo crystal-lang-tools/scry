@@ -6,11 +6,11 @@ module Scry
 
   struct CompletionContext
     JSON.mapping({
-      triggerKind:      CompletionTriggerKind,
-      triggerCharacter: String,
+      trigger_kind:      {type: CompletionTriggerKind, key: "triggerKind"},
+      trigger_character: {type: String, key: "triggerCharacter"},
     }, true)
 
-    def initialize(@triggerKind, @triggerCharacter)
+    def initialize(@trigger_kind, @trigger_character)
     end
   end
 end
