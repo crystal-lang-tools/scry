@@ -9,6 +9,7 @@ require "./publish_diagnostic"
 require "./symbol"
 require "./completion_provider"
 require "./completion_resolver"
+
 module Scry
   class UnrecognizedProcedureError < Exception
   end
@@ -54,12 +55,12 @@ module Scry
         Log.logger.debug(response)
         response
       when "textDocument/completion"
-          text_document = @workspace.get_file(params.text_document)
-          completion = CompletionProvider.new(text_document, params.context, params.position)
-          results = completion.run
-          response = ResponseMessage.new(msg.id, results)
-          Log.logger.debug(response)
-          response
+        text_document = @workspace.get_file(params.text_document)
+        completion = CompletionProvider.new(text_document, params.context, params.position)
+        results = completion.run
+        response = ResponseMessage.new(msg.id, results)
+        Log.logger.debug(response)
+        response
       else
         raise UnrecognizedProcedureError.new("Didn't recognize procedure: #{msg.method}")
       end

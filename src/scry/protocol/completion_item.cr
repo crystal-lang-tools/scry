@@ -66,10 +66,10 @@ module Scry
       insert_text:        {type: String, key: "insertText"},
       insert_text_format: {type: InsertTextFormat, key: "insertTextFormat"},
       # command: Command,
-      data: {type: CompletionItemData, nilable: true} # insertTestFormat: String,
-    # textEdit: TextEdit,
-    # additionalTextEdits:  Array(TextEdit),
-    # commitCharacters: Array(String)
+      data: {type: CompletionItemData, nilable: true}, # insertTestFormat: String,
+      # textEdit: TextEdit,
+      # additionalTextEdits:  Array(TextEdit),
+      # commitCharacters: Array(String)
     }, true)
 
     def initialize(@label, @kind, @detail, @data, insert_text = nil, @documentation = nil)

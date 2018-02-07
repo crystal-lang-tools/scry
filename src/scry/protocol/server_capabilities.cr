@@ -6,11 +6,13 @@ module Scry
     Full
     Incremental
   end
+
   struct CompletionOptions
     JSON.mapping(
       resolveProvider: Bool,
       triggerCharacters: Array(String)
     )
+
     def initialize
       @resolveProvider = true
       @triggerCharacters = [".", "\"", "/"]

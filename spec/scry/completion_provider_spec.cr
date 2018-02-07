@@ -6,7 +6,7 @@ module Scry
       tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
       text_content = "require \"arr"
       text_document = TextDocument.new(tree_path, [text_content])
-      position = Position.new(line=0, character=text_content.size)
+      position = Position.new(line = 0, character = text_content.size)
       completion_provider = CompletionProvider.new(text_document, context: nil, position: position)
 
       results = completion_provider.run
@@ -24,7 +24,7 @@ module Scry
       tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
       text_content = "require \"./"
       text_document = TextDocument.new(tree_path, [text_content])
-      position = Position.new(line=0, character=text_content.size)
+      position = Position.new(line = 0, character = text_content.size)
       completion_provider = CompletionProvider.new(text_document, context: nil, position: position)
 
       results = completion_provider.run

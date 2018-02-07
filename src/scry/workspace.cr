@@ -12,7 +12,7 @@ module Scry
       @open_files = {} of String => TextDocument
     end
 
-    def put_file(params : DidOpenTextDocumentParams|DidChangeTextDocumentParams)
+    def put_file(params : DidOpenTextDocumentParams | DidChangeTextDocumentParams)
       file = TextDocument.new(params)
       @open_files[file.filename] = file
     end

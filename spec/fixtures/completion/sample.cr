@@ -1,5 +1,4 @@
 class A
-    def method
-
-    end
+  def method
+  end
 end

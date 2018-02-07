@@ -5,7 +5,7 @@ module Scry
     it "handles require module completions" do
       tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
       context = RequireModuleContextData.new(tree_path)
-      completion_item = CompletionItem.new(label="mock", kind=CompletionItemKind::Text, detail="mock detail", data=context, documentation = nil)
+      completion_item = CompletionItem.new(label = "mock", kind = CompletionItemKind::Text, detail = "mock detail", data = context, documentation = nil)
       completion_resolver = CompletionResolver.new(1, completion_item)
 
       results = completion_resolver.run.as(CompletionItem)
