@@ -1,4 +1,3 @@
-
 module Scry::Completion
   class RequireModuleContext < Context
     RELATIVE_IMPORT_REGEX = /^\./
@@ -21,7 +20,7 @@ module Scry::Completion
         Dir.glob("#{root_path}/#{@import}*/", "#{root_path}/#{@import}*.cr")
       end
       found_paths.map do |path|
-        label = File.directory?(path) ? File.basename(path)+"/" : File.basename(path)
+        label = File.directory?(path) ? File.basename(path)+"/" : File.basename(path, ".cr")
         insert_text = label
         CompletionItem.new(
           label: label,
