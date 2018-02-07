@@ -17,14 +17,15 @@ module Scry::Completion
 
     def complete_in(paths)
       found_paths = paths.flat_map do |root_path|
-        Dir.glob("#{root_path}/#{@import}*/", "#{root_path}/#{@import}*.cr")
+        Dir.glob("#{root_path}/#{@import}*/", "#{root_path}/#{@import}*.cr").map{|e| File.expand_path(e)} - [@text_document.filename]
       end
       found_paths.map do |path|
         label = File.directory?(path) ? File.basename(path)+"/" : File.basename(path, ".cr")
         insert_text = label
+        root_path = paths.first
         CompletionItem.new(
           label: label,
-          insertText: insert_text,
+          insert_text: insert_text,
           kind: CompletionItemKind::Module,
           detail: label,
           data: RequireModuleContextData.new(path)

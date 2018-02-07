@@ -10,7 +10,7 @@ module Scry
 
       results = completion_resolver.run.as(CompletionItem)
       doc = results.documentation.as(MarkupContent)
-      doc.value.should eq("```crystal \n# taken from https://raw.githubusercontent.com/crystal-lang/crystal/master/samples/tree.cr\nclass Node\n    @left : self?\n    @right : self?\n \n ```")
+      doc.value.should eq("```crystal\n# taken from https://raw.githubusercontent.com/crystal-lang/crystal/master/samples/tree.cr\nclass Node\n  @left : self?\n  @right : self?\n\n```")
     end
   end
 end

@@ -29,14 +29,15 @@ module Scry
 
   enum InsertTextFormat
     PlainText = 1
-    Snippet = 2
+    Snippet   = 2
   end
 
   struct MarkupContent
     JSON.mapping({
-      kind: String,
-      value: String
+      kind:  String,
+      value: String,
     })
+
     def initialize(@kind, @value)
     end
   end
@@ -44,35 +45,38 @@ module Scry
   struct RequireModuleContextData
     JSON.mapping({
       require_module_context: Bool,
-      path: String
+      path:                   String,
     })
+
     def initialize(@path)
       @require_module_context = true
     end
   end
+
   alias CompletionItemData = RequireModuleContextData
+
   struct CompletionItem
     JSON.mapping({
-      label:         String,
-      kind:          CompletionItemKind,
-      detail:        String,
-      documentation: {type: MarkupContent, nilable: true}, #  | Markup
-      sortText:      String,
-      filterText:    String,
-      insertText:    String,
-      insertTextFormat: InsertTextFormat,
+      label:              String,
+      kind:               CompletionItemKind,
+      detail:             String,
+      documentation:      {type: MarkupContent, nilable: true}, #  | Markup
+      sort_text:          {type: String, key: "sortText"},
+      filter_text:        {type: String, key: "filterText"},
+      insert_text:        {type: String, key: "insertText"},
+      insert_text_format: {type: InsertTextFormat, key: "insertTextFormat"},
       # command: Command,
-      data: {type: CompletionItemData, nilable: true}
-      # insertTestFormat: String,
-      # textEdit: TextEdit,
-      # additionalTextEdits:  Array(TextEdit),
-      # commitCharacters: Array(String)
+      data: {type: CompletionItemData, nilable: true} # insertTestFormat: String,
+    # textEdit: TextEdit,
+    # additionalTextEdits:  Array(TextEdit),
+    # commitCharacters: Array(String)
     }, true)
-    def initialize(@label, @kind, @detail, @data, insertText = nil, @documentation = nil)
-      @sortText = @label
-      @filterText = @label
-      @insertText = insertText || @label
-      @insertTextFormat = InsertTextFormat::PlainText
+
+    def initialize(@label, @kind, @detail, @data, insert_text = nil, @documentation = nil)
+      @sort_text = @label
+      @filter_text = @label
+      @insert_text = insert_text || @label
+      @insert_text_format = InsertTextFormat::PlainText
     end
   end
 end
