@@ -1,76 +1,10 @@
-language: generic
-
-group: deprecated-2017Q3
-
-matrix:
-  include:
-    - os: linux
-      dist: trusty
-      env:
-        - DEPLOY_FILENAME=scry_linux.tar.gz
-    - os: osx
-      env:
-        - DEPLOY_FILENAME=scry_macOS.tar.gz
-
 sudo: required
 
-install:
-- |
-  set -e
-  set -x
-  case $TRAVIS_OS_NAME in
-  linux)
-    curl https://dist.crystal-lang.org/apt/setup.sh | sudo bash
-    sudo apt-get install -y --allow-unauthenticated crystal libgmp-dev llvm-3.8-dev build-essential
-    ;;
-  osx)
-    rm -f /usr/local/bin/shards
-    brew update
-    brew install llvm@4 crystal-lang
-    brew link llvm@4 --force
-    ;;
-  *)
-    exit 1;;
-  esac
+language: generic
 
-  set +x
+services:
+  - docker
 
-script:
-- crystal spec --error-trace --stats --progress --no-debug
-
-after_success:
-- |
-  set +e
-  set -x
-  case $TRAVIS_OS_NAME in
-  linux)
-    travis_wait make linux
-    tar -cvzf scry_linux.tar.gz bin/linux/scry
-    ;;
-  osx)
-    travis_wait make darwin
-    tar -cvzf scry_macOS.tar.gz bin/darwin/scry
-    ;;
-  *)
-    exit 1;;
-  esac
-
-  set +x
-
-notifications:
-  webhooks:
-    urls:
-    - https://webhooks.gitter.im/e/94bc44167f5a3d9fa7a8
-    on_success: change
-    on_failure: always
-    on_start: never
-
-deploy:
-  provider: releases
-  api_key:
-    secure: O6F1MwtIi/yjHVAd6hVfsIsqvaLNiC4IyIchRjn9/VgVfGGLmVnpuP45y1x9IW3G+ZRNcxPMTjD0E4x5rMSnOysHjMCyUPraQw669LlcUeCXvuSl8i1+nLIb+KdIKHX7raB3J8TwED3NfJ8GOS3kzj/tsPKBISIRGRh0/uaEjNnok0UbCgfTSBVwGYBIj+co0O5Lz7ceVWeg/1z9kc851oPnqN9AWOyQe0pC6VyDvi98R3hHBLAEIdEhFD0zWqoWTEm/HwKybTW/rwxE1MK5Dqol4hiDJ5jhyMGJXUEWlprXinbUuC3a1qc1SZGlGFCcTbP4XTQIqwQyzwsk/gfO/8H3C++SctVYhNKrScK9ZCgwjrm95wUDlOZmXnt1y90drEMKZyjjPXFp+r4jZsKijyBg/FJWL7rRTPsVbD4EJiUxaK2pOS7rySR1tvlyY66zjdNINgx5lt3Udiqlh4LRfqHI2asRIchqpoM5kBPHiP0g/7zJRZNU8QcTm4qM0Hujult9d3j2ahBY41XMVa7Any03LE7rcbLVUo3YkEm3amalo1zGigaU0YPxuQgJUNXZgfKwvaoWtyB3e413fkHHksgjWp/dsuZKI18q481oXPlaSoQ6dQ5DcZxsv7RfXzFXU9WM7lFpkpScJ4E3sbXB9sC9ThQL+Ron+IGslNTKiJc=
-  file: "$DEPLOY_FILENAME"
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: crystal-lang-tools/scry
+before_install:
+  - docker pull crystallang/crystal:0.24.1
+  - docker run -v `pwd`:/root/scry crystallang/crystal /bin/sh -c "apt-get update && apt-get install -y llvm-4.0-dev; cd /root/scry; crystal spec --error-trace --stats --progress --no-debug"
