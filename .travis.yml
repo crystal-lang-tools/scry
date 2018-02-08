@@ -7,4 +7,4 @@ services:
 
 before_install:
   - docker pull crystallang/crystal:0.24.1
-  - docker run -v `pwd`:/root/scry crystallang/crystal /bin/sh -c "apt-get update && apt-get install -y llvm-4.0-dev; cd /root/scry; crystal spec"
+  - docker run -v `pwd`:/root/scry crystallang/crystal /bin/sh -c "apt-get update && apt-get install -y llvm-4.0-dev; cd /root/scry; crystal spec --error-trace --stats --progress --no-debug"
