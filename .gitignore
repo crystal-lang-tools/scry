@@ -2,7 +2,7 @@
 /lib/
 /.crystal/
 /.shards/
-/bin/
+/bin/scry*
 .DS_Store
 *.out
 build/
