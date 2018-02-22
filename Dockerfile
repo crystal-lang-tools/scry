@@ -1,9 +1,9 @@
-FROM crystallang/crystal:0.22.0
+FROM crystallang/crystal:0.24.1
 
-RUN apt-get update && \
-    apt-get install -y build-essential curl libevent-dev git libxml2-dev \
-    llvm-3.8 llvm-3.8-dev libedit-dev libncurses-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update
+RUN apt-get install -y llvm-4.0-dev
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN mkdir -p /root/.cache/crystal
 

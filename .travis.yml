@@ -1,6 +1,6 @@
 language: generic
-
-group: deprecated-2017Q3
+services:
+  - docker
 
 matrix:
   include:
@@ -8,54 +8,20 @@ matrix:
       dist: trusty
       env:
         - DEPLOY_FILENAME=scry_linux.tar.gz
+        - DEPLOY_DIR=bin/linux
     - os: osx
       env:
         - DEPLOY_FILENAME=scry_macOS.tar.gz
-
-sudo: required
+        - DEPLOY_DIR=bin/darwin
 
 install:
-- |
-  set -e
-  set -x
-  case $TRAVIS_OS_NAME in
-  linux)
-    curl https://dist.crystal-lang.org/apt/setup.sh | sudo bash
-    sudo apt-get install -y --allow-unauthenticated crystal libgmp-dev llvm-3.8-dev build-essential
-    ;;
-  osx)
-    rm -f /usr/local/bin/shards
-    brew update
-    brew install llvm@4 crystal-lang
-    brew link llvm@4 --force
-    ;;
-  *)
-    exit 1;;
-  esac
-
-  set +x
+  - bin/ci  prepare_build
 
 script:
-- crystal spec --error-trace --stats --progress --no-debug
+  - bin/ci build
 
 after_success:
-- |
-  set +e
-  set -x
-  case $TRAVIS_OS_NAME in
-  linux)
-    travis_wait make linux
-    tar -cvzf scry_linux.tar.gz bin/linux/scry
-    ;;
-  osx)
-    travis_wait make darwin
-    tar -cvzf scry_macOS.tar.gz bin/darwin/scry
-    ;;
-  *)
-    exit 1;;
-  esac
-
-  set +x
+  - bin/ci deploy
 
 notifications:
   webhooks:
