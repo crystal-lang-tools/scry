@@ -15,7 +15,7 @@ def expand(path : String)
 end
 
 
-module Scry::Completion::DependacyGraph
+module Scry::Completion::DependencyGraph
 
     describe Node do
         it ".new" do

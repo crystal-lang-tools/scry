@@ -1,4 +1,4 @@
-module Scry::Completion::DependacyGraph
+module Scry::Completion::DependencyGraph
   struct Node
     property value
     property connections

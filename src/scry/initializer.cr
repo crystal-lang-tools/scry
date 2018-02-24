@@ -15,6 +15,7 @@ module Scry
     end
 
     def run
+      @workspace.open_workspace
       {@workspace, response}
     end
 
