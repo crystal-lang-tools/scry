@@ -10,6 +10,9 @@ class A
     def self.class_method(c : Int32): Int32
         c
     end
+
+    private def method_d
+    end
 end
 
 class C

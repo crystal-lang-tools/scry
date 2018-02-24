@@ -38,6 +38,7 @@ module Scry::Completion
     end
 
     def visit(node : Crystal::Def)
+      return false if @class_queue.empty? || node.visibility != Crystal::Visibility::Public
       if node.name == "initialize"
         name = "new"
         method_receiver = "#{@class_queue.last}.class"
