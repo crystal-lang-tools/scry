@@ -55,7 +55,7 @@ module Scry
         Log.logger.debug(response)
         response
       when "textDocument/completion"
-        text_document = @workspace.get_file(params.text_document)
+        text_document, method_db = @workspace.get_file(params.text_document)
         completion = CompletionProvider.new(text_document, params.context, params.position)
         results = completion.run
         response = ResponseMessage.new(msg.id, results)
@@ -133,7 +133,7 @@ module Scry
     end
 
     private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
-      @workspace.put_file(params)
+      @workspace.update_file(params)
       text_document = TextDocument.new(params)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
       response = analyzer.run
