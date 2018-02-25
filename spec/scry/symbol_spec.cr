@@ -51,7 +51,7 @@ module Scry
       text_document = TextDocument.new("uri", ["@bar = nil"])
       processor = SymbolProcessor.new(text_document)
       response = processor.run
-      result = response.result.try(&.first)
+      result = response.result.as(Array(SymbolInformation)).try(&.first)
       result.as(SymbolInformation).kind.is_a?(SymbolKind::Variable).should be_true
     end
 
@@ -60,7 +60,7 @@ module Scry
         text_document = TextDocument.new("uri", ["class Foo; getter bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         response = processor.run
-        result = response.result.try { |r| r[1] }
+        result = response.result.as(Array(SymbolInformation)).try { |r| r[1] }
         result.as(SymbolInformation).kind.is_a?(SymbolKind::Property).should be_true
       end
 
@@ -68,7 +68,7 @@ module Scry
         text_document = TextDocument.new("uri", ["class Foo; setter bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         response = processor.run
-        result = response.result.try { |r| r[1] }
+        result = response.result.as(Array(SymbolInformation)).try { |r| r[1] }
         result.as(SymbolInformation).kind.is_a?(SymbolKind::Property).should be_true
       end
 
@@ -76,7 +76,7 @@ module Scry
         text_document = TextDocument.new("uri", ["class Foo; property bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         response = processor.run
-        result = response.result.try { |r| r[1] }
+        result = response.result.as(Array(SymbolInformation)).try { |r| r[1] }
         result.as(SymbolInformation).kind.is_a?(SymbolKind::Property).should be_true
       end
     end
