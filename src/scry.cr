@@ -15,7 +15,7 @@ module Scry
 
     EnvironmentConfig.new.run
 
-    next_request = Channel(Int32).new
+    next_request = Channel(Int32).new(3)
     context = Context.new
 
     loop do |i|
