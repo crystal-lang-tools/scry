@@ -18,9 +18,10 @@ module Scry
     next_request = Channel(Nil).new
     context = Context.new
 
-    loop do
-      content = Request.new(STDIN).read
+    loop do |i|
       spawn do
+        Log.logger.debug("Scry Request ##{i}")
+        content = Request.new(STDIN).read
         request = Message.new(content).parse
         results = context.dispatch(request)
       rescue ex
@@ -32,7 +33,7 @@ module Scry
       end
       select
       when next_request.receive
-        Log.logger.info("Scry has processed a request!")
+        Log.logger.debug("Scry has processed a request!")
         next
       else
         sleep 1
