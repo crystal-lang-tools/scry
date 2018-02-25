@@ -31,6 +31,7 @@ module Scry
         response.write(STDOUT)
         next_request.send i
       end
+
       select
       when n = next_request.receive
         Log.logger.debug("Scry has processed request ##{n}!")
