@@ -15,9 +15,11 @@ module Scry
 
     EnvironmentConfig.new.run
 
+    next_request = Channel(Nil).new
     context = Context.new
+
     loop do
-      begin
+      spawn do
         content = Request.new(STDIN).read
         request = Message.new(content).parse
         results = context.dispatch(request)
@@ -26,6 +28,14 @@ module Scry
       ensure
         response = Response.new([results].flatten)
         response.write(STDOUT)
+        next_request.send nil
+      end
+      select
+      when next_request.receive
+        Log.logger.info("Scry has processed a request!")
+        next
+      else
+        sleep 1
       end
     end
   rescue ex
