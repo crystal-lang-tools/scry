@@ -100,6 +100,12 @@ module Scry
     end
 
     # Used by:
+    # - $/cancelRequest
+    private def dispatchNotification(params : CancelParams, msg)
+      nil
+    end
+
+    # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`
     private def dispatchNotification(params : TextDocumentParams, msg)

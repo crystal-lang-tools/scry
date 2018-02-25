@@ -1,9 +1,11 @@
 require "./log"
 require "compiler/crystal/crystal_path"
 require "./completion/*"
-
 module Scry
-  class UnrecognizedContext < Exception
+  class UnrecognizedContext < Completion::Context
+    def find
+      [] of CompletionItem
+    end
   end
 
   class CompletionProvider
@@ -19,6 +21,8 @@ module Scry
       context.find
     end
 
+
+
     def parse_context
       line = @text_document.text.first.lines[@position.line][0..@position.character - 1]
       case line
@@ -29,7 +33,7 @@ module Scry
       when REQUIRE_MODULE_REGEX
         Completion::RequireModuleContext.new($~["import"], @text_document)
       else
-        raise UnrecognizedContext.new("Couldn't identify context of: #{line}")
+        UnrecognizedContext.new
       end
     end
   end
