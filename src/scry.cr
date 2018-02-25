@@ -20,7 +20,7 @@ module Scry
 
     loop do |i|
       spawn do
-        Log.logger.debug("Scry Request ##{i}")
+        Log.logger.debug("Scry is listening request ##{i}...")
         content = Request.new(STDIN).read
         request = Message.new(content).parse
         results = context.dispatch(request)
