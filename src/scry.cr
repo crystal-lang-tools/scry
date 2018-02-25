@@ -33,7 +33,7 @@ module Scry
       end
       select
       when next_request.receive
-        Log.logger.debug("Scry has processed a request!")
+        Log.logger.debug("Scry has processed request ##{i}!")
         next
       else
         sleep 1
