@@ -15,7 +15,7 @@ module Scry
 
     EnvironmentConfig.new.run
 
-    next_request = Channel(Nil).new
+    next_request = Channel(Int32).new
     context = Context.new
 
     loop do |i|
@@ -29,11 +29,11 @@ module Scry
       ensure
         response = Response.new([results].flatten)
         response.write(STDOUT)
-        next_request.send nil
+        next_request.send i
       end
       select
-      when next_request.receive
-        Log.logger.debug("Scry has processed request ##{i}!")
+      when n = next_request.receive
+        Log.logger.debug("Scry has processed request ##{n}!")
         next
       else
         sleep 1
