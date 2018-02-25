@@ -19,8 +19,8 @@ module Scry
     context = Context.new
 
     loop do
+      content = Request.new(STDIN).read
       spawn do
-        content = Request.new(STDIN).read
         request = Message.new(content).parse
         results = context.dispatch(request)
       rescue ex
