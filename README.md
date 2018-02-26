@@ -15,7 +15,7 @@ The server is implemented in Crystal.
 
 ## Installation
 
-Scry will be distrubuted as part of editors extensions, see:
+Scry will be distributed as part of editors extensions, see:
 
 - [ide-crystal](https://github.com/crystal-lang-tools/atom-crystal) for Atom
 - [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
