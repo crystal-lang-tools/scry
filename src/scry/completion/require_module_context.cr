@@ -1,13 +1,12 @@
 module Scry::Completion
   class RequireModuleContext < Context
-    RELATIVE_IMPORT_REGEX = /^\./
 
     def initialize(@import : String, @text_document : TextDocument)
     end
 
     def find
       case @import
-      when RELATIVE_IMPORT_REGEX
+      when .starts_with? '.'
         file_dir = File.dirname(@text_document.filename)
         complete_in([file_dir])
       else
