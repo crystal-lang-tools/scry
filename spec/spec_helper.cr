@@ -31,4 +31,6 @@ module Scry
   TEXTDOCUMENT_POSITION_PARAM_EXAMPLE = %({"textDocument":{"uri":"#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
 
   INITIALIZED_EXAMPLE = %({"jsonrpc": "2.0", "method": "initialized", "params": {}})
+
+  COMPLETION_EXAMPLE = %({"jsonrpc": "2.0", "method": "textDocument/completion", "params": #{TEXTDOCUMENT_POSITION_PARAM_EXAMPLE}})
 end

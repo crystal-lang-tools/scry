@@ -38,7 +38,7 @@ module Scry
       io = IO::Memory.new
       response = Response.new(results)
       response.write(io)
-      io.to_s.should eq(%(Content-Length: 164\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true}}}))
+      io.to_s.should eq(%(Content-Length: 245\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true,"completionProvider":{"resolveProvider":true,"triggerCharacters":[".","\\\"","/"]}}}}))
     end
   end
 end

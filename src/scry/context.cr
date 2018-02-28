@@ -7,6 +7,8 @@ require "./update_config"
 require "./parse_analyzer"
 require "./publish_diagnostic"
 require "./symbol"
+require "./completion_provider"
+require "./completion_resolver"
 
 module Scry
   class UnrecognizedProcedureError < Exception
@@ -52,6 +54,13 @@ module Scry
         response = definitions.run
         Log.logger.debug(response)
         response
+      when "textDocument/completion"
+        text_document = @workspace.get_file(params.text_document)
+        completion = CompletionProvider.new(text_document, params.context, params.position)
+        results = completion.run
+        response = ResponseMessage.new(msg.id, results)
+        Log.logger.debug(response)
+        response
       else
         raise UnrecognizedProcedureError.new("Didn't recognize procedure: #{msg.method}")
       end
@@ -79,10 +88,31 @@ module Scry
       end
     end
 
+    private def dispatchRequest(params : CompletionItem, msg)
+      case msg.method
+      when "completionItem/resolve"
+        resolver = CompletionResolver.new(msg.id, params)
+        results = resolver.run
+        response = ResponseMessage.new(msg.id, results)
+        Log.logger.debug(response)
+        response
+      end
+    end
+
+    # Used by:
+    # - $/cancelRequest
+    private def dispatchNotification(params : CancelParams, msg)
+      nil
+    end
+
     # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`
     private def dispatchNotification(params : TextDocumentParams, msg)
+      case msg.method
+      when "textDocument/didClose"
+        @workspace.drop_file(params)
+      end
       nil
     end
 
@@ -93,8 +123,8 @@ module Scry
     end
 
     private def dispatchNotification(params : DidOpenTextDocumentParams, msg)
+      @workspace.put_file(params)
       text_document = TextDocument.new(params)
-
       unless text_document.in_memory?
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
@@ -103,6 +133,7 @@ module Scry
     end
 
     private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
+      @workspace.put_file(params)
       text_document = TextDocument.new(params)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
       response = analyzer.run
