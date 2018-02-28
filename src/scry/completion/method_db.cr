@@ -8,6 +8,18 @@ module Scry::Completion
       @db = {} of String => Array(MethodDBEntry)
     end
 
+    def matches(types : Array(String), text : String) : Array(MethodDBEntry)
+      types.each.flat_map do |e|
+        res = @db[e]?
+        if res
+          res
+        else
+          Log.logger.debug("Couldn't find type #{e}")
+          [] of MethodDBEntry
+        end
+      end.select(&.name.starts_with? text).to_a
+    end
+
     def self.generate(paths)
       new.tap do |method_db|
         paths.each do |path|

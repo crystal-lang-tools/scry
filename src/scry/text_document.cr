@@ -9,7 +9,7 @@ module Scry
   struct TextDocument
     getter id : Int32 | Nil
     getter uri : String
-    getter filename : String
+    property filename : String
     getter text : Array(String)
     getter position : Position?
 

@@ -53,7 +53,7 @@ module Scry
     end
   end
 
-  alias CompletionItemData = RequireModuleContextData
+  alias CompletionItemData = RequireModuleContextData | Nil
 
   struct CompletionItem
     JSON.mapping({
