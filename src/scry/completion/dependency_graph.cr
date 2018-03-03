@@ -62,6 +62,7 @@ module Scry::Completion::DependencyGraph
     end
 
     def build
+      Log.logger.debug("Starting to build dependancy graph for these paths: #{@lookup_paths.join("\n")}")
       graph = Graph.new
       @lookup_paths
         .map { |e| File.join(File.expand_path(e), "**", "*.cr") }
@@ -70,7 +71,7 @@ module Scry::Completion::DependencyGraph
         .each { |file| process_requires(file, graph) }
 
       prelude_node = graph[/src\/prelude.cr$/]
-
+      Log.logger.debug("Finished building the dependancy graph got these nodes:#{graph.each.to_a.map(&.first)}")
       return graph if prelude_node.nil?
 
       graph.each.reject { |e| e == prelude_node.not_nil!.value }.each do |key, _|
