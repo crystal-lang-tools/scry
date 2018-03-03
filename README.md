@@ -33,6 +33,7 @@ Ongoing, in [our](https://github.com/kofno/scry#contributors) free time.
 
 The goal is too implement all of the currently supported Language Server Features.
 
+- [Completion](https://microsoft.github.io/language-server-protocol/specification#textDocument_completion) **(WIP)**: compute completion items at a given cursor position.
 - [Diagnostics](https://microsoft.github.io/language-server-protocol/specification#textDocument_publishDiagnostics) **(WIP)**: provides problem detection for text document.
 - [Document Formatting](https://microsoft.github.io/language-server-protocol/specification#textDocument_formatting) **(WIP)**: this includes formatting of whole documents, document ranges and formatting on type.
 - [Goto Definition](https://microsoft.github.io/language-server-protocol/specification#textDocument_definition): **(WIP)** provides go to definition support for a symbol selected in a text document.
