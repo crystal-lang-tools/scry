@@ -47,7 +47,7 @@ module Scry::Completion::DependencyGraph
     end
 
     def each(&block)
-      @nodes.each do |k,v|
+      @nodes.each do |k, v|
         yield k, v
       end
     end
@@ -69,20 +69,20 @@ module Scry::Completion::DependencyGraph
         .flat_map { |d| Dir.glob(d) }
         .each { |file| process_requires(file, graph) }
 
-        prelude_node = graph[/src\/prelude.cr$/]
+      prelude_node = graph[/src\/prelude.cr$/]
 
-        return graph if prelude_node.nil?
+      return graph if prelude_node.nil?
 
-        graph.each.reject{|e| e == prelude_node.not_nil!.value}.each do |key, _|
-          graph[key].connections << prelude_node.not_nil!
-        end
-        graph
+      graph.each.reject { |e| e == prelude_node.not_nil!.value }.each do |key, _|
+        graph[key].connections << prelude_node.not_nil!
+      end
+      graph
     end
 
     def process_requires(file, graph)
       requires = parse_requires(file)
       current_file_path = File.expand_path(file)
-      if(requires.empty?)
+      if (requires.empty?)
         graph.add(current_file_path)
         return
       end

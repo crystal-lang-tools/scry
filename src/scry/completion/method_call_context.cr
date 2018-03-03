@@ -1,9 +1,9 @@
 module Scry::Completion
   class MethodCallContext < Context
-    TYPE_REGEXP = /[A-Z][a-zA-Z_:0-9]*/
+    TYPE_REGEXP          = /[A-Z][a-zA-Z_:0-9]*/
     REVERSED_TYPE_REGEXP = /[a-zA-Z_:0-9]*[A-Z]/
-    NEW_REGEXP  = /(?<type>#{TYPE_REGEXP})(?:\(.+\))?\.new/
-    CLASS_REGEXP = /(?<class_name>#{TYPE_REGEXP})/
+    NEW_REGEXP           = /(?<type>#{TYPE_REGEXP})(?:\(.+\))?\.new/
+    CLASS_REGEXP         = /(?<class_name>#{TYPE_REGEXP})/
 
     def initialize(@text : String, @target : String, @method : String, @method_db : MethodDB)
     end
@@ -44,8 +44,8 @@ module Scry::Completion
     def declaration_regex
       if @target.starts_with?("@")
         Regex.union(/(?<type>#{REVERSED_TYPE_REGEXP})\s*:\s*#{@target[1..-1].reverse}\s*#{"property".reverse}/,
-                    /(?<type>#{REVERSED_TYPE_REGEXP})\s*:\s*#{@target[1..-1].reverse}\s*#{"setter".reverse}/,
-                    /(?<type>#{REVERSED_TYPE_REGEXP})\s*:\s*#{@target[1..-1].reverse}\s*#{"getter".reverse}/
+          /(?<type>#{REVERSED_TYPE_REGEXP})\s*:\s*#{@target[1..-1].reverse}\s*#{"setter".reverse}/,
+          /(?<type>#{REVERSED_TYPE_REGEXP})\s*:\s*#{@target[1..-1].reverse}\s*#{"getter".reverse}/
         )
       else
         /(?<type>#{REVERSED_TYPE_REGEXP})\s*:\s*#{@target.reverse}/

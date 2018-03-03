@@ -9,7 +9,6 @@ module Scry
     property open_files
     property dependency_graph : Completion::DependencyGraph::Graph
 
-
     def initialize(root_uri, process_id, max_number_of_problems)
       @root_uri = root_uri
       @process_id = process_id

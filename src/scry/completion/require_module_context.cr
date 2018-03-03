@@ -1,6 +1,5 @@
 module Scry::Completion
   class RequireModuleContext < Context
-
     def initialize(@import : String, @text_document : TextDocument)
     end
 

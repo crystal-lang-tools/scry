@@ -3,9 +3,8 @@ require "../src/scry/**"
 
 module Scry
   EnvironmentConfig.new.run
-  ROOT_PATH = File.expand_path("spec/fixtures/")
+  ROOT_PATH      = File.expand_path("spec/fixtures/")
   SOME_FILE_PATH = File.expand_path("./fixtures/src/some_file.cr", __DIR__)
-
 
   INITIALIZATION_EXAMPLE = %({ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "processId": 1, "rootPath": "#{ROOT_PATH}", "capabilities": {} , "trace": "off"}})
 
