@@ -19,7 +19,7 @@ module Scry
     end
 
     def open_workspace
-      @dependency_graph = Completion::DependencyGraph::Builder.new(ENV["CRYSTAL_PATH"].split(":") + ["#{@root_uri}/src"]).build
+      @dependency_graph = Completion::DependencyGraph::Builder.new(ENV["CRYSTAL_PATH"].split(":") + [@root_uri]).build
     end
 
     def put_file(params : DidOpenTextDocumentParams)
