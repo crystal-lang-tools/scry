@@ -1,4 +1,3 @@
-require "compiler/crystal/**"
 require "./workspace"
 require "./text_document"
 require "./publish_diagnostic"
@@ -26,17 +25,22 @@ module Scry
 
     # NOTE: compiler is a bit heavy in some projects.
     private def analyze(source)
-      source = Crystal::Compiler::Source.new(@text_document.filename, source)
-      compiler = Crystal::Compiler.new
-      compiler.color = false
-      compiler.no_codegen = true
-      compiler.debug = Crystal::Debug::None
-      compiler.compile(source, source.filename + ".out")
-      [@diagnostic.clean]
-    rescue ex : Crystal::Exception
-      @diagnostic.from(ex)
-    ensure
-      GC.collect
+      response = crystal_build(@text_document.filename, source)
+      if response.empty?
+        [@diagnostic.clean]
+      else
+        @diagnostic.from(response)
+      end
+    rescue ex
+      Log.logger.error("A error was found while searching diagnostics\n#{ex}")
+      nil
+    end
+
+    private def crystal_build(filename, source)
+      code = IO::Memory.new(source)
+      String.build do |io|
+        Process.run("crystal", ["build", "--no-color", "--error-trace", "-f", "json", filename], output: io, error: io, input: code)
+      end
     end
   end
 end

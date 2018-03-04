@@ -1,5 +1,3 @@
-require "compiler/crystal/**"
-
 require "./log"
 require "./protocol/location"
 
@@ -21,29 +19,27 @@ module Scry
 
     # NOTE: compiler is a bit heavy in some projects.
     def search(filename, source, position)
-      source = Crystal::Compiler::Source.new(filename, source)
-      compiler = Crystal::Compiler.new
-      compiler.color = false
-      compiler.no_codegen = true
-      compiler.debug = Crystal::Debug::None
-      result = compiler.compile(source, filename + ".out")
-      loc = Crystal::Location.new(filename, position.line + 1, position.character + 1)
-      res = Crystal::ImplementationsVisitor.new(loc).process(result)
-      Log.logger.debug(res)
-      impls = res.implementations
-      if res.status == "ok" && impls
+      response = crystal_tool(filename, position)
+      parsed_response = JSON.parse(response)
+      impls = parsed_response["implementations"]?
+      if impls
         locations = impls.map do |impl|
-          pos = Position.new(impl.line, impl.column)
+          pos = Position.new(impl["line"].as_i, impl["column"].as_i)
           range = Range.new(pos, pos)
-          Location.new("file://" + impl.filename, range)
+          Location.new("file://" + impl["filename"].as_s, range)
         end
         ResponseMessage.new(@text_document.id, locations)
       end
     rescue ex
       Log.logger.error("A error was found while searching definitions\n#{ex}")
       nil
-    ensure
-      GC.collect
+    end
+
+    private def crystal_tool(filename, position)
+      location = "#{filename}:#{position.line + 1}:#{position.character + 1}"
+      String.build do |io|
+        Process.run("crystal", ["tool", "implementations", "--no-color", "--error-trace", "-f", "json", "-c", "#{location}", filename], output: io, error: io)
+      end
     end
   end
 end
