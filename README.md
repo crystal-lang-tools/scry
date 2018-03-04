@@ -17,6 +17,8 @@ The server is implemented in Crystal.
 
 To install scry download it from [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile latest version using:
 
+> **Note:** crystal and LLVM are required in order to compile scry.
+
 ```
 git clone https://github.com/crystal-lang-tools/scry.git
 cd scry
@@ -32,9 +34,7 @@ Then setup `scry` binary path on your LSP client.
 - Go to definition only work for some methods and variables. Go to classes or macros definition is not supported yet.
 - Symbol listing is per file, listing workspace symbols isn't supported yet.
 
-## Development && Roadmap
-
-> **Note:** crystal and LLVM are required in order to compile scry.
+## Roadmap
 
 Ongoing, in [our](https://github.com/kofno/scry#contributors) free time.
 
