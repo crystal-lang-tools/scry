@@ -15,7 +15,7 @@ The server is implemented in Crystal.
 
 ## Installation
 
-To install scry download it from [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile it using:
+To install scry download it from [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile latest version using:
 
 ```
 git clone https://github.com/crystal-lang-tools/scry.git
@@ -29,7 +29,7 @@ Then setup `scry` binary path on your LSP client.
 
 - Completion feature is still experimental.
 - Unexpected diagnostics can appear on files using implicit `require`, try using explicit `require` at top of your files.
-- GoTo definition (aka. implementations) only work for some methods and variables. Classes definition is not supported yet.
+- Go to definition only work for some methods and variables. Go to classes or macros definition is not supported yet.
 - Symbol listing is per file, listing workspace symbols isn't supported yet.
 
 ## Development && Roadmap
