@@ -15,15 +15,22 @@ The server is implemented in Crystal.
 
 ## Installation
 
-Scry will be distributed as part of editors extensions, see:
+To install scry download it from [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile it using:
 
-- [ide-crystal](https://github.com/crystal-lang-tools/atom-crystal) for Atom
-- [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
-- [vscode-crystal-lang](https://github.com/faustinoaq/vscode-crystal-lang)
+```
+git clone https://github.com/crystal-lang-tools/scry.git
+cd scry
+crystal build --status --progress --no-debug src/scry.cr
+```
+
+Then setup `scry` binary path on your LSP client.
 
 ## Known issues
 
-- Some diagnostics don't disappear after fixing the code.
+- Completion feature is still experimental.
+- Unexpected diagnostics can appear on files using implicit `require`, try using explicit `require` at top of your files.
+- GoTo definition (aka. implementations) only work for some methods and variables. Classes definition is not supported yet.
+- Symbol listing is per file, listing workspace symbols isn't supported yet.
 
 ## Development && Roadmap
 
@@ -60,3 +67,5 @@ The goal is too implement all of the currently supported Language Server Feature
 - [@kofno](https://github.com/kofno) Ryan L. Bell - creator, maintainer
 - [@keplersj](https://github.com/keplersj) Kepler Sticka-Jones - contributor
 - [@faustinoaq](https://github.com/faustinoaq) Faustino Aguilar - contributor
+- [@laginha87](https://github.com/laginha87) Filipe Correia - contributor
+- [@bmulvihill](https://github.com/bmulvihill) Bryan Mulvihill - contributor
