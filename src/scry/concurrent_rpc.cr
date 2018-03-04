@@ -1,6 +1,6 @@
 module Scry
   class ConcurrentRpc
-    CONTEXT = Context.new
+    @context = Context.new
 
     private def get_requests(reader, input_channel)
       Log.logger.info "getting request..."
@@ -13,7 +13,7 @@ module Scry
       Log.logger.info "Processing request..."
       Log.logger.info content
       request = Message.new(content).parse
-      results = CONTEXT.dispatch(request)
+      results = @context.dispatch(request)
     rescue ex
       results = [ResponseMessage.new(ex)]
     ensure
@@ -39,7 +39,7 @@ module Scry
 
         if channels[channel_index] == input_channel
           if data.nil?
-            Log.logger.info "Input closed, no more data to come in current channel..."
+            Log.logger.info "No more data to come from the client..."
             channels.delete_at(channel_index)
             next
           end
