@@ -69,7 +69,7 @@ module Scry
     private def dispatchRequest(params : DocumentFormattingParams, msg)
       text_document = TextDocument.new(params, msg.id)
 
-      if open_file = @workspace.open_files.first_value?
+      if open_file = @workspace.open_files[text_document.filename]
         text_document.text = open_file.text
       end
 
