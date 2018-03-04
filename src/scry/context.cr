@@ -69,12 +69,14 @@ module Scry
     private def dispatchRequest(params : DocumentFormattingParams, msg)
       text_document = TextDocument.new(params, msg.id)
 
-      unless text_document.untitled?
-        formatter = Formatter.new(@workspace, text_document)
-        response = formatter.run
-        Log.logger.debug(response)
-        response
+      if open_file = @workspace.open_files.first_value?
+        text_document.text = open_file.text
       end
+
+      formatter = Formatter.new(@workspace, text_document)
+      response = formatter.run
+      Log.logger.debug(response)
+      response
     end
 
     private def dispatchRequest(params : TextDocumentParams, msg)

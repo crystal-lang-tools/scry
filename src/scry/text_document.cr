@@ -10,8 +10,8 @@ module Scry
     getter id : Int32 | Nil
     getter uri : String
     getter filename : String
-    getter text : Array(String)
     getter position : Position?
+    property text : Array(String)
 
     def initialize(@uri, @text)
       @filename = uri_to_filename
