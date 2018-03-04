@@ -39,7 +39,7 @@ module Scry
     private def crystal_build(filename, source)
       code = IO::Memory.new(source)
       String.build do |io|
-        Process.run("crystal", ["build", "--no-color", "--error-trace", "-f", "json", filename], output: io, error: io, input: code)
+        Process.run("crystal", ["build", "--no-codegen", "--no-color", "--error-trace", "-f", "json", "--stdin-filename", filename], output: io, error: io, input: code)
       end
     end
   end
