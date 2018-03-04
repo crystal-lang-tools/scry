@@ -40,11 +40,7 @@ module Scry
     def initialize(params : DocumentFormattingParams, @id)
       @uri = params.text_document.uri
       @filename = uri_to_filename
-      if untitled?
-        @text = [""]
-      else
-        @text = [read_file]
-      end
+      @text = [""]
     end
 
     def initialize(params : TextDocumentPositionParams, @id)
