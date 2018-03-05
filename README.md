@@ -27,7 +27,7 @@ Scry will be distributed as part of editors extensions, see:
 
 ## Development && Roadmap
 
-> **Note:** crystal and LLVM are required in order to compile scry.
+> **Note:** crystal is required in order to compile scry.
 
 Ongoing, in [our](https://github.com/kofno/scry#contributors) free time.
 
