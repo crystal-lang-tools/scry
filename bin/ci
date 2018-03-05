@@ -65,8 +65,7 @@ prepare_build() {
   on_linux docker build -t crystal/scry-image .
 
   on_osx brew update
-  on_osx brew install llvm crystal-lang
-  on_osx brew link --overwrite --force llvm
+  on_osx brew install crystal-lang
 }
 
 
