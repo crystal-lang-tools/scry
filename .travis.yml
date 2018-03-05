@@ -15,7 +15,7 @@ matrix:
         - DEPLOY_DIR=bin/darwin
 
 install:
-  - bin/ci  prepare_build
+  - bin/ci prepare_build
 
 script:
   - bin/ci build
