@@ -1,8 +1,9 @@
-require "compiler/crystal/**"
-
+require "compiler/crystal/syntax"
+require "compiler/crystal/crystal_path"
 require "./workspace"
 require "./text_document"
 require "./publish_diagnostic"
+require "./missing_methods"
 
 module Scry
   struct ParseAnalyzer
@@ -20,7 +21,7 @@ module Scry
       parser.parse
       [@diagnostic.clean]
     rescue ex : Crystal::Exception
-      @diagnostic.from(ex)
+      @diagnostic.from(ex.to_json)
     end
   end
 end

@@ -26,7 +26,7 @@ module Scry
     end
 
     def from(ex)
-      build_failures = Array(BuildFailure).from_json(ex.to_json)
+      build_failures = Array(BuildFailure).from_json(ex)
       build_failures
         .uniq
         .first(@workspace.max_number_of_problems)

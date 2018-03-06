@@ -6,7 +6,7 @@ module Scry
       initer = Initializer.new(
         InitializeParams.from_json({
           processId:    1,
-          rootPath:     "/homa/main/Projects/Experiment",
+          rootPath:     "/home/main/Projects/Experiment",
           capabilities: {} of String => String,
           trace:        "off",
         }.to_json),
