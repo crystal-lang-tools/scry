@@ -70,7 +70,7 @@ module Scry
       text_document = TextDocument.new(params, msg.id)
 
       if open_file = @workspace.open_files[text_document.filename]?
-        text_document.text = open_file.text
+        text_document.text = open_file.first.text
       end
 
       formatter = Formatter.new(@workspace, text_document)
