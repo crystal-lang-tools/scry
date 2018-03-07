@@ -36,8 +36,10 @@ module Scry::Completion
   struct MethodDBEntry
     property name : String
     property signature : String
+    property file_path : String
+    property location : String
 
-    def initialize(@name, @signature)
+    def initialize(@name, @signature, @file_path, @location)
     end
   end
 
@@ -60,7 +62,7 @@ module Scry::Completion
         method_receiver = node.receiver ? "#{@class_queue.last}.class" : @class_queue.last
       end
       signature = "(#{node.args.map(&.to_s).join(", ")}) : #{return_type || node.return_type.to_s}"
-      @classes[method_receiver] << MethodDBEntry.new(name, signature)
+      @classes[method_receiver] << MethodDBEntry.new(name, signature, @file, node.location.to_s)
       false
     end
 

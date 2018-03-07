@@ -54,8 +54,10 @@ module Scry::Completion
 
     def to_completion_items(results : Array(MethodDBEntry))
       results.map do |res|
-        label = res.name
-        CompletionItem.new(label, CompletionItemKind::Method, label, nil)
+        CompletionItem.new(res.name,
+                           CompletionItemKind::Method,
+                           "#{res.name}#{res.signature}",
+                           MethodCallContextData.new(res.file_path, res.location))
       end
     end
   end
