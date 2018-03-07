@@ -69,3 +69,5 @@ The goal is too implement all of the currently supported Language Server Feature
 - [@faustinoaq](https://github.com/faustinoaq) Faustino Aguilar - contributor
 - [@laginha87](https://github.com/laginha87) Filipe Correia - contributor
 - [@bmulvihill](https://github.com/bmulvihill) Bryan Mulvihill - contributor
+
+[See all scry's contributors](https://github.com/crystal-lang-tools/scry/graphs/contributors)
