@@ -3,14 +3,14 @@ require "../src/scry/**"
 
 module Scry
   EnvironmentConfig.new.run
+  ROOT_PATH      = File.expand_path("spec/fixtures/")
+  SOME_FILE_PATH = File.expand_path("./fixtures/src/some_file.cr", __DIR__)
 
-  SOME_FILE_PATH = File.expand_path("./fixtures/some_file.cr", __DIR__)
-
-  INITIALIZATION_EXAMPLE = %({ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "processId": 1, "rootPath": "/foo", "capabilities": {} , "trace": "off"}})
+  INITIALIZATION_EXAMPLE = %({ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "processId": 1, "rootPath": "#{ROOT_PATH}", "capabilities": {} , "trace": "off"}})
 
   CONFIG_CHANGE_EXAMPLE = %({"jsonrpc":"2.0","method":"workspace/didChangeConfiguration","params":{"settings":{"crystal-ide":{"maxNumberOfProblems":100,"backend":"scry","customCommand":"crystal","customCommandArgs":[],"logLevel":"debug"}}}})
 
-  DOC_OPEN_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///Users/foo/Projects/crystal_av/src/crystal_av/c_handler.cr","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
+  DOC_OPEN_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file://#{SOME_FILE_PATH}","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
 
   DOC_CLOSE_EXAMPLE = %({"jsonrpc":"2.0","method":"textDocument/didClose","params":{"textDocument":{ "uri":"file://#{SOME_FILE_PATH}" }}})
 

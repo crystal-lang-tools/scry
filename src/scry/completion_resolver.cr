@@ -11,6 +11,8 @@ module Scry
         doc = file.each_line.first(5).join("\n")
         @completionItem.documentation = MarkupContent.new("markdown", "```crystal\n#{doc}\n```")
         @completionItem
+      else
+        @completionItem
       end
     end
   end
