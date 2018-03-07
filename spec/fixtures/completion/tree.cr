@@ -6,6 +6,7 @@ class Node
   def initialize(@value : Char)
   end
 
+  # Adds a node to the tree
   def add(x)
     if x < @value
       if left = @left
