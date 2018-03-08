@@ -59,6 +59,7 @@ on_both() {
 
 build() {
   with_build_env 'crystal spec --error-trace --stats --progress --no-debug'
+  with_build_env 'crystal tool format --check'
 }
 
 prepare_build() {
