@@ -39,7 +39,6 @@ module Scry::Completion
         Crystal::Nop.new
       end
     end
-
   end
 
   struct MethodDBEntry
