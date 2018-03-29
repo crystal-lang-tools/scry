@@ -27,7 +27,6 @@ module Scry
     # See, https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#shutdown-request
     # NOTE: For some reason the client doesn't accept `ResponseMessage.new(nil)` on shutdown even with emit_null.
     def dispatch(msg : RequestMessage)
-      exit(0) if msg.method == "shutdown"
       Log.logger.debug(msg.method)
       if params = msg.params
         dispatchRequest(params, msg)
@@ -35,6 +34,7 @@ module Scry
     end
 
     def dispatch(msg : NotificationMessage)
+      exit(0) if msg.method == "exit"
       Log.logger.debug(msg.method)
       dispatchNotification(msg.params, msg)
     end
