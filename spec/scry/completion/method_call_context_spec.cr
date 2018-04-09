@@ -116,7 +116,6 @@ module Scry::Completion
 
         context.get_type.should eq("A")
 
-
         context.get_type.should eq("A")
 
         code = "
