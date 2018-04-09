@@ -26,8 +26,6 @@ module Scry
 
     # A request message to describe a request between the client and the server.
     # Every processed request must send a response back to the sender of the request.
-    # See, https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#shutdown-request
-    # NOTE: For some reason the client doesn't accept `ResponseMessage.new(nil)` on shutdown even with emit_null.
     def dispatch(msg : RequestMessage)
       Log.logger.debug(msg.method)
       dispatch_request(msg.params, msg)
@@ -42,7 +40,11 @@ module Scry
       if msg.method == "shutdown"
         Scry.shutdown = true
         ResponseMessage.new(msg.id, nil)
-      elsif msg.method == "exit"
+      end
+    end
+
+    private def dispatch_notification(params : Nil, msg)
+      if msg.method == "exit"
         exit(0)
       end
     end
