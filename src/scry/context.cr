@@ -32,6 +32,7 @@ module Scry
     end
 
     def dispatch(msg : NotificationMessage)
+      exit(0) if msg.method == "exit"
       Log.logger.debug(msg.method)
       dispatch_notification(msg.params, msg)
     end
