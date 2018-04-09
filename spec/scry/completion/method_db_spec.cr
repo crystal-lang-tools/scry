@@ -16,6 +16,17 @@ module Scry::Completion
         method_db.db["A.class"].map(&.signature).should eq(["() : A", "(c : Int32) : Int32"]), "handles basic method_signature"
         method_db.db["C"].map(&.name).should eq(["method_a", "method_c"]), "handles class reopens"
       end
+      context "generate handles invalid files" do
+        path = File.expand_path("spec/fixtures/completion/method_db/sample_2.cr")
+        path_2 = File.expand_path("spec/fixtures/completion/method_db/invalid_sample.cr")
+
+        method_db = MethodDB.generate([
+          path,
+          path_2,
+        ])
+
+        method_db.db["C"].map(&.name).should eq(["method_c"])
+      end
     end
   end
 end

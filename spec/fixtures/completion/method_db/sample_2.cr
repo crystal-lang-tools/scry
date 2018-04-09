@@ -1,3 +1,6 @@
+require "./invalid_sample"
+require "./sample"
+
 def a
 end
 

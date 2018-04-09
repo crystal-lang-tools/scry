@@ -24,11 +24,19 @@ module Scry::Completion
       new.tap do |method_db|
         paths.each do |path|
           next unless File.exists? path
-          node = Crystal::Parser.parse(File.read path)
+          node = self.parse(path)
           visitor = Visitor.new(path)
           node.accept(visitor)
           method_db.db.merge!(visitor.classes) { |_, _old, _new| _old + _new }
         end
+      end
+    end
+
+    def self.parse(path)
+      begin
+        Crystal::Parser.parse(File.read path)
+      rescue exception
+        Crystal::Nop.new
       end
     end
   end
