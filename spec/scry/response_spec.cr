@@ -26,7 +26,7 @@ module Scry
       io = IO::Memory.new
       response = Response.new(results)
       response.write(io)
-      io.to_s[0...19].should eq("Content-Length: 278")
+      io.to_s[0...19].should eq("Content-Length: 268")
     end
 
     it "responds with server capabilities" do
