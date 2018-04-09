@@ -20,9 +20,9 @@ module Scry::Completion
       elsif @text.reverse =~ Regex.union(assignment_regex, declaration_regex)
         if $~["object"]?
           case $~["object"].reverse
-          when /true|false/
+          when /\Atrue|false\z/
             "Bool"
-          when /[-+]?[0-9]+(_([iu])(8|16|32|64))?/
+          when /\A[-+]?[0-9]+(_([iu])(8|16|32|64))?\z/
             if $~[1]?
               "#{($~[2] == "i" ? "Int" : "UInt")}#{$~[3]}"
             else
@@ -38,7 +38,7 @@ module Scry::Completion
     end
 
     def assignment_regex
-      /(?<object>.*)\s*=\s*#{@target.reverse}/
+      /(?<object>\S*)\s*=\s*#{@target.reverse}/
     end
 
     def declaration_regex
