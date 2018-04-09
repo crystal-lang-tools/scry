@@ -27,30 +27,36 @@ module Scry
     # See, https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#shutdown-request
     # NOTE: For some reason the client doesn't accept `ResponseMessage.new(nil)` on shutdown even with emit_null.
     def dispatch(msg : RequestMessage)
-      exit(0) if msg.method == "shutdown"
       Log.logger.debug(msg.method)
-      if params = msg.params
-        dispatchRequest(params, msg)
-      end
+      dispatch_request(msg.params, msg)
     end
 
     def dispatch(msg : NotificationMessage)
       Log.logger.debug(msg.method)
-      dispatchNotification(msg.params, msg)
+      dispatch_notification(msg.params, msg)
     end
 
-    private def dispatchRequest(params : InitializeParams, msg)
+    private def dispatch_request(params : Nil, msg)
+      if msg.method == "shutdown"
+        Scry.shutdown = true
+        ResponseMessage.new(msg.id, nil)
+      elsif msg.method == "exit"
+        exit(0)
+      end
+    end
+
+    private def dispatch_request(params : InitializeParams, msg)
       initializer = Initializer.new(params, msg.id)
       @workspace, response = initializer.run
       response
     end
 
     # Also used by methods like Go to Definition
-    private def dispatchRequest(params : TextDocumentPositionParams, msg)
+    private def dispatch_request(params : TextDocumentPositionParams, msg)
       case msg.method
       when "textDocument/definition"
         text_document = TextDocument.new(params, msg.id)
-        definitions = Implementations.new(text_document)
+        definitions = Implementations.new(@workspace, text_document)
         response = definitions.run
         Log.logger.debug(response)
         response
@@ -66,7 +72,7 @@ module Scry
       end
     end
 
-    private def dispatchRequest(params : DocumentFormattingParams, msg)
+    private def dispatch_request(params : DocumentFormattingParams, msg)
       text_document = TextDocument.new(params, msg.id)
 
       if open_file = @workspace.open_files[text_document.filename]?
@@ -79,7 +85,7 @@ module Scry
       response
     end
 
-    private def dispatchRequest(params : TextDocumentParams, msg)
+    private def dispatch_request(params : TextDocumentParams, msg)
       case msg.method
       when "textDocument/documentSymbol"
         text_document = TextDocument.new(params, msg.id)
@@ -90,7 +96,7 @@ module Scry
       end
     end
 
-    private def dispatchRequest(params : CompletionItem, msg)
+    private def dispatch_request(params : CompletionItem, msg)
       case msg.method
       when "completionItem/resolve"
         resolver = CompletionResolver.new(msg.id, params)
@@ -103,14 +109,14 @@ module Scry
 
     # Used by:
     # - $/cancelRequest
-    private def dispatchNotification(params : CancelParams, msg)
+    private def dispatch_notification(params : CancelParams, msg)
       nil
     end
 
     # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`
-    private def dispatchNotification(params : TextDocumentParams, msg)
+    private def dispatch_notification(params : TextDocumentParams, msg)
       case msg.method
       when "textDocument/didClose"
         @workspace.drop_file(params)
@@ -118,13 +124,13 @@ module Scry
       nil
     end
 
-    private def dispatchNotification(params : DidChangeConfigurationParams, msg)
+    private def dispatch_notification(params : DidChangeConfigurationParams, msg)
       updater = UpdateConfig.new(@workspace, params)
       @workspace, response = updater.run
       response
     end
 
-    private def dispatchNotification(params : DidOpenTextDocumentParams, msg)
+    private def dispatch_notification(params : DidOpenTextDocumentParams, msg)
       @workspace.put_file(params)
       text_document = TextDocument.new(params)
       unless text_document.in_memory?
@@ -134,7 +140,7 @@ module Scry
       end
     end
 
-    private def dispatchNotification(params : DidChangeTextDocumentParams, msg)
+    private def dispatch_notification(params : DidChangeTextDocumentParams, msg)
       @workspace.update_file(params)
       text_document = TextDocument.new(params)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
@@ -142,7 +148,7 @@ module Scry
       response
     end
 
-    private def dispatchNotification(params : DidChangeWatchedFilesParams, msg)
+    private def dispatch_notification(params : DidChangeWatchedFilesParams, msg)
       params.changes.map { |file_event|
         handle_file_event(file_event)
       }.compact
@@ -165,7 +171,7 @@ module Scry
       end
     end
 
-    private def dispatchNotification(params : Trace, msg)
+    private def dispatch_notification(params : Trace, msg)
       nil
     end
 
@@ -173,11 +179,11 @@ module Scry
     # - `handle_file_event`
     # - `DidOpenTextDocumentParams`
     # - `DidChangeTextDocumentParams`
-    private def dispatchNotification(params : PublishDiagnosticsParams, msg)
+    private def dispatch_notification(params : PublishDiagnosticsParams, msg)
       nil
     end
 
-    private def dispatchNotification(params : VoidParams, msg)
+    private def dispatch_notification(params : VoidParams, msg)
       nil
     end
   end
