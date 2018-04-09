@@ -72,6 +72,13 @@ module Scry
       uri.starts_with?("untitled:")
     end
 
+    def inside_crystal_path?
+      ENV["CRYSTAL_PATH"].split(':').each do |path|
+        return true if filename.starts_with?(path)
+      end
+      false
+    end
+
     def source
       @text.first
     end

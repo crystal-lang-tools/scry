@@ -20,18 +20,19 @@ module Scry
       notification(params)
     end
 
-    def clean
-      params = PublishDiagnosticsParams.new(@uri, [] of Diagnostic)
+    def clean(uri = @uri)
+      params = PublishDiagnosticsParams.new(uri, [] of Diagnostic)
       notification(params)
     end
 
-    def from(ex)
+    def from(ex) : Array(NotificationMessage)
       build_failures = Array(BuildFailure).from_json(ex)
       build_failures
         .uniq
         .first(@workspace.max_number_of_problems)
         .map { |bf| Diagnostic.new(bf) }
         .group_by(&.uri)
+        .select { |file, diagnostics| !file.ends_with?(".scry.cr") }
         .map { |file, diagnostics| unclean(file, diagnostics) }
     end
   end
