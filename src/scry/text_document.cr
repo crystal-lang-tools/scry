@@ -61,7 +61,7 @@ module Scry
     end
 
     def self.uri_to_filename(uri)
-      uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\/|^untitled:/, "")
+      uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\/:/, "")
     end
 
     def in_memory?
