@@ -61,7 +61,7 @@ module Scry
     end
 
     def self.uri_to_filename(uri)
-      uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\//, "")
+      uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\/|^untitled:/, "")
     end
 
     def in_memory?
@@ -70,6 +70,13 @@ module Scry
 
     def untitled?
       uri.starts_with?("untitled:")
+    end
+
+    def inside_crystal_path?
+      ENV["CRYSTAL_PATH"].split(':').each do |path|
+        return true if filename.starts_with?(path)
+      end
+      false
     end
 
     def source
