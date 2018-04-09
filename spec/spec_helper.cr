@@ -33,4 +33,6 @@ module Scry
   INITIALIZED_EXAMPLE = %({"jsonrpc": "2.0", "method": "initialized", "params": {}})
 
   COMPLETION_EXAMPLE = %({"jsonrpc": "2.0", "method": "textDocument/completion", "params": #{TEXTDOCUMENT_POSITION_PARAM_EXAMPLE}})
+
+  UNTITLED_FORMATTER_EXAMPLE = %({"textDocument":{"uri":"untitled:Untitled-1","languageId":"crystal","version":1,"text":"1+1"}})
 end
