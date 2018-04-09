@@ -6,8 +6,6 @@ require "./scry/response"
 require "./scry/environment_config"
 
 module Scry
-  class_property shutdown = false
-
   def self.start
     Log.logger.info("Scry is looking into your code...")
 
