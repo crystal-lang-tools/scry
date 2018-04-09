@@ -4,7 +4,7 @@ require "./protocol/location"
 module Scry
   # Using Crystal implementation to emulate GoTo Definition.
   struct Implementations
-    def initialize(@text_document : TextDocument)
+    def initialize(@workspace : Workspace, @text_document : TextDocument)
     end
 
     def run
@@ -17,29 +17,61 @@ module Scry
       end
     end
 
+    def get_scope
+      root_uri = @workspace.root_uri
+      if Dir.exists?("#{root_uri}/src")
+        Dir.glob("#{root_uri}/src/*.cr")
+      else
+        Dir.glob("#{root_uri}/**/*.cr").reject(&.=~(/\/spec\/|\/lib\//))
+      end
+    end
+
     # NOTE: compiler is a bit heavy in some projects.
     def search(filename, source, position)
-      response = crystal_tool(filename, position)
+      scope = get_scope
+      result = analyze(filename, position, scope)
+      case result
+      when ResponseMessage
+        result
+      when JSON::Any
+        response_with(result)
+      end
+    end
+
+    private def crystal_tool(filename, position, scope)
+      location = "#{filename}:#{position.line + 1}:#{position.character + 1}"
+      String.build do |io|
+        args = ["tool", "implementations", "--no-color", "--error-trace", "-f", "json", "-c", "#{location}"] + scope
+        Process.run("crystal", args, output: io, error: io)
+      end
+    end
+
+    private def analyze(filename, position, scope)
+      response = crystal_tool(filename, position, scope)
+      Log.logger.debug("response: #{response}")
       parsed_response = JSON.parse(response)
-      impls = parsed_response["implementations"]?
-      if impls
-        locations = impls.map do |impl|
-          pos = Position.new(impl["line"].as_i, impl["column"].as_i)
-          range = Range.new(pos, pos)
-          Location.new("file://" + impl["filename"].as_s, range)
-        end
-        ResponseMessage.new(@text_document.id, locations)
+      implementations = parsed_response["implementations"]?
+      if implementations
+        implementations
+      else
+        implementation_response
       end
     rescue ex
       Log.logger.error("A error was found while searching definitions\n#{ex}")
-      nil
+      implementation_response
     end
 
-    private def crystal_tool(filename, position)
-      location = "#{filename}:#{position.line + 1}:#{position.character + 1}"
-      String.build do |io|
-        Process.run("crystal", ["tool", "implementations", "--no-color", "--error-trace", "-f", "json", "-c", "#{location}", filename], output: io, error: io)
+    def implementation_response(locations = [] of Location)
+      ResponseMessage.new(@text_document.id, locations)
+    end
+
+    private def response_with(implementations)
+      locations = implementations.map do |item|
+        pos = Position.new(item["line"].as_i - 1, item["column"].as_i - 1)
+        range = Range.new(pos, pos)
+        Location.new("file://" + item["filename"].as_s, range)
       end
+      implementation_response(locations)
     end
   end
 end

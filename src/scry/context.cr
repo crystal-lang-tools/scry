@@ -50,7 +50,7 @@ module Scry
       case msg.method
       when "textDocument/definition"
         text_document = TextDocument.new(params, msg.id)
-        definitions = Implementations.new(text_document)
+        definitions = Implementations.new(@workspace, text_document)
         response = definitions.run
         Log.logger.debug(response)
         response
