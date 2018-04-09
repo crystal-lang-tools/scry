@@ -9,13 +9,11 @@ module Scry
     end
 
     def run
-      if @text_document.inside_crystal_path?
-        clean_diagnostic
-      else
+      if !@text_document.inside_crystal_path?
         @text_document.text.map do |text|
           analyze(text)
-        end
-      end.flatten.uniq
+        end.flatten.uniq
+      end
     end
 
     # Reset all diagnostics in the current project
