@@ -4,7 +4,7 @@ require "./completion/method_db"
 module Scry
   struct Workspace
     property root_uri : String
-    property process_id : Int32 | Int64
+    property process_id : Int32 | Int64 | Nil
     property max_number_of_problems : Int32
     property open_files
     property dependency_graph : Completion::DependencyGraph::Graph
