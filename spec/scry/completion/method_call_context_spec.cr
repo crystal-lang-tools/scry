@@ -105,6 +105,28 @@ module Scry::Completion
         context = parse_example(code)
 
         context.get_type.should eq("A")
+
+        code = "
+                    a = true
+                    a = A.new(1)
+                    a‸methd
+                "
+
+        context = parse_example(code)
+
+        context.get_type.should eq("A")
+
+        context.get_type.should eq("A")
+
+        code = "
+                    a = true
+                    a = A.new(true)
+                    a‸methd
+                "
+
+        context = parse_example(code)
+
+        context.get_type.should eq("A")
       end
 
       context "it identifies from method defintion" do
