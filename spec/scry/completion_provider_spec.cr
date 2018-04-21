@@ -4,12 +4,10 @@ module Scry
   private macro it_completes(code, with_labels, file = __FILE__, line = __LINE__)
 
     it "completes #{{{code}}}" do
-      procedure = Message.new %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"#{__FILE_PATH__}","languageId":"crystal","version":1,"text":"#{{{code}}}"}}})
-      result = __CONTEXT__.dispatch(procedure.parse)
+      __CONTEXT__.test_send_did_open(__FILE_PATH__, {{code}})
+      response = __CONTEXT__.test_send_completion(__FILE_PATH__, %({"line":0,"character":#{{{code}}.size}}))
 
-      procedure = Message.new(%({"jsonrpc": "2.0", "id": 1, "method": "textDocument/completion", "params": {"textDocument":{"uri":"#{__FILE_PATH__}"},"position":{"line":0,"character":#{{{code}}.size}}}}))
-      response = __CONTEXT__.dispatch(procedure.parse).as(Scry::ResponseMessage)
-      results = response.result.as(Array(CompletionItem))
+      results = response.as(Scry::ResponseMessage).result.as(Array(CompletionItem))
       labels = results.map(&.label)
       labels.should eq({{with_labels}})
 
