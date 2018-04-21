@@ -1,38 +1,34 @@
 require "../spec_helper"
 
 module Scry
-  describe CompletionProvider do
-    it "handles require module completions for crystal modules" do
-      tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
-      text_content = "require \"arr"
-      text_document = TextDocument.new(tree_path, [text_content])
-      position = Position.new(line = 0, character = text_content.size)
-      completion_provider = CompletionProvider.new(text_document, context: nil, position: position, method_db: Completion::MethodDB.new)
+  private macro it_completes(code, with_labels, file = __FILE__, line = __LINE__)
 
-      results = completion_provider.run
+    it "completes #{{{code}}}" do
+      procedure = Message.new %({"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"#{__FILE_PATH__}","languageId":"crystal","version":1,"text":"#{{{code}}}"}}})
+      result = __CONTEXT__.dispatch(procedure.parse)
 
-      results.size.should eq(1)
+      procedure = Message.new(%({"jsonrpc": "2.0", "id": 1, "method": "textDocument/completion", "params": {"textDocument":{"uri":"#{__FILE_PATH__}"},"position":{"line":0,"character":#{{{code}}.size}}}}))
+      result = __CONTEXT__.dispatch(procedure.parse)
+      # labels = results.map(&.label)
+      # labels.should eq({{with_labels}})
 
-      result = results.first
-      result.label.should eq("array")
-      result.insert_text.should eq("array")
-      result.kind.should eq(CompletionItemKind::Module)
-      result.documentation.should be_nil
+      # results.each do |e|
+      #   e.kind.should eq(__KIND__)
+      # end
     end
+  end
 
-    it "handles require module completions for relative path" do
-      tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
-      text_content = "require \"./sa"
-      text_document = TextDocument.new(tree_path, [text_content])
-      position = Position.new(line = 0, character = text_content.size)
-      completion_provider = CompletionProvider.new(text_document, context: nil, position: position, method_db: Completion::MethodDB.new)
+  describe CompletionProvider do
+    context "module completion" do
+      __KIND__ = CompletionItemKind::Module
+      __CONTEXT__ = Context.new
+      root_path = File.expand_path("spec/fixtures/completion/")
+      ProtocolHelper.send_init(__CONTEXT__, root_path)
 
-      results = completion_provider.run
+      __FILE_PATH__ = File.join(root_path, "tree.cr")
 
-      labels = results.map &.label
-
-      results.size.should eq(1)
-      labels.should eq(["sample"])
+      it_completes("require \\\"arr", ["array"])
+      it_completes("require \\\"./sa", ["sample"])
     end
   end
 end
