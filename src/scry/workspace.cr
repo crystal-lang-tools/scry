@@ -23,12 +23,12 @@ module Scry
 
     def put_file(params : DidOpenTextDocumentParams)
       file = TextDocument.new(params)
-      if file.untitled?
-        @open_files[file.filename] = {file, Completion::MethodDB.new}
-      else
+      if @dependency_graph[file.filename]?
         file_dependencies = @dependency_graph[file.filename].descendants.map &.value
         method_db = Completion::MethodDB.generate(file_dependencies)
         @open_files[file.filename] = {file, method_db}
+      else
+        @open_files[file.filename] = {file, Completion::MethodDB.new}
       end
     end
 

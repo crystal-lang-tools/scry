@@ -32,6 +32,10 @@ module Scry::Completion::DependencyGraph
       @nodes[value]
     end
 
+    def []?(value : String)
+      @nodes[value]?
+    end
+
     def add_edge(value_1 : String, value_2 : String)
       add value_1
       add value_2
