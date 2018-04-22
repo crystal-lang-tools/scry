@@ -4,6 +4,22 @@ require "./protocol/location"
 module Scry
   # Using Crystal implementation to emulate GoTo Definition.
   struct Implementations
+    struct ImplementationsResponse
+      JSON.mapping(
+        status: String,
+        message: String,
+        implementations: Array(ImplementationLocation)
+      )
+    end
+
+    struct ImplementationLocation
+      JSON.mapping(
+        line: Int32,
+        column: Int32,
+        filename: String
+      )
+    end
+
     def initialize(@workspace : Workspace, @text_document : TextDocument)
     end
 
@@ -33,7 +49,7 @@ module Scry
       case result
       when ResponseMessage
         result
-      when JSON::Any
+      when Array(ImplementationLocation)
         response_with(result)
       end
     end
@@ -49,15 +65,10 @@ module Scry
     private def analyze(filename, position, scope)
       response = crystal_tool(filename, position, scope)
       Log.logger.debug("response: #{response}")
-      parsed_response = JSON.parse(response)
-      implementations = parsed_response["implementations"]?
-      if implementations
-        implementations
-      else
-        implementation_response
-      end
+      response = ImplementationsResponse.from_json(response)
+      response.implementations || implementation_response
     rescue ex
-      Log.logger.error("A error was found while searching definitions\n#{ex}")
+      Log.logger.error("A error was found while searching implementations\n#{ex}")
       implementation_response
     end
 
@@ -67,9 +78,9 @@ module Scry
 
     private def response_with(implementations)
       locations = implementations.map do |item|
-        pos = Position.new(item["line"].as_i - 1, item["column"].as_i - 1)
+        pos = Position.new(item.line - 1, item.column - 1)
         range = Range.new(pos, pos)
-        Location.new("file://" + item["filename"].as_s, range)
+        Location.new("file://" + item.filename, range)
       end
       implementation_response(locations)
     end
