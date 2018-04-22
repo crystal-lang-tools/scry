@@ -9,17 +9,10 @@ module Scry
     end
 
     def run
-      if !@text_document.inside_crystal_path?
+      unless @text_document.inside_crystal_path?
         @text_document.text.map do |text|
           analyze(text)
         end.flatten.uniq
-      end
-    end
-
-    # Reset all diagnostics in the current project
-    def clean_diagnostic
-      Dir.glob("#{@workspace.root_uri}/**/*.cr").map do |file|
-        @diagnostic.clean("file://#{file}")
       end
     end
 
@@ -31,12 +24,12 @@ module Scry
       root_uri = @workspace.root_uri
       response = crystal_build(filename, source)
       if response.empty?
-        clean_diagnostic
+        @diagnostic.full_clean
       else
         if Dir.exists?("#{root_uri}/src") && response.includes?("undefined")
           response = crystal_build("#{root_uri}/.scry.cr", %(require "./src/*"))
           if response.empty?
-            clean_diagnostic
+            @diagnostic.full_clean
           else
             @diagnostic.from(response)
           end
