@@ -1,5 +1,6 @@
 require "./log"
 require "./protocol/location"
+require "./build_failure"
 
 module Scry
   # Using Crystal implementation to emulate GoTo Definition.
@@ -8,7 +9,7 @@ module Scry
       JSON.mapping(
         status: String,
         message: String,
-        implementations: Array(ImplementationLocation)
+        implementations: {type: Array(ImplementationLocation), nilable: true}
       )
     end
 
@@ -65,8 +66,17 @@ module Scry
     private def analyze(filename, position, scope)
       response = crystal_tool(filename, position, scope)
       Log.logger.debug("response: #{response}")
-      response = ImplementationsResponse.from_json(response)
-      response.implementations || implementation_response
+      response = (Array(BuildFailure) | ImplementationsResponse).from_json(response)
+      case response
+      when .is_a?(Array(BuildFailure))
+        implementation_response
+      when .is_a?(ImplementationsResponse)
+        if impls = response.implementations
+          impls
+        else
+          implementation_response
+        end
+      end
     rescue ex
       Log.logger.error("A error was found while searching implementations\n#{ex}")
       implementation_response
