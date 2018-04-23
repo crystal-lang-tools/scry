@@ -9,7 +9,7 @@ module Scry
       JSON.mapping(
         status: String,
         message: String,
-        implementations: {type: Array(ImplementationLocation), nilable: true}
+        implementations: Array(ImplementationLocation)?
       )
     end
 
