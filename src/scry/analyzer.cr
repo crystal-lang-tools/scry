@@ -37,7 +37,7 @@ module Scry
                     elsif Dir.exists?("#{root_uri}/src") && response.includes?("undefined")
                       %(require "./src/*")
                     else
-                      ""
+                      return @diagnostic.from(response)
                     end
         response = crystal_build(main_file, main_code)
         if response.empty?

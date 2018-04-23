@@ -6,9 +6,14 @@ require "./workspace"
 
 module Scry
   struct PublishDiagnostic
-    FILES_WITH_DIAGNOSTIC = [] of String
+    # Store all groups of files that have received some diagnostic,
+    # Useful to clean diagnostics after code changes.
+    # Each group depends on the file that generated the diagnostic
+    # and can be cleared just by that file.
+    ALL_FILES_WITH_DIAGNOSTIC = {} of String => Array(String)
 
     def initialize(@workspace : Workspace, @uri : String)
+      ALL_FILES_WITH_DIAGNOSTIC[@uri] = [] of String
     end
 
     private def notification(params)
@@ -24,10 +29,10 @@ module Scry
     # If the computed set is empty it has to push the empty array to clear former diagnostic
     # See: https://microsoft.github.io/language-server-protocol/specification#textDocument_publishDiagnostics
     def full_clean
-      clean_diagnostics = FILES_WITH_DIAGNOSTIC.map do |file|
+      clean_diagnostics = ALL_FILES_WITH_DIAGNOSTIC[@uri].map do |file|
         clean(file)
       end
-      FILES_WITH_DIAGNOSTIC.clear
+      ALL_FILES_WITH_DIAGNOSTIC[@uri].clear
       clean_diagnostics
     end
 
@@ -45,7 +50,7 @@ module Scry
         .group_by(&.uri)
         .select { |file, diagnostics| !file.ends_with?(".scry.cr") }
         .map do |file, diagnostics|
-        FILES_WITH_DIAGNOSTIC << file
+        ALL_FILES_WITH_DIAGNOSTIC[@uri] << file
         unclean(file, diagnostics)
       end
     end
