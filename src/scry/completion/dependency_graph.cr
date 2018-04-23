@@ -78,12 +78,13 @@ module Scry::Completion::DependencyGraph
         .flat_map { |d| Dir.glob(d) }
         .each { |file| process_requires(file, graph) }
 
-      if prelude_node = graph[/src\/prelude.cr$/]
-        graph.each.reject { |e| e == prelude_node.value }.each do |key, _|
-          graph[key].connections << prelude_node
-        end
-      end
+      prelude_node = graph[/src\/prelude.cr$/]
       Log.logger.debug("Finished building the dependancy graph got these nodes:#{graph.each.to_a.map(&.first)}")
+      return graph if prelude_node.nil?
+
+      graph.each.reject { |e| e == prelude_node.not_nil!.value }.each do |key, _|
+        graph[key].connections << prelude_node.not_nil!
+      end
       graph
     end
 
