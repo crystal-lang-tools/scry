@@ -26,13 +26,22 @@ module Scry
       if response.empty?
         @diagnostic.full_clean
       else
-        if Dir.exists?("#{root_uri}/src") && response.includes?("undefined")
-          response = crystal_build("#{root_uri}/.scry.cr", %(require "./src/*"))
-          if response.empty?
-            @diagnostic.full_clean
-          else
-            @diagnostic.from(response)
-          end
+        # Crystal compiler needs a main file to compile
+        # By default it uses .scry.cr on workspace root,
+        # if src dir exists and the error is caused by un undefined symbol,
+        # then it requires ./src/* files
+        # Otherwise You can create your own .scry.cr
+        main_file = "#{root_uri}/.scry.cr"
+        main_code = if File.exists?(main_file)
+                      File.read(main_file)
+                    elsif Dir.exists?("#{root_uri}/src") && response.includes?("undefined")
+                      %(require "./src/*")
+                    else
+                      ""
+                    end
+        response = crystal_build(main_file, main_code)
+        if response.empty?
+          @diagnostic.full_clean
         else
           @diagnostic.from(response)
         end
