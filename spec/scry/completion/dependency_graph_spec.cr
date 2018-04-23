@@ -1,9 +1,10 @@
 require "../../spec_helper"
-# require "./helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-CRYSTAL_PATH = Crystal::CrystalPath.default_path.split(":").last
+Scry::EnvironmentConfig.new
+
+CRYSTAL_PATH = ENV["CRYSTAL_PATH"]?.to_s.split(":").last? || "lib"
 PRELUDE_PATH = File.expand_path("prelude.cr", CRYSTAL_PATH)
 
 def expand(paths : Array(String))
