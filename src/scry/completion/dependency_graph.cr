@@ -26,6 +26,10 @@ module Scry::Completion::DependencyGraph
 
   class Graph
     def initialize(@nodes = {} of String => Node)
+      if crystal_path = ENV["CRYSTAL_PATH"]?
+        prelude_path = "#{crystal_path}/prelude.cr"
+        @nodes[prelude_path] = Node.new(prelude_path)
+      end
     end
 
     def [](value : String)
@@ -74,13 +78,12 @@ module Scry::Completion::DependencyGraph
         .flat_map { |d| Dir.glob(d) }
         .each { |file| process_requires(file, graph) }
 
-      prelude_node = graph[/src\/prelude.cr$/]
-      Log.logger.debug("Finished building the dependancy graph got these nodes:#{graph.each.to_a.map(&.first)}")
-      return graph if prelude_node.nil?
-
-      graph.each.reject { |e| e == prelude_node.not_nil!.value }.each do |key, _|
-        graph[key].connections << prelude_node.not_nil!
+      if prelude_node = graph[/src\/prelude.cr$/]
+        graph.each.reject { |e| e == prelude_node.value }.each do |key, _|
+          graph[key].connections << prelude_node
+        end
       end
+      Log.logger.debug("Finished building the dependancy graph got these nodes:#{graph.each.to_a.map(&.first)}")
       graph
     end
 
