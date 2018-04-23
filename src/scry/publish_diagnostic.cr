@@ -6,7 +6,7 @@ require "./workspace"
 
 module Scry
   struct PublishDiagnostic
-    METHOD = "textDocument/publishDiagnostics"
+    METHOD                = "textDocument/publishDiagnostics"
     FILES_WITH_DIAGNOSTIC = [] of String
 
     def initialize(@workspace : Workspace, @uri : String)
@@ -46,9 +46,9 @@ module Scry
         .group_by(&.uri)
         .select { |file, diagnostics| !file.ends_with?(".scry.cr") }
         .map do |file, diagnostics|
-          FILES_WITH_DIAGNOSTIC << file
-          unclean(file, diagnostics)
-        end
+        FILES_WITH_DIAGNOSTIC << file
+        unclean(file, diagnostics)
+      end
     end
   end
 end
