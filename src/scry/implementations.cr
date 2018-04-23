@@ -71,9 +71,9 @@ module Scry
       Log.logger.debug("response: #{response}")
       response = (Array(BuildFailure) | ImplementationsResponse).from_json(response)
       case response
-      when .is_a?(Array(BuildFailure))
+      when Array(BuildFailure)
         implementation_response
-      when .is_a?(ImplementationsResponse)
+      when ImplementationsResponse
         if impls = response.implementations
           impls
         else
