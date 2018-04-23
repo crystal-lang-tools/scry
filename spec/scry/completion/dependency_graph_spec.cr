@@ -4,7 +4,7 @@ ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
 Scry::EnvironmentConfig.new
 
-CRYSTAL_PATH = ENV["CRYSTAL_PATH"]?.to_s.split(":").last? || "lib"
+CRYSTAL_PATH = Crystal::DEFAULT_PATH.split(":").last
 PRELUDE_PATH = "#{CRYSTAL_PATH}/prelude.cr"
 
 def expand(paths : Array(String))

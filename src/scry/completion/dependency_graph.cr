@@ -28,12 +28,9 @@ module Scry::Completion::DependencyGraph
     getter prelude_node : Node
 
     def initialize(@nodes = {} of String => Node)
-      if crystal_path = ENV["CRYSTAL_PATH"]?.to_s.split(":").last?
-        prelude_path = "#{crystal_path}/prelude.cr"
-        @nodes[prelude_path] = @prelude_node = Node.new(prelude_path)
-      else
-        @prelude_node = Node.new("")
-      end
+      crystal_path = Crystal::DEFAULT_PATH.split(":").last
+      prelude_path = "#{crystal_path}/prelude.cr"
+      @nodes[prelude_path] = @prelude_node = Node.new(prelude_path)
     end
 
     def [](value : String)
