@@ -5,7 +5,7 @@ ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 Scry::EnvironmentConfig.new
 
 CRYSTAL_PATH = ENV["CRYSTAL_PATH"]?.to_s.split(":").last? || "lib"
-PRELUDE_PATH = File.expand_path("prelude.cr", CRYSTAL_PATH)
+PRELUDE_PATH = "#{CRYSTAL_PATH}/prelude.cr"
 
 def expand(paths : Array(String))
   paths.map { |p| expand(p) }
