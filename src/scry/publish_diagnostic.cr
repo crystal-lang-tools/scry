@@ -6,14 +6,13 @@ require "./workspace"
 
 module Scry
   struct PublishDiagnostic
-    METHOD                = "textDocument/publishDiagnostics"
     FILES_WITH_DIAGNOSTIC = [] of String
 
     def initialize(@workspace : Workspace, @uri : String)
     end
 
     private def notification(params)
-      NotificationMessage.new(METHOD, params)
+      NotificationMessage.new("textDocument/publishDiagnostics", params)
     end
 
     private def unclean(file, diagnostics)
