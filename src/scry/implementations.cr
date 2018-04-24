@@ -49,13 +49,7 @@ module Scry
     # NOTE: compiler is a bit heavy in some projects.
     def search(filename, source, position)
       scope = get_scope
-      result = analyze(filename, position, scope)
-      case result
-      when ResponseMessage
-        result
-      when Array(ImplementationLocation)
-        response_with(result)
-      end
+      analyze(filename, position, scope)
     end
 
     private def crystal_tool(filename, position, scope)
@@ -75,7 +69,7 @@ module Scry
         implementation_response
       when ImplementationsResponse
         if impls = response.implementations
-          impls
+          response_with(impls)
         else
           implementation_response
         end
