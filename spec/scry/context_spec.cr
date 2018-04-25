@@ -23,7 +23,7 @@ module Scry
 
       procedure = Message.new(WATCHED_FILE_DELETED_EXAMPLE).parse
       result = context.dispatch(procedure)
-      result.to_json.should eq(%([{"jsonrpc":"2.0","method":"textDocument/publishDiagnostics","params":{"uri":"file://#{SOME_FILE_PATH}","diagnostics":[]}}]))
+      result.to_json.should eq(%([[{"jsonrpc":"2.0","method":"textDocument/publishDiagnostics","params":{"uri":"file://#{SOME_FILE_PATH}","diagnostics":[]}}]]))
     end
   end
 end
