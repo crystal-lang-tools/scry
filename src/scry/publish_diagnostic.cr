@@ -33,7 +33,7 @@ module Scry
         clean(file)
       end
       ALL_FILES_WITH_DIAGNOSTIC[@uri].clear
-      clean_diagnostics << clean
+      clean_diagnostics << clean if clean_diagnostics.empty?
       clean_diagnostics
     end
 
