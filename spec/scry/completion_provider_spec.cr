@@ -32,13 +32,13 @@ module Scry
     _context_ = Context.new
     root_path = File.expand_path("spec/fixtures/completion/")
     _context_.test_send_init(root_path)
-    _file_path_ = File.join(root_path, "tree.cr")
+    _file_path_ = File.join(root_path, "sample.cr")
 
     context "module completion" do
       _kind_ = CompletionItemKind::Module
 
       it_completes("require \"arr", ["array"])
-      it_completes("require \"./sa", ["sample"])
+      it_completes("require \"./tr", ["tree"])
     end
 
     context "method completion" do
@@ -62,6 +62,7 @@ module Scry
         it_completes("a = true
                       a.to_", %w(to_json to_s to_s to_yaml))
       end
+
       context "int32" do
         _expected_labels_ = INT32_METHODS
 
@@ -73,6 +74,59 @@ module Scry
         it_completes "a = true
                       a = 1
                       a."
+        it_completes "def blah(a : A)
+                      end
+                      def blah_2(a : Node)
+                          a = 2
+                          a."
+      end
+
+      context "tree instance methods" do
+        _expected_labels_ = %w(add print)
+
+        it_completes "abc = Node.new
+                      abc."
+
+        it_completes "abc =
+                      Node.new
+                      abc."
+        it_completes "a = true
+                      a = Node.new
+                      a."
+
+        it_completes "a = true
+                      a = Node.new(1)
+                      a."
+
+        it_completes "a = true
+                      a = Node.new(true)
+                      a."
+
+        it_completes "def blah(a : Node)
+                        a."
+
+        it_completes "def blah(a : Array)
+                      end
+                      def blah_2(a : Node)
+                          a."
+
+        it_completes "property a : Node
+                      def blah(a : A)
+                        @a."
+
+        it_completes "getter a : Node
+                      def blah(a : A)
+                        @a."
+
+        it_completes "setter a : Node
+                      def blah(a : A)
+                          @a."
+
+        it_completes "a = 2
+                      def blah_2(a : Node)
+                          a."
+
+        it_completes "Node.", %w(new)
       end
     end
   end
