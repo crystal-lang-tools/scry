@@ -5,7 +5,7 @@ module Scry
     end
 
     def test_send_did_open(file_path, text)
-      test_send_notification "textDocument/didOpen", %({"textDocument":{"uri":"#{file_path}", "languageId":"crystal","version":1,"text":"#{text}" }})
+      test_send_notification "textDocument/didOpen", %({"textDocument":{"uri":"#{file_path}", "languageId":"crystal","version":1,"text":#{text.dump} }})
     end
 
     def test_send_completion(file_path, position)
