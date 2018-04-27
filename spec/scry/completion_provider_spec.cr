@@ -4,7 +4,7 @@ module Scry
   BOOLEAN_METHODS = %w(!= & == ^ clone hash to_json to_s to_s to_yaml |)
   INT32_METHODS   = %w(- clone popcount)
 
-  private macro it_completes(code, with_labels = nil, file = __FILE__, line = __LINE__)
+  private macro it_completes(code, with_labels = nil)
 
     it "completes #{{{code}}.dump}" do
       {% if with_labels %}
