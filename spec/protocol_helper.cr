@@ -13,7 +13,7 @@ module Scry
     end
 
     def test_send_notification(method, params)
-      test_send  %({ "jsonrpc": "2.0", "method": "#{method}", "params": #{params}})
+      test_send %({ "jsonrpc": "2.0", "method": "#{method}", "params": #{params}})
     end
 
     def test_send_request(method, params)
