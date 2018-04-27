@@ -14,7 +14,7 @@ module Scry
       {% end %}
 
       %code = {{code}}
-      cursor_location = [%code.lines.size, %code.size]
+      cursor_location = { %code.lines.size, %code.size }
 
       _context_.test_send_did_open(_file_path_, %code)
       response = _context_.test_send_completion(_file_path_, %({"line":#{cursor_location[0]},"character":#{cursor_location[1]}}))
