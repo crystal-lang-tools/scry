@@ -38,6 +38,10 @@ module Scry
       @open_files[file.filename] = {file, node}
     end
 
+    def change_file(text_document)
+      @dependancy_graph.update_node(text_document)
+    end
+
     def drop_file(params : TextDocumentParams)
       filename = TextDocument.uri_to_filename(params.text_document.uri)
       @open_files.delete(filename)

@@ -169,6 +169,7 @@ module Scry
       when FileEventType::Deleted
         PublishDiagnostic.new(@workspace, text_document.uri).clean
       when FileEventType::Changed
+        @workspace.change_file(text_document)
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
         response

@@ -10,7 +10,7 @@ module Scry
   end
 
   class CompletionProvider
-    METHOD_CALL_REGEX       = /(?<target>@?[a-zA-Z][a-zA-Z_:]*)\.(?<method>[a-zA-Z]*[a-zA-Z_:]*)$/
+    METHOD_CALL_REGEX       = /(?<target>@?[a-zA-Z_][a-zA-Z_:]*)\.(?<method>[a-zA-Z]*[a-zA-Z_:]*)$/
     INSTANCE_VARIABLE_REGEX = /(?<var>@[a-zA-Z_]*)$/
     REQUIRE_MODULE_REGEX    = /require\s*\"(?<import>[a-zA-Z\/._]*)$/
 

@@ -8,8 +8,16 @@ module Scry
       test_send_notification "textDocument/didOpen", %({"textDocument":{"uri":"#{file_path}", "languageId":"crystal","version":1,"text":#{text.dump} }})
     end
 
+    def test_send_did_update(file_path, text)
+      test_send_notification "textDocument/didUpdate", %({"textDocument":{"uri":"#{file_path}", "languageId":"crystal","version":1,"text":#{text.dump} }})
+    end
+
     def test_send_completion(file_path, position)
       test_send_request "textDocument/completion", %({"textDocument":{"uri":"#{file_path}"},"position":#{position}})
+    end
+
+    def test_send_file_changed(file_path)
+      test_send_notification "workspace/didChangeWatchedFiles", %({"changes": [{"uri": "#{file_path}", "type":#{FileEventType::Changed.to_i}}]})
     end
 
     def test_send_notification(method, params)

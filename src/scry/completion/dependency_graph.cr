@@ -55,6 +55,10 @@ module Scry::Completion::DependencyGraph
     def each
       @nodes.each
     end
+
+    def update_node(text_document : TextDocument)
+
+    end
   end
 
   class Builder

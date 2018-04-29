@@ -14,17 +14,19 @@ module Scry
       {% end %}
 
       %code = {{code}}
-      cursor_location = { %code.lines.size, %code.size }
-
       _context_.test_send_did_open(_file_path_, %code)
-      response = _context_.test_send_completion(_file_path_, %({"line":#{cursor_location[0]},"character":#{cursor_location[1]}}))
-      results = response.as(Scry::ResponseMessage).result.as(Array(CompletionItem))
-      labels = results.map(&.label)
-      labels.sort.should eq(%expected.sort)
+      assert_completion( %code, %expected, _kind_)
+    end
+  end
 
-      results.each do |e|
-        e.kind.should eq(_kind_)
-      end
+  private macro assert_completion(code, expected, kind)
+    cursor_location = { {{code}}.lines.size, {{code}}.size }
+    response = _context_.test_send_completion(_file_path_, %({"line":#{cursor_location[0]},"character":#{cursor_location[1]}}))
+    results = response.as(Scry::ResponseMessage).result.as(Array(CompletionItem))
+    labels = results.map(&.label)
+    labels.sort.should eq({{expected}}.sort)
+    results.each do |e|
+      e.kind.should eq({{kind}})
     end
   end
 
@@ -127,6 +129,34 @@ module Scry
                           a."
 
         it_completes "Node.", %w(new)
+      end
+    end
+
+    it "handles updates to dependancy graph on file change" do
+
+      _file_path_ = File.join(root_path, "temp_sample.cr")
+      begin
+        _context_ = Context.new
+        f = File.new(_file_path_, "w+")
+        f.close
+
+        _context_.test_send_init(root_path)
+        _context_.test_send_did_open(_file_path_, "")
+
+        code = "require \"./fib\"
+                Fib."
+        f = File.new(_file_path_, "w+")
+        f.puts(code)
+        f.close
+        _context_.test_send_file_changed(_file_path_)
+        _context_.test_send_did_update(_file_path_, code)
+        expected = %w(execute)
+        assert_completion(code, expected, CompletionItemKind::Method)
+
+        File.delete(_file_path_)
+      rescue exception
+        File.delete(_file_path_)
+        raise exception
       end
     end
   end
