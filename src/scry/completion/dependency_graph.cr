@@ -84,11 +84,7 @@ module Scry::Completion::DependencyGraph
     end
 
     def rebuild(graph, filename)
-      @lookup_paths
-        .map { |e| File.join(File.expand_path(e), "**", "*.cr") }
-        .uniq
-        .flat_map { |d| Dir.glob(d) }
-        .each { |file| process_requires(file, graph) if file == filename }
+      process_requires(filename, graph)
       graph
     end
 
