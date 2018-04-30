@@ -24,8 +24,10 @@ module Scry
       @dependency_graph = Completion::DependencyGraph::Builder.new(@lookup_path).build
     end
 
-    def reopen_workspace(filename)
-      @dependency_graph = Completion::DependencyGraph::Builder.new(@lookup_path).rebuild(@dependency_graph, filename)
+    def reopen_workspace(file)
+      @dependency_graph = Completion::DependencyGraph::Builder.new(@lookup_path).rebuild(@dependency_graph, file.filename)
+      method_db = Completion::MethodDB.generate(file_dependencies)
+      @open_files[file.filename] = {file, method_db}
     end
 
     def put_file(params : DidOpenTextDocumentParams)
