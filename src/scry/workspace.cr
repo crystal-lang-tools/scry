@@ -48,6 +48,7 @@ module Scry
     def drop_file(params : TextDocumentParams)
       filename = TextDocument.uri_to_filename(params.text_document.uri)
       @open_files.delete(filename)
+      @dependency_graph.delete(filename)
     end
 
     def get_file(text_document : TextDocumentIdentifier)

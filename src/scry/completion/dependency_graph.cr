@@ -60,6 +60,10 @@ module Scry::Completion::DependencyGraph
     def each
       @nodes.each
     end
+
+    def delete(value : String)
+      @nodes.delete value
+    end
   end
 
   class Builder
