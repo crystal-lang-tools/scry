@@ -9,16 +9,23 @@ module Scry
     property open_files
     property dependency_graph : Completion::DependencyGraph::Graph
 
+    @lookup_path : Array(String)
+
     def initialize(root_uri, process_id, max_number_of_problems)
       @root_uri = root_uri
       @process_id = process_id
       @max_number_of_problems = max_number_of_problems
       @open_files = {} of String => {TextDocument, Completion::MethodDB}
       @dependency_graph = Completion::DependencyGraph::Graph.new
+      @lookup_path = ENV["CRYSTAL_PATH"].split(":") + [@root_uri]
     end
 
     def open_workspace
-      @dependency_graph = Completion::DependencyGraph::Builder.new(ENV["CRYSTAL_PATH"].split(":") + [@root_uri]).build
+      @dependency_graph = Completion::DependencyGraph::Builder.new(@lookup_path).build
+    end
+
+    def reopen_workspace(filename)
+      @dependency_graph = Completion::DependencyGraph::Builder.new(@lookup_path).rebuild(@dependency_graph, filename)
     end
 
     def put_file(params : DidOpenTextDocumentParams)
