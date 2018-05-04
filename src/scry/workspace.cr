@@ -38,7 +38,8 @@ module Scry
       else
         file_dependencies = @dependency_graph.prelude_node.descendants.map &.value
       end
-      method_db = Completion::MethodDB.generate(file_dependencies)
+      file_dependencies << file.filename
+      method_db = Completion::MethodDB.generate(file_dependencies.uniq!)
       @open_files[file.filename] = {file, method_db}
     end
 

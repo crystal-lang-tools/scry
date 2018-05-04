@@ -2,10 +2,7 @@ require "../../spec_helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-Scry::EnvironmentConfig.new
-
-CRYSTAL_PATH = Crystal::DEFAULT_PATH.split(":").last
-PRELUDE_PATH = "#{CRYSTAL_PATH}/prelude.cr"
+PRELUDE_PATH = File.expand_path("prelude.cr", Scry.default_crystal_path)
 
 def expand(paths : Array(String))
   paths.map { |p| expand(p) }
@@ -82,7 +79,7 @@ module Scry::Completion::DependencyGraph
       context "single file no requires with crystal path" do
         path = expand "single_file_no_requires"
         sample_1 = expand "single_file_no_requires/sample_1.cr"
-        builder = Builder.new([CRYSTAL_PATH, path])
+        builder = Builder.new(ENV["CRYSTAL_PATH"].split(":") + [path])
 
         graph = builder.build
         graph[sample_1].connections.map(&.value).should eq([PRELUDE_PATH])
@@ -117,8 +114,8 @@ module Scry::Completion::DependencyGraph
         graph = builder.build
 
         graph[wildcard_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, relative_import_file, PRELUDE_PATH].sort)
-        graph[sample_2].connections.map(&.value).sort.should eq([sample_1, PRELUDE_PATH])
-        graph[relative_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, PRELUDE_PATH])
+        graph[sample_2].connections.map(&.value).sort.should eq([sample_1, PRELUDE_PATH].sort)
+        graph[relative_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, PRELUDE_PATH].sort)
       end
     end
   end

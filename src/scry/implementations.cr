@@ -1,9 +1,26 @@
 require "./log"
 require "./protocol/location"
+require "./build_failure"
 
 module Scry
   # Using Crystal implementation to emulate GoTo Definition.
   struct Implementations
+    struct ImplementationsResponse
+      JSON.mapping(
+        status: String,
+        message: String,
+        implementations: Array(ImplementationLocation)?
+      )
+    end
+
+    struct ImplementationLocation
+      JSON.mapping(
+        line: Int32,
+        column: Int32,
+        filename: String
+      )
+    end
+
     def initialize(@workspace : Workspace, @text_document : TextDocument)
     end
 
@@ -19,23 +36,20 @@ module Scry
 
     def get_scope
       root_uri = @workspace.root_uri
-      if Dir.exists?("#{root_uri}/src")
+      main_file = "#{root_uri}/.scry.cr"
+      if File.exists?(main_file)
+        [main_file]
+      elsif Dir.exists?("#{root_uri}/src")
         Dir.glob("#{root_uri}/src/*.cr")
       else
-        Dir.glob("#{root_uri}/**/*.cr").reject(&.=~(/\/spec\/|\/lib\//))
+        Dir.glob("#{root_uri}/**/*.cr")
       end
     end
 
     # NOTE: compiler is a bit heavy in some projects.
     def search(filename, source, position)
       scope = get_scope
-      result = analyze(filename, position, scope)
-      case result
-      when ResponseMessage
-        result
-      when JSON::Any
-        response_with(result)
-      end
+      analyze(filename, position, scope)
     end
 
     private def crystal_tool(filename, position, scope)
@@ -49,15 +63,19 @@ module Scry
     private def analyze(filename, position, scope)
       response = crystal_tool(filename, position, scope)
       Log.logger.debug("response: #{response}")
-      parsed_response = JSON.parse(response)
-      implementations = parsed_response["implementations"]?
-      if implementations
-        implementations
-      else
+      response = (Array(BuildFailure) | ImplementationsResponse).from_json(response)
+      case response
+      when Array(BuildFailure)
         implementation_response
+      when ImplementationsResponse
+        if impls = response.implementations
+          response_with(impls)
+        else
+          implementation_response
+        end
       end
     rescue ex
-      Log.logger.error("A error was found while searching definitions\n#{ex}")
+      Log.logger.error("A error was found while searching implementations\n#{ex}")
       implementation_response
     end
 
@@ -67,9 +85,9 @@ module Scry
 
     private def response_with(implementations)
       locations = implementations.map do |item|
-        pos = Position.new(item["line"].as_i - 1, item["column"].as_i - 1)
+        pos = Position.new(item.line - 1, item.column - 1)
         range = Range.new(pos, pos)
-        Location.new("file://" + item["filename"].as_s, range)
+        Location.new("file://" + item.filename, range)
       end
       implementation_response(locations)
     end
