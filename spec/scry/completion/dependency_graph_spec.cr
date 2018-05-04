@@ -114,8 +114,8 @@ module Scry::Completion::DependencyGraph
         graph = builder.build
 
         graph[wildcard_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, relative_import_file, PRELUDE_PATH].sort)
-        graph[sample_2].connections.map(&.value).sort.should eq([sample_1, PRELUDE_PATH])
-        graph[relative_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, PRELUDE_PATH])
+        graph[sample_2].connections.map(&.value).sort.should eq([sample_1, PRELUDE_PATH].sort)
+        graph[relative_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, PRELUDE_PATH].sort)
       end
     end
   end
