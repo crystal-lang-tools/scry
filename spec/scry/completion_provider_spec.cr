@@ -128,16 +128,19 @@ module Scry
 
         it_completes "Node.", %w(new)
 
-        it_completes "a = A.new
+        it_completes "a = B.new
                       a.", %w(method)
       end
     end
 
     context "classname completion" do
       _kind_ = CompletionItemKind::Class
-      it_completes("A", %w(Array Atomic ArgumentError))
+      it_completes("A", %w(Array Atomic ArgumentError AtExitHandlers))
       it_completes("JSON::P", %w(ParseException Parser PullParser))
       it_completes("JSON::Pa", %w(ParseException Parser))
+      it_completes("JSO", %w(JSON JSON::Any JSON::Builder JSON::Error JSON::Lexer JSON::Lexer::IOBased JSON::Lexer::StringBased JSON::ParseException JSON::Parser JSON::PullParser JSON::Token))
     end
   end
 end
+
+
