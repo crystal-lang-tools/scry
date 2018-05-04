@@ -127,6 +127,9 @@ module Scry
                           a."
 
         it_completes "Node.", %w(new)
+
+        it_completes "a = A.new
+                      a.", %w(method)
       end
     end
   end
