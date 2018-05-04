@@ -23,14 +23,14 @@ module Scry
 
     def put_file(params : DidOpenTextDocumentParams)
       file = TextDocument.new(params)
-      if file.untitled?
-        @open_files[file.filename] = {file, Completion::MethodDB.new}
-      else
+      if @dependency_graph[file.filename]?
         file_dependencies = @dependency_graph[file.filename].descendants.map &.value
-        file_dependencies << file.filename
-        method_db = Completion::MethodDB.generate(file_dependencies.uniq!)
-        @open_files[file.filename] = {file, method_db}
+      else
+        file_dependencies = @dependency_graph.prelude_node.descendants.map &.value
       end
+      file_dependencies << file.filename
+      method_db = Completion::MethodDB.generate(file_dependencies.uniq!)
+      @open_files[file.filename] = {file, method_db}
     end
 
     def update_file(params : DidChangeTextDocumentParams)
@@ -46,6 +46,7 @@ module Scry
 
     def get_file(text_document : TextDocumentIdentifier)
       filename = TextDocument.uri_to_filename(text_document.uri)
+      Log.logger.debug("@open_files: #{@open_files}")
       @open_files[filename]
     end
   end
