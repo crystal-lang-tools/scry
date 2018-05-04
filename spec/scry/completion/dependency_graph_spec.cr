@@ -2,7 +2,7 @@ require "../../spec_helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-PRELUDE_PATH = "#{Scry.default_crystal_path}/prelude.cr"
+PRELUDE_PATH = File.expand_path("prelude.cr", Scry.default_crystal_path)
 
 def expand(paths : Array(String))
   paths.map { |p| expand(p) }
