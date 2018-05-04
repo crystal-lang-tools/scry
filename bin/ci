@@ -63,7 +63,7 @@ build() {
 }
 
 prepare_build() {
-  on_both 'ulimit -n 8192'
+  on_both 'ulimit -n 24576'
   on_linux docker build -t crystal/scry-image .
 
   on_osx brew update
