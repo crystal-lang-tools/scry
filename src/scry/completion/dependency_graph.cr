@@ -28,8 +28,8 @@ module Scry::Completion::DependencyGraph
     getter prelude_node : Node
 
     def initialize(@nodes = {} of String => Node)
-      crystal_path = Crystal::DEFAULT_PATH.split(":").last
-      prelude_path = "#{crystal_path}/prelude.cr"
+      crystal_path = Crystal::DEFAULT_PATH.split(":").select { |path| path.ends_with?("src") }.first
+      prelude_path = File.expand_path("prelude.cr", CRYSTAL_PATH)
       @nodes[prelude_path] = @prelude_node = Node.new(prelude_path)
     end
 

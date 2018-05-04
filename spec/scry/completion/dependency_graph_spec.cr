@@ -2,7 +2,7 @@ require "../../spec_helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-CRYSTAL_PATH = Crystal::DEFAULT_PATH.split(":").reject { |path| path == "lib" }.first
+CRYSTAL_PATH = Crystal::DEFAULT_PATH.split(":").select { |path| path.ends_with?("src") }.first
 PRELUDE_PATH = File.expand_path("prelude.cr", CRYSTAL_PATH)
 
 def expand(paths : Array(String))
