@@ -132,5 +132,12 @@ module Scry
                       a.", %w(method)
       end
     end
+
+    context "classname completion" do
+      _kind_ = CompletionItemKind::Class
+      it_completes("A", %w(Array Atomic ArgumentError))
+      it_completes("JSON::P", %w(ParseException Parser PullParser))
+      it_completes("JSON::Pa", %w(ParseException Parser))
+    end
   end
 end
