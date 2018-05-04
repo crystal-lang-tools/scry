@@ -142,5 +142,3 @@ module Scry
     end
   end
 end
-
-
