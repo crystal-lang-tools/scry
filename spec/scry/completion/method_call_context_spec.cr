@@ -44,7 +44,6 @@ module Scry::Completion
                     a = true
                     a‸methd
                 "
-
         context = parse_example(code)
 
         context.get_type.should eq("Bool")

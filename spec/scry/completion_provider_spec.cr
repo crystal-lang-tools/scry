@@ -1,38 +1,133 @@
 require "../spec_helper"
 
 module Scry
+  BOOLEAN_METHODS = %w(!= & == ^ clone hash to_json to_s to_s to_yaml |)
+  INT32_METHODS   = %w(- clone popcount)
+
+  private macro it_completes(code, with_labels = nil)
+
+    it "completes #{{{code}}.dump}" do
+      {% if with_labels %}
+        %expected = {{with_labels}}
+      {% else %}
+        %expected = _expected_labels_
+      {% end %}
+
+      %code = {{code}}
+      cursor_location = { %code.lines.size, %code.size }
+
+      _context_.test_send_did_open(_file_path_, %code)
+      response = _context_.test_send_completion(_file_path_, %({"line":#{cursor_location[0]},"character":#{cursor_location[1]}}))
+      results = response.as(Scry::ResponseMessage).result.as(Array(CompletionItem))
+      labels = results.map(&.label)
+      labels.sort.should eq(%expected.sort)
+
+      results.each do |e|
+        e.kind.should eq(_kind_)
+      end
+    end
+  end
+
   describe CompletionProvider do
-    it "handles require module completions for crystal modules" do
-      tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
-      text_content = "require \"arr"
-      text_document = TextDocument.new(tree_path, [text_content])
-      position = Position.new(line = 0, character = text_content.size)
-      completion_provider = CompletionProvider.new(text_document, context: nil, position: position, method_db: Completion::MethodDB.new)
+    _context_ = Context.new
+    root_path = File.expand_path("spec/fixtures/completion/")
+    _context_.test_send_init(root_path)
+    _file_path_ = File.join(root_path, "sample.cr")
 
-      results = completion_provider.run
+    context "module completion" do
+      _kind_ = CompletionItemKind::Module
 
-      results.size.should eq(1)
-
-      result = results.first
-      result.label.should eq("array")
-      result.insert_text.should eq("array")
-      result.kind.should eq(CompletionItemKind::Module)
-      result.documentation.should be_nil
+      it_completes("require \"arr", ["array"])
+      it_completes("require \"./tr", ["tree"])
     end
 
-    it "handles require module completions for relative path" do
-      tree_path = File.expand_path("spec/fixtures/completion/tree.cr")
-      text_content = "require \"./sa"
-      text_document = TextDocument.new(tree_path, [text_content])
-      position = Position.new(line = 0, character = text_content.size)
-      completion_provider = CompletionProvider.new(text_document, context: nil, position: position, method_db: Completion::MethodDB.new)
+    context "method completion" do
+      _kind_ = CompletionItemKind::Method
+      context "boolean methods" do
+        _expected_labels_ = BOOLEAN_METHODS
+        it_completes "a = true
+                      a."
 
-      results = completion_provider.run
+        it_completes "a = false
+                      a."
 
-      labels = results.map &.label
+        it_completes "a =
+                        false
+                    a."
 
-      results.size.should eq(1)
-      labels.should eq(["sample"])
+        it_completes "a = 1
+                      a = true
+                      a."
+
+        it_completes("a = true
+                      a.to_", %w(to_json to_s to_s to_yaml))
+      end
+
+      context "int32" do
+        _expected_labels_ = INT32_METHODS
+
+        (1..10).each do |i|
+          it_completes "a = #{i}
+                        a."
+        end
+
+        it_completes "a = true
+                      a = 1
+                      a."
+        it_completes "def blah(a : A)
+                      end
+                      def blah_2(a : Node)
+                          a = 2
+                          a."
+      end
+
+      context "tree instance methods" do
+        _expected_labels_ = %w(add print)
+
+        it_completes "abc = Node.new
+                      abc."
+
+        it_completes "abc =
+                      Node.new
+                      abc."
+        it_completes "a = true
+                      a = Node.new
+                      a."
+
+        it_completes "a = true
+                      a = Node.new(1)
+                      a."
+
+        it_completes "a = true
+                      a = Node.new(true)
+                      a."
+
+        it_completes "def blah(a : Node)
+                        a."
+
+        it_completes "def blah(a : Array)
+                      end
+                      def blah_2(a : Node)
+                          a."
+
+        it_completes "property a : Node
+                      def blah(a : A)
+                        @a."
+
+        it_completes "getter a : Node
+                      def blah(a : A)
+                        @a."
+
+        it_completes "setter a : Node
+                      def blah(a : A)
+                          @a."
+
+        it_completes "a = 2
+                      def blah_2(a : Node)
+                          a."
+
+        it_completes "Node.", %w(new)
+      end
     end
   end
 end
