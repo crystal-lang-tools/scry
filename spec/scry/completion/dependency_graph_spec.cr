@@ -2,8 +2,6 @@ require "../../spec_helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-Scry::EnvironmentConfig.new
-
 CRYSTAL_PATH = Crystal::DEFAULT_PATH.split(":").last
 PRELUDE_PATH = "#{CRYSTAL_PATH}/prelude.cr"
 
