@@ -2,8 +2,7 @@ require "../../spec_helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-CRYSTAL_PATH = Crystal::DEFAULT_PATH.split(":").select { |path| path.ends_with?("src") }.first
-PRELUDE_PATH = File.expand_path("prelude.cr", CRYSTAL_PATH)
+PRELUDE_PATH = "#{Scry.default_crystal_path}/prelude.cr"
 
 def expand(paths : Array(String))
   paths.map { |p| expand(p) }
@@ -80,7 +79,7 @@ module Scry::Completion::DependencyGraph
       context "single file no requires with crystal path" do
         path = expand "single_file_no_requires"
         sample_1 = expand "single_file_no_requires/sample_1.cr"
-        builder = Builder.new([CRYSTAL_PATH, path])
+        builder = Builder.new(ENV["CRYSTAL_PATH"].split(":") + [path])
 
         graph = builder.build
         graph[sample_1].connections.map(&.value).should eq([PRELUDE_PATH])
