@@ -1,5 +1,6 @@
 require "spec"
 require "../src/scry/**"
+require "./protocol_helper"
 
 module Scry
   EnvironmentConfig.new.run

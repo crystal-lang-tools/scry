@@ -7,7 +7,7 @@ module Scry
       tmpfile = Tempfile.new("scry.out")
       log_file = File.open(tmpfile.path, "w")
       logger = Logger.new(log_file)
-      logger.level = Logger::DEBUG
+      logger.level = Logger::INFO
       logger
     end
 
