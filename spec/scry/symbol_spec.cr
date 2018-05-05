@@ -128,11 +128,11 @@ module Scry
         result.kind.is_a?(SymbolKind::Class).should be_true
       end
 
-      it "return stdlib symbol with regex query match for puts" do
-        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "put*")
+      it "return stdlib symbol with regex query match for initialize" do
+        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "initializ*")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
-        result.kind.is_a?(SymbolKind::Function).should be_true
+        result.kind.is_a?(SymbolKind::Method).should be_true
       end
     end
   end
