@@ -98,5 +98,21 @@ module Scry
         result.kind.is_a?(SymbolKind::Constant).should be_true
       end
     end
+
+    describe "WorkspaceSymbols" do
+      it "return empty Symbols list if no query" do
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "")
+        response = processor.run
+        result = response.result.as(Array(SymbolInformation))
+        result.empty?.should be_true
+      end
+
+      it "return Symbols list with query match" do
+        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "salut")
+        response = processor.run
+        result = response.result.as(Array(SymbolInformation)).try(&.first)
+        result.kind.is_a?(SymbolKind::Method).should be_true
+      end
+    end
   end
 end
