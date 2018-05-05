@@ -19,7 +19,7 @@ module Scry
       text_document = TextDocument.new("uri", ["class Test; end"])
       processor = SymbolProcessor.new(text_document)
       response = processor.run
-      result = response.result.as(Array(SymbolInformation)).try(&.first)
+      result = response.result.as(Array(SymbolInformation)).first
       result.kind.is_a?(SymbolKind::Class).should be_true
     end
 
@@ -27,7 +27,7 @@ module Scry
       text_document = TextDocument.new("uri", ["struct Test; end"])
       processor = SymbolProcessor.new(text_document)
       response = processor.run
-      result = response.result.as(Array(SymbolInformation)).try(&.first)
+      result = response.result.as(Array(SymbolInformation)).first
       result.kind.is_a?(SymbolKind::Class).should be_true
     end
 
@@ -35,7 +35,7 @@ module Scry
       text_document = TextDocument.new("uri", ["module Test; end"])
       processor = SymbolProcessor.new(text_document)
       response = processor.run
-      result = response.result.as(Array(SymbolInformation)).try(&.first)
+      result = response.result.as(Array(SymbolInformation)).first
       result.kind.is_a?(SymbolKind::Module).should be_true
     end
 
@@ -43,7 +43,7 @@ module Scry
       text_document = TextDocument.new("uri", ["def test; end"])
       processor = SymbolProcessor.new(text_document)
       response = processor.run
-      result = response.result.as(Array(SymbolInformation)).try(&.first)
+      result = response.result.as(Array(SymbolInformation)).first
       result.kind.is_a?(SymbolKind::Method).should be_true
     end
 
@@ -51,7 +51,7 @@ module Scry
       text_document = TextDocument.new("uri", ["@bar = nil"])
       processor = SymbolProcessor.new(text_document)
       response = processor.run
-      result = response.result.as(Array(SymbolInformation)).try(&.first)
+      result = response.result.as(Array(SymbolInformation)).first
       result.as(SymbolInformation).kind.is_a?(SymbolKind::Variable).should be_true
     end
 
@@ -86,7 +86,7 @@ module Scry
         text_document = TextDocument.new("uri", [%(HELLO = "world")])
         processor = SymbolProcessor.new(text_document)
         response = processor.run
-        result = response.result.as(Array(SymbolInformation)).try(&.first)
+        result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Constant).should be_true
       end
 
@@ -94,7 +94,7 @@ module Scry
         text_document = TextDocument.new("uri", [%(alias Hello = World)])
         processor = SymbolProcessor.new(text_document)
         response = processor.run
-        result = response.result.as(Array(SymbolInformation)).try(&.first)
+        result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Constant).should be_true
       end
     end
@@ -110,7 +110,14 @@ module Scry
       it "return Symbols list with query match" do
         processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "salut")
         response = processor.run
-        result = response.result.as(Array(SymbolInformation)).try(&.first)
+        result = response.result.as(Array(SymbolInformation)).first
+        result.kind.is_a?(SymbolKind::Method).should be_true
+      end
+
+      it "return Symbols list with regex query match" do
+        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "sal*")
+        response = processor.run
+        result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Method).should be_true
       end
     end
