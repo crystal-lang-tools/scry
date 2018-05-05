@@ -17,7 +17,7 @@ module Scry
       @max_number_of_problems = max_number_of_problems
       @open_files = {} of String => {TextDocument, Completion::MethodDB}
       @dependency_graph = Completion::DependencyGraph::Graph.new
-      @lookup_path = ENV["CRYSTAL_PATH"].split(":") + [@root_uri]
+      @lookup_path = (ENV["CRYSTAL_PATH"].split(":") << @root_uri)
     end
 
     def open_workspace
