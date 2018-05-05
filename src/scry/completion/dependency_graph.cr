@@ -1,3 +1,5 @@
+require "../default_crystal_path"
+
 module Scry::Completion::DependencyGraph
   struct Node
     property value
@@ -28,8 +30,7 @@ module Scry::Completion::DependencyGraph
     getter prelude_node : Node
 
     def initialize(@nodes = {} of String => Node)
-      crystal_path = Crystal::DEFAULT_PATH.split(":").last
-      prelude_path = "#{crystal_path}/prelude.cr"
+      prelude_path = File.expand_path("prelude.cr", Scry.default_crystal_path)
       @nodes[prelude_path] = @prelude_node = Node.new(prelude_path)
     end
 
