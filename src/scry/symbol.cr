@@ -114,28 +114,44 @@ module Scry
       node.accept(visitor)
 
       ResponseMessage.new(@text_document.id, visitor.symbols)
+    rescue
+      ResponseMessage.new(@text_document.id, [] of SymbolInformation)
     end
   end
 
   class WorkspaceSymbolProcessor
+    @@crystal_path_files = [] of SymbolInformation
+
     def initialize(@msg_id : Int32 | String, @root_path : String, @query : String)
-      @all_files = Dir.glob("#{root_path}/**/*.cr")
+      @workspace_files = Dir.glob(File.join(root_path, "**", "*.cr"))
+      if @@crystal_path_files.empty?
+        # Memoize crystal stdlib
+        @@crystal_path_files = search_symbols(Dir.glob(File.join(Scry.default_crystal_path, "**", "*.cr")), ".*")
+      end
     end
 
     def run
       symbols = [] of SymbolInformation
       unless @query.empty?
-        @all_files.each do |file|
-          visitor = SymbolVisitor.new("file://#{file}")
-          parser = Crystal::Parser.new(File.read(file))
-          parser.filename = file
-          node = parser.parse
-          node.accept(visitor)
-          symbols.concat visitor.symbols.select(&.name.match(Regex.new(@query)))
-        end
+        symbols.concat search_symbols(@workspace_files, @query)
+        symbols.concat @@crystal_path_files.select(&.name.match(Regex.new(@query)))
       end
-
       ResponseMessage.new(@msg_id, symbols)
+    end
+
+    def search_symbols(files, query)
+      symbols = [] of SymbolInformation
+      files.each do |file|
+        visitor = SymbolVisitor.new("file://#{file}")
+        parser = Crystal::Parser.new(File.read(file))
+        parser.filename = file
+        node = parser.parse
+        node.accept(visitor)
+        symbols.concat visitor.symbols.select(&.name.match(Regex.new(query)))
+      rescue
+        next
+      end
+      symbols
     end
   end
 end
