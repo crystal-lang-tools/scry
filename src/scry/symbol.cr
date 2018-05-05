@@ -1,4 +1,5 @@
 require "compiler/crystal/syntax"
+require "./protocol/workspace_symbol_params"
 
 module Scry
   class SymbolVisitor < Crystal::Visitor
@@ -113,6 +114,28 @@ module Scry
       node.accept(visitor)
 
       ResponseMessage.new(@text_document.id, visitor.symbols)
+    end
+  end
+
+  class WorkspaceSymbolProcessor
+    def initialize(@msg_id : Int32 | String, @root_path : String, @query : String)
+      @all_files = Dir.glob("#{root_path}/**/*.cr")
+    end
+
+    def run
+      symbols = [] of SymbolInformation
+      unless @query.empty?
+        @all_files.each do |file|
+          visitor = SymbolVisitor.new("file://#{file}")
+          parser = Crystal::Parser.new(File.read(file))
+          parser.filename = file
+          node = parser.parse
+          node.accept(visitor)
+          symbols.concat visitor.symbols.select(&.name.match(Regex.new(@query)))
+        end
+      end
+
+      ResponseMessage.new(@msg_id, symbols)
     end
   end
 end
