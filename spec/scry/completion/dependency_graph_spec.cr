@@ -1,10 +1,8 @@
 require "../../spec_helper"
-# require "./helper"
 
 ROOT = File.expand_path("spec/fixtures/completion/dependency_graph")
 
-CRYSTAL_PATH = Crystal::CrystalPath.default_path.split(":").first
-PRELUDE_PATH = File.expand_path("prelude.cr", CRYSTAL_PATH)
+PRELUDE_PATH = File.expand_path("prelude.cr", Scry.default_crystal_path)
 
 def expand(paths : Array(String))
   paths.map { |p| expand(p) }
@@ -52,12 +50,6 @@ module Scry::Completion::DependencyGraph
       graph["value"].should eq(node)
     end
 
-    it "#[Regex]" do
-      node = Node.new("value")
-      graph = Graph.new({node.value => node})
-      graph[/al/].should eq(node)
-    end
-
     it "#add_edge" do
       graph = Graph.new
 
@@ -75,7 +67,7 @@ module Scry::Completion::DependencyGraph
         keys << k
       end
 
-      keys.should eq(["value_1", "value_2"])
+      keys.select(&.match(/value_\d/)).should eq(["value_1", "value_2"])
     end
   end
   describe Builder do
@@ -87,19 +79,19 @@ module Scry::Completion::DependencyGraph
       context "single file no requires with crystal path" do
         path = expand "single_file_no_requires"
         sample_1 = expand "single_file_no_requires/sample_1.cr"
-        builder = Builder.new([CRYSTAL_PATH, path])
+        builder = Builder.new(ENV["CRYSTAL_PATH"].split(":") + [path])
 
         graph = builder.build
         graph[sample_1].connections.map(&.value).should eq([PRELUDE_PATH])
       end
 
-      context "single file no requires" do
+      context "single file no requires with crystal path implicit" do
         path = expand "single_file_no_requires"
         sample_1 = expand "single_file_no_requires/sample_1.cr"
         builder = Builder.new([path])
 
         graph = builder.build
-        graph[sample_1].connections.map(&.value).should eq([] of String)
+        graph[sample_1].connections.map(&.value).should eq([PRELUDE_PATH])
       end
 
       context "single file relative import" do
@@ -109,7 +101,7 @@ module Scry::Completion::DependencyGraph
         builder = Builder.new([expand("single_file_no_requires")])
 
         graph = builder.build
-        graph[relative_import_file].connections.map(&.value).should eq([sample_1])
+        graph[relative_import_file].connections.map(&.value).should eq([sample_1, PRELUDE_PATH])
       end
 
       context "wildcard imports" do
@@ -121,9 +113,9 @@ module Scry::Completion::DependencyGraph
 
         graph = builder.build
 
-        graph[wildcard_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, relative_import_file].sort)
-        graph[sample_2].connections.map(&.value).sort.should eq([sample_1])
-        graph[relative_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2])
+        graph[wildcard_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, relative_import_file, PRELUDE_PATH].sort)
+        graph[sample_2].connections.map(&.value).sort.should eq([sample_1, PRELUDE_PATH].sort)
+        graph[relative_import_file].connections.map(&.value).sort.should eq([sample_1, sample_2, PRELUDE_PATH].sort)
       end
     end
   end
