@@ -1,4 +1,5 @@
 require "compiler/crystal/syntax"
+require "./protocol/workspace_symbol_params"
 
 module Scry
   class SymbolVisitor < Crystal::Visitor
@@ -113,6 +114,49 @@ module Scry
       node.accept(visitor)
 
       ResponseMessage.new(@text_document.id, visitor.symbols)
+    rescue
+      ResponseMessage.new(@text_document.id, [] of SymbolInformation)
+    end
+  end
+
+  class WorkspaceSymbolProcessor
+    @@crystal_path_symbols : Array(SymbolInformation)?
+    @query_regex : Regex
+
+    def initialize(@msg_id : Int32 | String, @root_path : String, @query : String)
+      @workspace_files = Dir.glob(File.join(root_path, "**", "*.cr"))
+      @query_regex = Regex.new(@query)
+    end
+
+    def run
+      symbols = [] of SymbolInformation
+      unless @query.empty?
+        symbols.concat self.class.search_symbols(@workspace_files, @query_regex)
+        symbols.concat self.class.crystal_path_symbols.select(&.name.match(@query_regex))
+      end
+      ResponseMessage.new(@msg_id, symbols)
+    end
+
+    def self.crystal_path_symbols
+      @@crystal_path_symbols ||= begin
+        crystal_path_files = Dir.glob(File.join(Scry.default_crystal_path, "**", "*.cr"))
+        search_symbols(crystal_path_files, Regex.new(".*"))
+      end
+    end
+
+    def self.search_symbols(files, query_regex)
+      symbols = [] of SymbolInformation
+      files.each do |file|
+        visitor = SymbolVisitor.new("file://#{file}")
+        parser = Crystal::Parser.new(File.read(file))
+        parser.filename = file
+        node = parser.parse
+        node.accept(visitor)
+        symbols.concat visitor.symbols.select(&.name.match(query_regex))
+      rescue
+        next
+      end
+      symbols
     end
   end
 end
