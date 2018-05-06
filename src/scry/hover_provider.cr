@@ -62,12 +62,28 @@ module Scry
       ResponseMessage.new(@text_document.id, context)
     end
 
+    # NOTE: this Would be configurable in the future with scry.yml
     private def response_with(contexts, range)
       content = vertical_align(contexts)
       # content = horizontal_align(contexts)
       hover_response(Hover.new(MarkupContent.new("markdown", content.join("\n")), range))
     end
 
+    # Aligns context output vertically. By example:
+    #
+    # **Context 1**
+    #
+    # ```crystal
+    # arg1 : String
+    # arg2 : Int32 ∣ Nil
+    # ```
+    #
+    # **Context 2**
+    #
+    # ```crystal
+    # arg1 : String
+    # arg2 : Bool
+    # ```
     private def vertical_align(contexts)
       contents = [] of String
       contexts.each_with_index do |context, i|
@@ -83,7 +99,12 @@ module Scry
       contents
     end
 
-    # NOTE: this Would be configurable in the future with scry.yml
+    # Aligns context output horizontally. By example:
+    #
+    # | Expression | Type 1 | Type 2 |
+    # | :--- | :--- | :--- |
+    # | arg1 | `String` | `String` |
+    # | arg2 | `Int32 ∣ Nil` | `Bool` |
     private def horizontal_align(contexts)
       contents = [] of String
       titles = ["| Expression |"] of String
