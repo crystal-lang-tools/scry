@@ -92,8 +92,8 @@ module Scry
       line_number = location.line_number
       column_number = location.column_number
       position = Position.new(line_number - 1, column_number - 1)
-      end_location = node.end_location
-      if end_location
+
+      if end_location = node.end_location
         end_line_number = end_location.line_number
         end_column_number = end_location.column_number
       else
