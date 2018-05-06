@@ -45,7 +45,8 @@ module Scry
       documentFormattingProvider: Bool,
       definitionProvider: Bool,
       documentSymbolProvider: Bool,
-      completionProvider: CompletionOptions
+      completionProvider: CompletionOptions,
+      hoverProvider: Bool
     )
 
     def initialize
@@ -54,6 +55,7 @@ module Scry
       @definitionProvider = true
       @documentSymbolProvider = true
       @completionProvider = CompletionOptions.new
+      @hoverProvider = true
     end
   end
 end

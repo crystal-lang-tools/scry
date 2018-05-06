@@ -6,7 +6,7 @@ require "./completion_item"
 
 module Scry
   # Add a response type when needed
-  alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation) | Array(CompletionItem) | CompletionItem
+  alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation) | Array(CompletionItem) | CompletionItem | Hover
 
   struct ResponseMessage
     JSON.mapping({
