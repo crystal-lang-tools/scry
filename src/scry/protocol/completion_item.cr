@@ -1,3 +1,5 @@
+require "./markup_content"
+
 module Scry
   enum CompletionItemKind
     Text          =  1
@@ -30,16 +32,6 @@ module Scry
   enum InsertTextFormat
     PlainText = 1
     Snippet   = 2
-  end
-
-  struct MarkupContent
-    JSON.mapping({
-      kind:  String,
-      value: String,
-    })
-
-    def initialize(@kind, @value)
-    end
   end
 
   struct RequireModuleContextData
