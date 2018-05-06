@@ -90,9 +90,9 @@ module Scry
         contents << "**Context #{i + 1}**\n" if contexts.size > 1
         contents << "```crystal\n"
         max_size = context.keys.max_by(&.size).size
-        context.each do |key, value|
-          key_aligned = "#{key}".ljust(max_size)
-          contents << "#{key_aligned} : #{value}\n"
+        context.each do |var_name, var_type|
+          var_name_aligned = "#{var_name}".ljust(max_size)
+          contents << "#{var_name_aligned} : #{var_type}\n"
         end
         contents << "```\n"
       end
@@ -106,9 +106,11 @@ module Scry
     # | arg1 | `String` | `String` |
     # | arg2 | `Int32 ∣ Nil` | `Bool` |
     private def horizontal_align(contexts)
-      contents = [] of String
-      titles = ["| Expression |"] of String
-      titles_lines = ["| :--- |"] of String
+      titles = IO::Memory.new
+      contents = IO::Memory.new
+      titles_lines = IO::Memory.new
+      titles << "| Expression |"
+      titles_lines << "| :--- |"
       contents_hash = {} of String => Array(String)
       contexts.each_with_index do |context, i|
         if contexts.size > 1
@@ -117,21 +119,20 @@ module Scry
           titles << " Type |"
         end
         titles_lines << " :--- |"
-        context.each do |key, value|
+        context.each do |var_name, var_type|
           # Replaces | by unicode symbol 0x2223 (DIVIDES)
-          escaped_value = "`#{value.gsub("|", "∣")}`"
-          if contents_hash[key]?
-            contents_hash[key] << escaped_value
+          escaped_var_type = "`#{var_type.gsub("|", "∣")}`"
+          if contents_hash[var_name]?
+            contents_hash[var_name] << escaped_var_type
           else
-            contents_hash[key] = [escaped_value]
+            contents_hash[var_name] = [escaped_var_type]
           end
         end
       end
-      contents_hash.each do |key, value|
-        contents << "| #{key} | #{value.join(" | ")} |"
+      contents_hash.each do |var_name, var_type|
+        contents << "| #{var_name} | #{var_type.join(" | ")} |\n"
       end
-      titles << "\n"
-      [titles.join + titles_lines.join].concat(contents).join("\n")
+      (titles << "\n" << titles_lines << "\n" << contents).to_s
     end
   end
 end
