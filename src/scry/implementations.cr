@@ -1,10 +1,13 @@
 require "./log"
 require "./protocol/location"
 require "./build_failure"
+require "./tool_helper"
 
 module Scry
   # Using Crystal implementation to emulate GoTo Definition.
   struct Implementations
+    include ToolHelper
+
     struct ImplementationsResponse
       JSON.mapping(
         status: String,
@@ -26,36 +29,20 @@ module Scry
 
     def run
       if position = @text_document.position
-        search(
-          @text_document.filename,
-          @text_document.text.first,
-          position
-        )
-      end
-    end
-
-    def get_scope
-      root_uri = @workspace.root_uri
-      main_file = "#{root_uri}/.scry.cr"
-      if File.exists?(main_file)
-        [main_file]
-      elsif Dir.exists?("#{root_uri}/src")
-        Dir.glob("#{root_uri}/src/*.cr")
-      else
-        Dir.glob("#{root_uri}/**/*.cr")
+        search(@text_document.filename, position)
       end
     end
 
     # NOTE: compiler is a bit heavy in some projects.
-    def search(filename, source, position)
-      scope = get_scope
+    def search(filename, position)
+      scope = get_scope(@workspace.root_uri)
       analyze(filename, position, scope)
     end
 
     private def crystal_tool(filename, position, scope)
       location = "#{filename}:#{position.line + 1}:#{position.character + 1}"
       String.build do |io|
-        args = ["tool", "implementations", "--no-color", "--error-trace", "-f", "json", "-c", "#{location}"] + scope
+        args = ["tool", "implementations", "--no-color", "--error-trace", "-f", "json", "-c", location] + scope
         Process.run("crystal", args, output: io, error: io)
       end
     end
