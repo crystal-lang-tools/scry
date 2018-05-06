@@ -63,13 +63,12 @@ module Scry
     end
 
     private def response_with(contexts, range)
-      contents = ["```crystal"]
+      contents = ["| Expression | Type |", "| --- | --- |"]
       contexts.each do |context|
         context.each do |key, value|
-          contents << "#{key} : #{value}\n"
+          contents << "| #{key} | #{value} |"
         end
       end
-      contents << "```"
       hover_response(Hover.new(MarkupContent.new("markdown", contents.join('\n')), range))
     end
   end
