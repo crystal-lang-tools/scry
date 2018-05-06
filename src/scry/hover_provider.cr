@@ -110,19 +110,23 @@ module Scry
     # | arg1 | `String` | `String` |
     # | arg2 | `Int32 ∣ Nil` | `Bool` |
     private def horizontal_align(contexts)
-      titles = IO::Memory.new
       contents = IO::Memory.new
-      titles_lines = IO::Memory.new
-      titles << "| Expression |"
-      titles_lines << "| :--- |"
-      contents_hash = {} of String => Array(String)
+      contents << "| Expression |"
       contexts.each_with_index do |context, i|
         if contexts.size > 1
-          titles << " Type #{i + 1} |"
+          contents << " Type #{i + 1} |"
         else
-          titles << " Type |"
+          contents << " Type |"
         end
-        titles_lines << " :--- |"
+      end
+      contents << "\n"
+      contents << "| :--- |"
+      contexts.each_with_index do |context, i|
+        contents << " :--- |"
+      end
+      contents << "\n"
+      contents_hash = {} of String => Array(String)
+      contexts.each_with_index do |context, i|
         context.each do |var_name, var_type|
           # Replaces | by unicode symbol 0x2223 (DIVIDES)
           escaped_var_type = "`#{var_type.gsub("|", "∣")}`"
@@ -136,7 +140,7 @@ module Scry
       contents_hash.each do |var_name, var_type|
         contents << "| #{var_name} | #{var_type.join(" | ")} |\n"
       end
-      (titles << "\n" << titles_lines << "\n" << contents).to_s
+      contents.to_s
     end
   end
 end
