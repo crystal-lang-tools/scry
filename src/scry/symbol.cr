@@ -87,20 +87,24 @@ module Scry
 
     def process_node(node, name : String, kind : SymbolKind)
       location = node.location
-      end_location = node.end_location
-      return true unless location && end_location
+      return true unless location
 
       line_number = location.line_number
       column_number = location.column_number
-      end_line_number = end_location.line_number
-      end_column_number = end_location.column_number
       position = Position.new(line_number - 1, column_number - 1)
+      end_location = node.end_location
+      if end_location
+        end_line_number = end_location.line_number
+        end_column_number = end_location.column_number
+      else
+        end_line_number = line_number
+        end_column_number = column_number
+      end
       end_position = Position.new(end_line_number - 1, end_column_number - 1)
+
       range = Range.new(position, end_position)
       location = Location.new(@document_uri, range)
-
       @symbols << SymbolInformation.new(name, kind, location, @container.join("::"))
-
       true
     end
   end
