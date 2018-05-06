@@ -120,28 +120,31 @@ module Scry
   end
 
   class WorkspaceSymbolProcessor
-    @@crystal_path_symbols = [] of SymbolInformation
+    @@crystal_path_symbols : Array(SymbolInformation)?
     @query_regex : Regex
 
     def initialize(@msg_id : Int32 | String, @root_path : String, @query : String)
       @workspace_files = Dir.glob(File.join(root_path, "**", "*.cr"))
-      if @@crystal_path_symbols.empty?
-        # Memoize crystal stdlib
-        @@crystal_path_symbols = search_symbols(Dir.glob(File.join(Scry.default_crystal_path, "**", "*.cr")), Regex.new(".*"))
-      end
       @query_regex = Regex.new(@query)
     end
 
     def run
       symbols = [] of SymbolInformation
       unless @query.empty?
-        symbols.concat search_symbols(@workspace_files, @query_regex)
-        symbols.concat @@crystal_path_symbols.select(&.name.match(@query_regex))
+        symbols.concat self.class.search_symbols(@workspace_files, @query_regex)
+        symbols.concat self.class.crystal_path_symbols.select(&.name.match(@query_regex))
       end
       ResponseMessage.new(@msg_id, symbols)
     end
 
-    def search_symbols(files, query_regex)
+    def self.crystal_path_symbols
+      @@crystal_path_symbols ||= begin
+        crystal_path_files = Dir.glob(File.join(Scry.default_crystal_path, "**", "*.cr"))
+        search_symbols(crystal_path_files, Regex.new(".*"))
+      end
+    end
+
+    def self.search_symbols(files, query_regex)
       symbols = [] of SymbolInformation
       files.each do |file|
         visitor = SymbolVisitor.new("file://#{file}")
