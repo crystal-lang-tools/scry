@@ -63,13 +63,47 @@ module Scry
     end
 
     private def response_with(contexts, range)
-      contents = ["| Expression | Type |", "| --- | --- |"]
-      contexts.each do |context|
+      content = vertical_align(contexts)
+      # content = horizontal_align(contexts)
+      hover_response(Hover.new(MarkupContent.new("markdown", content.join("\n")), range))
+    end
+
+    private def vertical_align(contexts)
+      contents = [] of String
+      contexts.each_with_index do |context, i|
+        contents << "**Context #{i + 1}**\n"
+        contents << "```crystal"
         context.each do |key, value|
-          contents << "| #{key} | #{value} |"
+          contents << "#{key} : #{value}"
+        end
+        contents << "```"
+      end
+      contents
+    end
+
+    # NOTE: this Would be configurable in the future with scry.yml
+    private def horizontal_align(contexts)
+      contents = [] of String
+      titles = ["| Expression |"] of String
+      titles_lines = ["| :--- |"] of String
+      contents_hash = {} of String => Array(String)
+      contexts.each_with_index do |context, i|
+        titles << " Type #{i + 1} |"
+        titles_lines << " :--- |"
+        context.each do |key, value|
+          escaped_value = "`#{value.gsub("|", "∣")}`"
+          if contents_hash[key]?
+            contents_hash[key] << escaped_value
+          else
+            contents_hash[key] = [escaped_value]
+          end
         end
       end
-      hover_response(Hover.new(MarkupContent.new("markdown", contents.join('\n')), range))
+      contents_hash.each do |key, value|
+        contents << "| #{key} | #{value.join(" | ")} |"
+      end
+      titles << "\n"
+      [titles.join + titles_lines.join].concat contents
     end
   end
 end
