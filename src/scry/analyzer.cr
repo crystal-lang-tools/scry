@@ -31,10 +31,10 @@ module Scry
         # if src dir exists and the error is caused by un undefined symbol,
         # then it requires ./src/* files
         # Otherwise You can create your own .scry.cr
-        main_file = "#{root_uri}/.scry.cr"
+        main_file = File.join(root_uri, ".scry.cr")
         main_code = if File.exists?(main_file)
                       File.read(main_file)
-                    elsif Dir.exists?("#{root_uri}/src") && response.includes?("undefined")
+                    elsif Dir.exists?(File.join(root_uri, "src")) && response.includes?("undefined")
                       %(require "./src/*")
                     else
                       return @diagnostic.from(response)
