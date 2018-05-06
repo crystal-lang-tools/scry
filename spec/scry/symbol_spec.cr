@@ -108,28 +108,28 @@ module Scry
       end
 
       it "return Symbols list with query match" do
-        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "salut")
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "salut")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Method).should be_true
       end
 
       it "return Symbols list with regex query match" do
-        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "sal*")
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "sal*")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Method).should be_true
       end
 
       it "return stdlib Symbol with regex query match for File" do
-        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "Fil*")
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "Fil*")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Class).should be_true
       end
 
       it "return stdlib symbol with regex query match for initialize" do
-        processor = WorkspaceSymbolProcessor.new(0, "#{ROOT_PATH}/src", "initializ*")
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "initializ*")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Method).should be_true
