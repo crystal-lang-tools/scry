@@ -66,7 +66,7 @@ module Scry
     private def response_with(contexts, range)
       content = vertical_align(contexts)
       # content = horizontal_align(contexts)
-      hover_response(Hover.new(MarkupContent.new("markdown", content.join("\n")), range))
+      hover_response(Hover.new(MarkupContent.new("markdown", content), range))
     end
 
     # Aligns context output vertically. By example:
@@ -85,18 +85,18 @@ module Scry
     # arg2 : Bool
     # ```
     private def vertical_align(contexts)
-      contents = [] of String
+      contents = IO::Memory.new
       contexts.each_with_index do |context, i|
-        contents << "**Context #{i + 1}**\n"
-        contents << "```crystal"
+        contents << "**Context #{i + 1}**\n" if contexts.size > 1
+        contents << "```crystal\n"
         max_size = context.keys.max_by(&.size).size
         context.each do |key, value|
           key_aligned = "#{key}".ljust(max_size)
-          contents << "#{key_aligned} : #{value}"
+          contents << "#{key_aligned} : #{value}\n"
         end
-        contents << "```"
+        contents << "```\n"
       end
-      contents
+      contents.to_s
     end
 
     # Aligns context output horizontally. By example:
@@ -111,9 +111,14 @@ module Scry
       titles_lines = ["| :--- |"] of String
       contents_hash = {} of String => Array(String)
       contexts.each_with_index do |context, i|
-        titles << " Type #{i + 1} |"
+        if contexts.size > 1
+          titles << " Type #{i + 1} |"
+        else
+          titles << " Type |"
+        end
         titles_lines << " :--- |"
         context.each do |key, value|
+          # Replaces | by unicode symbol 0x2223 (DIVIDES)
           escaped_value = "`#{value.gsub("|", "∣")}`"
           if contents_hash[key]?
             contents_hash[key] << escaped_value
@@ -126,7 +131,7 @@ module Scry
         contents << "| #{key} | #{value.join(" | ")} |"
       end
       titles << "\n"
-      [titles.join + titles_lines.join].concat contents
+      [titles.join + titles_lines.join].concat(contents).join("\n")
     end
   end
 end
