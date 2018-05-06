@@ -73,8 +73,10 @@ module Scry
       contexts.each_with_index do |context, i|
         contents << "**Context #{i + 1}**\n"
         contents << "```crystal"
+        max_size = context.keys.max_by(&.size).size
         context.each do |key, value|
-          contents << "#{key} : #{value}"
+          key_aligned = "#{key}".ljust(max_size)
+          contents << "#{key_aligned} : #{value}"
         end
         contents << "```"
       end
