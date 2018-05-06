@@ -86,7 +86,11 @@ module Scry
     # ```
     private def vertical_align(contexts)
       contents = IO::Memory.new
-      max_size = context.keys.max_by(&.size).size
+      max_size = 0
+      contexts.each do |context|
+        size = context.keys.max_by(&.size).size
+        max_size = size if size > max_size
+      end
       contexts.each_with_index do |context, i|
         contents << "**Context #{i + 1}**\n" if contexts.size > 1
         contents << "```crystal\n"
