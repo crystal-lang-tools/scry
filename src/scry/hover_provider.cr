@@ -109,37 +109,45 @@ module Scry
     # | :--- | :--- | :--- |
     # | arg1 | `String` | `String` |
     # | arg2 | `Int32 ∣ Nil` | `Bool` |
-    private def horizontal_align(contexts)
+    def horizontal_align(contexts)
       contents = IO::Memory.new
-      contents << "| Expression |"
-      contexts.each_with_index do |context, i|
-        if contexts.size > 1
+
+      # Header
+      if contexts.size == 1
+        contents << "| Expression | Type |"
+      else
+        contents << "| Expression |"
+        contexts.size.times do |i|
           contents << " Type #{i + 1} |"
-        else
-          contents << " Type |"
         end
       end
-      contents << "\n"
+      contents.puts
+
+      # Lines
       contents << "| :--- |"
-      contexts.each_with_index do |context, i|
-        contents << " :--- |"
-      end
-      contents << "\n"
-      contents_hash = {} of String => Array(String)
-      contexts.each_with_index do |context, i|
-        context.each do |var_name, var_type|
+      contexts.size.times { contents << " :--- |" }
+      contents.puts
+
+      # Types
+      # > group var types (for all context) for each var
+      types_per_var = {} of String => Array(String)
+      contexts.each do |ctx|
+        ctx.each do |var_name, var_type|
           # Replaces | by unicode symbol 0x2223 (DIVIDES)
+          # as | can conflicts with the markdown table
           escaped_var_type = "`#{var_type.gsub("|", "∣")}`"
-          if contents_hash[var_name]?
-            contents_hash[var_name] << escaped_var_type
+          if types = types_per_var[var_name]?
+            types << escaped_var_type
           else
-            contents_hash[var_name] = [escaped_var_type]
+            types_per_var[var_name] = [escaped_var_type]
           end
         end
       end
-      contents_hash.each do |var_name, var_type|
-        contents << "| #{var_name} | #{var_type.join(" | ")} |\n"
+      # > print types, var by var
+      types_per_var.each do |var_name, var_type|
+        contents.puts "| #{var_name} | #{var_type.join(" | ")} |"
       end
+
       contents.to_s
     end
   end
