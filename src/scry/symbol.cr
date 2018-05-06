@@ -120,13 +120,13 @@ module Scry
   end
 
   class WorkspaceSymbolProcessor
-    @@crystal_path_files = [] of SymbolInformation
+    @@crystal_path_symbols = [] of SymbolInformation
 
     def initialize(@msg_id : Int32 | String, @root_path : String, @query : String)
       @workspace_files = Dir.glob(File.join(root_path, "**", "*.cr"))
-      if @@crystal_path_files.empty?
+      if @@crystal_path_symbols.empty?
         # Memoize crystal stdlib
-        @@crystal_path_files = search_symbols(Dir.glob(File.join(Scry.default_crystal_path, "**", "*.cr")), ".*")
+        @@crystal_path_symbols = search_symbols(Dir.glob(File.join(Scry.default_crystal_path, "**", "*.cr")), ".*")
       end
     end
 
@@ -134,7 +134,7 @@ module Scry
       symbols = [] of SymbolInformation
       unless @query.empty?
         symbols.concat search_symbols(@workspace_files, @query)
-        symbols.concat @@crystal_path_files.select(&.name.match(Regex.new(@query)))
+        symbols.concat @@crystal_path_symbols.select(&.name.match(Regex.new(@query)))
       end
       ResponseMessage.new(@msg_id, symbols)
     end
