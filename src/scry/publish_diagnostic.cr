@@ -49,7 +49,7 @@ module Scry
         .first(@workspace.max_number_of_problems)
         .map { |bf| Diagnostic.new(bf) }
         .group_by(&.uri)
-        .select { |file, diagnostics| !file.ends_with?(".scry.cr") }
+        .select { |file, diagnostics| !file.ends_with?(".scry_main.cr") }
         .map do |file, diagnostics|
         ALL_FILES_WITH_DIAGNOSTIC[@uri] << file
         unclean(file, diagnostics)
