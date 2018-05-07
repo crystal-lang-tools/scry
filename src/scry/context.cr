@@ -107,6 +107,18 @@ module Scry
       end
     end
 
+    private def dispatch_request(params : WorkspaceSymbolParams, msg)
+      case msg.method
+      when "workspace/symbol"
+        query = params.query
+        root_path = TextDocument.uri_to_filename(@workspace.root_uri)
+        workspace_symbol_processor = WorkspaceSymbolProcessor.new(msg.id, root_path, query)
+        response = workspace_symbol_processor.run
+        Log.logger.debug(response)
+        response
+      end
+    end
+
     private def dispatch_request(params : CompletionItem, msg)
       case msg.method
       when "completionItem/resolve"
@@ -174,8 +186,9 @@ module Scry
         response = analyzer.run
         response
       when FileEventType::Deleted
-        PublishDiagnostic.new(@workspace, text_document.uri).clean
+        PublishDiagnostic.new(@workspace, text_document.uri).full_clean
       when FileEventType::Changed
+        @workspace.reopen_workspace(text_document)
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
         response

@@ -61,6 +61,10 @@ module Scry::Completion::DependencyGraph
     def each
       @nodes.each
     end
+
+    def delete(value : String)
+      @nodes.delete value
+    end
   end
 
   class Builder
@@ -81,6 +85,11 @@ module Scry::Completion::DependencyGraph
       graph.each.reject { |e| e == prelude_node.value }.each do |key, _|
         graph[key].connections << prelude_node
       end
+      graph
+    end
+
+    def rebuild(graph, filename)
+      process_requires(filename, graph)
       graph
     end
 
