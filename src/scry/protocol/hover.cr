@@ -5,7 +5,7 @@ module Scry
     JSON.mapping({
       contents: MarkupContent,
       range:    Range?,
-    }, true)
+    })
 
     def initialize(@contents, @range = nil)
     end
