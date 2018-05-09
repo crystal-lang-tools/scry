@@ -21,7 +21,7 @@ module Scry::Completion
     end
 
     def type_match(text : String) : Array(String)
-      @db.keys.select(&.starts_with?(text)).reject(&.ends_with?(".class"))
+      @db.keys.select!(&.starts_with?(text)).reject!(&.ends_with?(".class"))
     end
 
     def self.generate(paths)
