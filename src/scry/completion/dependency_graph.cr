@@ -1,3 +1,5 @@
+require "../default_crystal_path"
+
 module Scry::Completion::DependencyGraph
   struct Node
     property value
@@ -25,11 +27,19 @@ module Scry::Completion::DependencyGraph
   end
 
   class Graph
+    getter prelude_node : Node
+
     def initialize(@nodes = {} of String => Node)
+      prelude_path = File.expand_path("prelude.cr", Scry.default_crystal_path)
+      @nodes[prelude_path] = @prelude_node = Node.new(prelude_path)
     end
 
     def [](value : String)
       @nodes[value]
+    end
+
+    def []?(value : String)
+      @nodes[value]?
     end
 
     def add_edge(value_1 : String, value_2 : String)
@@ -40,10 +50,6 @@ module Scry::Completion::DependencyGraph
 
     def add(value : String)
       @nodes[value] = Node.new(value) unless @nodes[value]?
-    end
-
-    def [](value : Regex)
-      @nodes[@nodes.keys.find(&.match(value))]?
     end
 
     def each(&block)
@@ -70,12 +76,10 @@ module Scry::Completion::DependencyGraph
         .flat_map { |d| Dir.glob(d) }
         .each { |file| process_requires(file, graph) }
 
-      prelude_node = graph[/src\/prelude.cr$/]
+      prelude_node = graph.prelude_node
       Log.logger.debug("Finished building the dependancy graph got these nodes:#{graph.each.to_a.map(&.first)}")
-      return graph if prelude_node.nil?
-
-      graph.each.reject { |e| e == prelude_node.not_nil!.value }.each do |key, _|
-        graph[key].connections << prelude_node.not_nil!
+      graph.each.reject { |e| e == prelude_node.value }.each do |key, _|
+        graph[key].connections << prelude_node
       end
       graph
     end
