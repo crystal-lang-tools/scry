@@ -31,7 +31,7 @@ module Scry::Completion
           node = self.parse(path)
           visitor = Visitor.new(path)
           node.accept(visitor)
-          method_db.db.merge!(visitor.classes) { |_, _old, _new| _old + _new }
+          method_db.db.merge!(visitor.classes_or_modules) { |_, _old, _new| _old + _new }
         end
       end
     end
@@ -56,13 +56,12 @@ module Scry::Completion
   end
 
   class Visitor < Crystal::Visitor
-    property classes
-    property class_name = ""
+    property classes_or_modules
+    property path_name = ""
 
     def initialize(@file : String)
-      @classes = {} of String => Array(MethodDBEntry)
-      @class_queue = [] of Crystal::Path
-      @module_queue = [] of Crystal::Path
+      @classes_or_modules = {} of String => Array(MethodDBEntry)
+      @path_queue = [] of Crystal::Path
     end
 
     def generate_name(paths : Array(Crystal::Path))
@@ -70,41 +69,36 @@ module Scry::Completion
     end
 
     def visit(node : Crystal::Def)
-      return false if @class_queue.empty? || node.visibility != Crystal::Visibility::Public
+      return false if @path_queue.empty? || node.visibility != Crystal::Visibility::Public
       if node.name == "initialize"
         name = "new"
-        method_receiver = "#{@class_name}.class"
-        return_type = @class_name
+        method_receiver = "#{@path_name}.class"
+        return_type = @path_name
       else
         name = node.name
-        method_receiver = node.receiver ? "#{@class_name}.class" : @class_name
+        method_receiver = node.receiver ? "#{@path_name}.class" : @path_name
       end
       signature = "(#{node.args.map(&.to_s).join(", ")}) : #{return_type || node.return_type.to_s}"
-      @classes[method_receiver] << MethodDBEntry.new(name, signature, @file, node.location.to_s)
+      @classes_or_modules[method_receiver] << MethodDBEntry.new(name, signature, @file, node.location.to_s)
       false
     end
 
     def visit(node : Crystal::ClassDef)
-      @class_queue << node.name
-      @class_name = generate_name(@module_queue + @class_queue)
-      @classes["#{@class_name}.class"] = [] of MethodDBEntry
-      @classes[@class_name] = [] of MethodDBEntry
+      @path_queue << node.name
+      @path_name = generate_name(@path_queue)
+      @classes_or_modules["#{@path_name}.class"] = [] of MethodDBEntry
+      @classes_or_modules[@path_name] = [] of MethodDBEntry
       true
     end
 
-    def end_visit(node : Crystal::ClassDef)
-      @class_queue.pop
-      @class_name = generate_name(@module_queue + @class_queue)
-      true
-    end
-
-    def end_visit(node : Crystal::ModuleDef)
-      @module_queue.pop
+    def end_visit(node : Crystal::ClassDef|Crystal::ModuleDef)
+      @path_queue.pop
+      @path_name = generate_name(@path_queue)
     end
 
     def visit(node : Crystal::ModuleDef)
-      @module_queue << node.name
-      @classes[generate_name(@module_queue)] = [] of MethodDBEntry
+      @path_queue << node.name
+      @classes_or_modules[generate_name(@path_queue)] = [] of MethodDBEntry
       true
     end
 
