@@ -122,16 +122,17 @@ module Scry::Completion::DependencyGraph
 
     def parse_requires(file_path)
       file_dir = File.dirname(file_path)
-      File.each_line(file_path).reduce([] of String) do |acc, line|
+      paths = [] of String
+      File.each_line(file_path) do |line|
         require_statement = /^\s*require\s*\"(?<file>.*)\"\s*$/.match(line)
         unless require_statement.nil?
           path = resolve_path(require_statement.as(Regex::MatchData)["file"].not_nil!, file_dir)
           if path
-            acc << path
+            paths << path
           end
         end
-        acc
       end
+      paths
     end
 
     def resolve_path(required_file, file_dir)
