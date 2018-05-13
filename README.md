@@ -22,7 +22,7 @@ To install scry download it from [releases page](https://github.com/crystal-lang
 ```
 git clone https://github.com/crystal-lang-tools/scry.git
 cd scry
-crystal build --status --progress --no-debug src/scry.cr
+shards build -v
 ```
 
 Then setup `scry` binary path on your LSP client.
