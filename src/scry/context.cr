@@ -9,6 +9,7 @@ require "./publish_diagnostic"
 require "./symbol"
 require "./completion_provider"
 require "./completion_resolver"
+require "./hover_provider"
 
 module Scry
   class_property shutdown = false
@@ -58,6 +59,12 @@ module Scry
     # Also used by methods like Go to Definition
     private def dispatch_request(params : TextDocumentPositionParams, msg)
       case msg.method
+      when "textDocument/hover"
+        text_document = TextDocument.new(params, msg.id)
+        hover = HoverProvider.new(@workspace, text_document)
+        response = hover.run
+        Log.logger.debug(response)
+        response
       when "textDocument/definition"
         text_document = TextDocument.new(params, msg.id)
         definitions = Implementations.new(@workspace, text_document)
