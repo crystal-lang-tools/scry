@@ -207,7 +207,7 @@ module Scry
       nil
     end
 
-    private def dispatch_notification(params : VoidParams, msg)
+    private def dispatch_notification(params, msg)
       nil
     end
   end

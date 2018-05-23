@@ -3,6 +3,7 @@ require "./text_edit"
 require "./location"
 require "./symbol_information"
 require "./completion_item"
+require "./hover"
 
 module Scry
   # Add a response type when needed

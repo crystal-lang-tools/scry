@@ -57,7 +57,6 @@ module Scry
 
     def get_file(text_document : TextDocumentIdentifier)
       filename = TextDocument.uri_to_filename(text_document.uri)
-      Log.logger.debug("@open_files: #{@open_files}")
       @open_files[filename]
     end
   end

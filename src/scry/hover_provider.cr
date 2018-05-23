@@ -41,7 +41,6 @@ module Scry
 
     private def analyze(filename, position, scope)
       response = crystal_tool(filename, position, scope)
-      Log.logger.debug("response: #{response}")
       response = (Array(BuildFailure) | HoverResponse).from_json(response)
       case response
       when Array(BuildFailure)

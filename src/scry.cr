@@ -2,11 +2,14 @@ require "./scry/log"
 require "./scry/request"
 require "./scry/context"
 require "./scry/message"
-require "./scry/response"
 require "./scry/environment_config"
+require "./scry/client"
 
 module Scry
   def self.start
+    client = Client.new(STDOUT)
+    Log.logger = Log::ClientLogger.new(client)
+
     Log.logger.info("Scry is looking into your code...")
 
     at_exit do
@@ -24,8 +27,8 @@ module Scry
       rescue ex
         results = [ResponseMessage.new(ex)]
       ensure
-        response = Response.new([results].flatten)
-        response.write(STDOUT)
+        response = [results].flatten.compact
+        client.send_message(response)
       end
     end
   rescue ex

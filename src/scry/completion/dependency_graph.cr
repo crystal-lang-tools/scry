@@ -81,7 +81,6 @@ module Scry::Completion::DependencyGraph
         .each { |file| process_requires(file, graph) }
 
       prelude_node = graph.prelude_node
-      Log.logger.debug("Finished building the dependancy graph got these nodes:#{graph.each.to_a.map(&.first)}")
       graph.each.reject { |e| e == prelude_node.value }.each do |key, _|
         graph[key].connections << prelude_node
       end
