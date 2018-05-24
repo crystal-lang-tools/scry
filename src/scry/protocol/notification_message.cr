@@ -8,6 +8,7 @@ require "./publish_diagnostics_params"
 require "./void_params"
 require "./trace"
 require "./cancel_params"
+require "./log_message_params"
 
 module Scry
   alias NotificationType = (DidChangeConfigurationParams |
@@ -18,6 +19,7 @@ module Scry
                             PublishDiagnosticsParams |
                             VoidParams |
                             CancelParams |
+                            LogMessageParams |
                             Trace)
 
   struct NotificationMessage
