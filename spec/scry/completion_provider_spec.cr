@@ -133,7 +133,7 @@ module Scry
       end
     end
 
-    context "classname completion" do
+    context "module, struct and class name completion" do
       _kind_ = CompletionItemKind::Class
       it_completes("A", %w(Array Atomic ArgumentError AtExitHandlers))
       it_completes(" ::A", %w(Array Atomic ArgumentError AtExitHandlers))

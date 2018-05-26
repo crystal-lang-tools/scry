@@ -8,7 +8,10 @@ module Scry::Completion
     def find
       target_header_index = @target.rindex(":")
       @method_db.type_match(@target).map do |label|
-        label = label[(target_header_index + 1)..-1] if target_header_index
+        if target_header_index
+          label = label[(target_header_index + 1)..-1]
+        end
+
         CompletionItem.new(
           label: label,
           insert_text: label,
