@@ -13,6 +13,7 @@ module Scry
     METHOD_CALL_REGEX       = /(?<target>@?[a-zA-Z][a-zA-Z_:]*)\.(?<method>[a-zA-Z]*[a-zA-Z_:]*)$/
     INSTANCE_VARIABLE_REGEX = /(?<var>@[a-zA-Z_]*)$/
     REQUIRE_MODULE_REGEX    = /require\s*\"(?<import>[a-zA-Z\/._]*)$/
+    CLASS_NAME_REGEX        = /(?<target>[A-Z][a-zA-Z_:]*)$/
 
     def initialize(@text_document : TextDocument, @context : CompletionContext | Nil, @position : Position, @method_db : Completion::MethodDB)
     end
@@ -29,6 +30,8 @@ module Scry
       case lines
       when METHOD_CALL_REGEX
         Completion::MethodCallContext.new(lines, $~["target"], $~["method"], @method_db)
+      when CLASS_NAME_REGEX
+        Completion::ClassModuleContext.new(lines, $~["target"], @method_db)
       when INSTANCE_VARIABLE_REGEX
         Completion::InstanceVariableContext.new($~["var"], lines, @text_document)
       when REQUIRE_MODULE_REGEX

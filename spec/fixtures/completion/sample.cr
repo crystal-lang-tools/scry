@@ -1,6 +1,6 @@
 require "./tree"
 
-class A
+class B
   def method
   end
 end
