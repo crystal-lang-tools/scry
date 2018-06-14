@@ -107,7 +107,7 @@ module Scry
         result.empty?.should be_true
       end
 
-      it "return Symbols list with query match for saludo (example file)" do
+      it "return Symbols list with query match for saluto (example file)" do
         processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "saluto")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
