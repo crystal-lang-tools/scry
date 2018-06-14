@@ -9,13 +9,15 @@ matrix:
       env:
         - DEPLOY_FILENAME=scry_linux.tar.gz
         - DEPLOY_DIR=bin/linux
+        - DEPLOY_STATIC="--static"
     - os: osx
       env:
         - DEPLOY_FILENAME=scry_macOS.tar.gz
         - DEPLOY_DIR=bin/darwin
+        - DEPLOY_STATIC=""
 
 install:
-  - bin/ci  prepare_build
+  - bin/ci prepare_build
 
 script:
   - bin/ci build
@@ -39,4 +41,5 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+    all_branches: true
     repo: crystal-lang-tools/scry

@@ -15,24 +15,32 @@ The server is implemented in Crystal.
 
 ## Installation
 
-Scry will be distrubuted as part of editors extensions, see:
+To install scry download it from [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile latest version using:
 
-- [ide-crystal](https://github.com/crystal-lang-tools/atom-crystal) for Atom
-- [vscode-crystal-ide](https://github.com/kofno/crystal-ide)
-- [vscode-crystal-lang](https://github.com/faustinoaq/vscode-crystal-lang)
+> **Note:** crystal is required in order to compile scry.
+
+```
+git clone https://github.com/crystal-lang-tools/scry.git
+cd scry
+shards build -v
+```
+
+Then setup `scry` binary path on your LSP client.
 
 ## Known issues
 
-- Some diagnostics don't disappear after fixing the code.
+- Completion feature is still experimental.
+- Unexpected diagnostics can appear on files using implicit `require`, try using explicit `require` at top of your files.
+- Go to definition only work for some methods and variables. Go to classes or macros definition is not supported yet.
+- Symbol listing works per file, searching for workspace symbols is not supported yet.
 
-## Development && Roadmap
-
-> **Note:** crystal and LLVM are required in order to compile scry.
+## Roadmap
 
 Ongoing, in [our](https://github.com/kofno/scry#contributors) free time.
 
 The goal is too implement all of the currently supported Language Server Features.
 
+- [Completion](https://microsoft.github.io/language-server-protocol/specification#textDocument_completion) **(WIP)**: compute completion items at a given cursor position.
 - [Diagnostics](https://microsoft.github.io/language-server-protocol/specification#textDocument_publishDiagnostics) **(WIP)**: provides problem detection for text document.
 - [Document Formatting](https://microsoft.github.io/language-server-protocol/specification#textDocument_formatting) **(WIP)**: this includes formatting of whole documents, document ranges and formatting on type.
 - [Goto Definition](https://microsoft.github.io/language-server-protocol/specification#textDocument_definition): **(WIP)** provides go to definition support for a symbol selected in a text document.
@@ -59,3 +67,7 @@ The goal is too implement all of the currently supported Language Server Feature
 - [@kofno](https://github.com/kofno) Ryan L. Bell - creator, maintainer
 - [@keplersj](https://github.com/keplersj) Kepler Sticka-Jones - contributor
 - [@faustinoaq](https://github.com/faustinoaq) Faustino Aguilar - contributor
+- [@laginha87](https://github.com/laginha87) Filipe Correia - contributor
+- [@bmulvihill](https://github.com/bmulvihill) Bryan Mulvihill - contributor
+
+[See all scry's contributors](https://github.com/crystal-lang-tools/scry/graphs/contributors)

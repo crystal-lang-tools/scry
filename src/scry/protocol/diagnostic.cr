@@ -43,7 +43,7 @@ module Scry
         Position.new(line - 1, column + size - 1)
       )
       @severity = DiagnosticSeverity::Error.value
-      @source = "Scry [Crystal]"
+      @source = "Scry"
     end
   end
 end

@@ -1,4 +1,3 @@
-require "compiler/crystal/**"
 require "./workspace"
 require "./text_document"
 require "./publish_diagnostic"
@@ -10,33 +9,53 @@ module Scry
     end
 
     def run
-      @text_document.text.map do |text|
-        unless inside_path?
+      unless @text_document.inside_crystal_path?
+        @text_document.text.map do |text|
           analyze(text)
-        end
-      end.flatten.uniq
-    end
-
-    private def inside_path?
-      ENV["CRYSTAL_PATH"].split(':').each do |path|
-        return true if @text_document.filename.starts_with?(path)
+        end.flatten.uniq
       end
-      false
     end
 
-    # NOTE: compiler is a bit heavy in some projects.
+    # Analyze the code twice,
+    # first time analyzes a single file and stop if no error
+    # second time analyzes the entire project requiring the first level files inside src folder
     private def analyze(source)
-      source = Crystal::Compiler::Source.new(@text_document.filename, source)
-      compiler = Crystal::Compiler.new
-      compiler.color = false
-      compiler.no_codegen = true
-      compiler.debug = Crystal::Debug::None
-      compiler.compile(source, source.filename + ".out")
-      [@diagnostic.clean]
-    rescue ex : Crystal::Exception
-      @diagnostic.from(ex)
-    ensure
-      GC.collect
+      filename = @text_document.filename
+      root_uri = @workspace.root_uri
+      response = crystal_build(filename, source)
+      if response.empty?
+        @diagnostic.full_clean
+      else
+        # Crystal compiler needs a main file to compile
+        # By default it uses .scry_main.cr on workspace root,
+        # if src dir exists and the error is caused by un undefined symbol,
+        # then it requires ./src/* files
+        # Otherwise You can create your own .scry_main.cr
+        main_file = File.join(root_uri, ".scry_main.cr")
+        main_code = if File.exists?(main_file)
+                      File.read(main_file)
+                    elsif Dir.exists?(File.join(root_uri, "src")) && response.includes?("undefined")
+                      %(require "./src/*")
+                    else
+                      return @diagnostic.from(response)
+                    end
+        response = crystal_build(main_file, main_code)
+        if response.empty?
+          @diagnostic.full_clean
+        else
+          @diagnostic.from(response)
+        end
+      end
+    rescue ex
+      Log.logger.error("A error was found while searching diagnostics\n#{ex}")
+      nil
+    end
+
+    private def crystal_build(filename, source)
+      code = IO::Memory.new(source)
+      String.build do |io|
+        Process.run("crystal", ["build", "--no-debug", "--no-codegen", "--no-color", "--error-trace", "-f", "json", "--stdin-filename", filename], output: io, error: io, input: code)
+      end
     end
   end
 end

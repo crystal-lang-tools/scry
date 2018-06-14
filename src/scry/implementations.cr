@@ -1,49 +1,82 @@
-require "compiler/crystal/**"
-
 require "./log"
 require "./protocol/location"
+require "./build_failure"
+require "./tool_helper"
 
 module Scry
   # Using Crystal implementation to emulate GoTo Definition.
   struct Implementations
-    def initialize(@text_document : TextDocument)
+    include ToolHelper
+
+    struct ImplementationsResponse
+      JSON.mapping(
+        status: String,
+        message: String,
+        implementations: Array(ImplementationLocation)?
+      )
+    end
+
+    struct ImplementationLocation
+      JSON.mapping(
+        line: Int32,
+        column: Int32,
+        filename: String
+      )
+    end
+
+    def initialize(@workspace : Workspace, @text_document : TextDocument)
     end
 
     def run
       if position = @text_document.position
-        search(
-          @text_document.filename,
-          @text_document.text.first,
-          position
-        )
+        search(@text_document.filename, position)
       end
     end
 
     # NOTE: compiler is a bit heavy in some projects.
-    def search(filename, source, position)
-      source = Crystal::Compiler::Source.new(filename, source)
-      compiler = Crystal::Compiler.new
-      compiler.color = false
-      compiler.no_codegen = true
-      compiler.debug = Crystal::Debug::None
-      result = compiler.compile(source, filename + ".out")
-      loc = Crystal::Location.new(filename, position.line + 1, position.character + 1)
-      res = Crystal::ImplementationsVisitor.new(loc).process(result)
-      Log.logger.debug(res)
-      impls = res.implementations
-      if res.status == "ok" && impls
-        locations = impls.map do |impl|
-          pos = Position.new(impl.line, impl.column)
-          range = Range.new(pos, pos)
-          Location.new("file://" + impl.filename, range)
+    def search(filename, position)
+      scope = get_scope(@workspace.root_uri)
+      analyze(filename, position, scope)
+    end
+
+    private def crystal_tool(filename, position, scope)
+      location = "#{filename}:#{position.line + 1}:#{position.character + 1}"
+      String.build do |io|
+        args = ["tool", "implementations", "--no-color", "--error-trace", "-f", "json", "-c", location] + scope
+        Process.run("crystal", args, output: io, error: io)
+      end
+    end
+
+    private def analyze(filename, position, scope)
+      response = crystal_tool(filename, position, scope)
+      Log.logger.debug("response: #{response}")
+      response = (Array(BuildFailure) | ImplementationsResponse).from_json(response)
+      case response
+      when Array(BuildFailure)
+        implementation_response
+      when ImplementationsResponse
+        if impls = response.implementations
+          response_with(impls)
+        else
+          implementation_response
         end
-        ResponseMessage.new(@text_document.id, locations)
       end
     rescue ex
-      Log.logger.error("A error was found while searching definitions\n#{ex}")
-      nil
-    ensure
-      GC.collect
+      Log.logger.error("A error was found while searching implementations\n#{ex}")
+      implementation_response
+    end
+
+    def implementation_response(locations = [] of Location)
+      ResponseMessage.new(@text_document.id, locations)
+    end
+
+    private def response_with(implementations)
+      locations = implementations.map do |item|
+        pos = Position.new(item.line - 1, item.column - 1)
+        range = Range.new(pos, pos)
+        Location.new("file://" + item.filename, range)
+      end
+      implementation_response(locations)
     end
   end
 end

@@ -27,8 +27,13 @@ module Scry
       Log.logger.debug(raw_header)
 
       if raw_header.nil?
-        Log.logger.warn("Connection with client lost")
-        nil
+        if Scry.shutdown
+          Log.logger.info("Server has shut down, no more request are accepted")
+          exit(0)
+        else
+          Log.logger.warn("Connection with client lost")
+          nil
+        end
       else
         header = raw_header.chomp
         header.size == 0 ? nil : header

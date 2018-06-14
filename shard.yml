@@ -1,9 +1,11 @@
 name: scry
-version: 0.6.1
+version: 0.7.1
 
 authors:
-  - Ryan L. Bell <ryan.l.bell@gmail.com>
-  - Kepler Sticka-Jones <http://keplersj.com>
-  - Faustino Aguilar <http://faustinoaq.github.io>
+  - Scry Team <https://github.com/crystal-lang-tools/scry>
 
 license: MIT
+
+targets:
+  scry:
+    main: src/scry.cr

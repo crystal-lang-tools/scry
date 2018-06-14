@@ -1,20 +1,29 @@
 require "logger"
-require "tempfile"
+require "./client"
+require "./protocol/log_message_params"
 
 module Scry
-  class Log
-    private def self.initialize_logger
-      tmpfile = Tempfile.new("scry.out")
-      log_file = File.open(tmpfile.path, "w")
-      logger = Logger.new(log_file)
-      logger.level = Logger::DEBUG
-      logger
-    end
+  module Log
+    class_property logger : Logger = Logger.new(nil)
 
-    @@logger : Logger = initialize_logger
+    class ClientLogger < Logger
+      def initialize(@client : Client)
+        super(@client.io)
+      end
 
-    def self.logger
-      @@logger
+      private def write(severity, datetime, progname, message)
+        message_type = case severity
+                       when INFO
+                         MessageType::Info
+                       when WARN
+                         MessageType::Warning
+                       when ERROR, FATAL
+                         MessageType::Error
+                       else
+                         MessageType::Log
+                       end
+        @client.send("window/logMessage", LogMessageParams.new(message_type, message.to_s))
+      end
     end
   end
 end

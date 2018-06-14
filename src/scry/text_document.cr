@@ -10,8 +10,8 @@ module Scry
     getter id : Int32 | Nil
     getter uri : String
     getter filename : String
-    getter text : Array(String)
     getter position : Position?
+    property text : Array(String)
 
     def initialize(@uri, @text)
       @filename = uri_to_filename
@@ -40,11 +40,7 @@ module Scry
     def initialize(params : DocumentFormattingParams, @id)
       @uri = params.text_document.uri
       @filename = uri_to_filename
-      if untitled?
-        @text = [""]
-      else
-        @text = [read_file]
-      end
+      @text = [""]
     end
 
     def initialize(params : TextDocumentPositionParams, @id)
@@ -61,7 +57,11 @@ module Scry
     end
 
     def uri_to_filename
-      @uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\//, "")
+      self.class.uri_to_filename(@uri)
+    end
+
+    def self.uri_to_filename(uri)
+      uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\//, "")
     end
 
     def in_memory?
@@ -70,6 +70,13 @@ module Scry
 
     def untitled?
       uri.starts_with?("untitled:")
+    end
+
+    def inside_crystal_path?
+      ENV["CRYSTAL_PATH"].split(':').each do |path|
+        return true if filename.starts_with?(path)
+      end
+      false
     end
 
     def source

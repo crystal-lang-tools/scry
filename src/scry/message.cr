@@ -5,7 +5,7 @@ module Scry
   class InvalidContentError < Exception
   end
 
-  alias MessageType = RequestMessage | NotificationMessage
+  alias ProtocolMessage = RequestMessage | NotificationMessage
 
   struct Message
     def initialize(@json : String)
@@ -16,7 +16,7 @@ module Scry
     end
 
     def parse
-      MessageType.from_json(@json || "")
+      ProtocolMessage.from_json(@json || "")
     end
   end
 end
