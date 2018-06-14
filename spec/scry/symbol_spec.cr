@@ -114,13 +114,6 @@ module Scry
         result.kind.is_a?(SymbolKind::Method).should be_true
       end
 
-      it "return stdlib Symbol with query match for File" do
-        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "File")
-        response = processor.run
-        result = response.result.as(Array(SymbolInformation)).first
-        result.kind.is_a?(SymbolKind::Class).should be_true
-      end
-
       it "return stdlib symbol with query match for initialize" do
         processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "initialize")
         response = processor.run
