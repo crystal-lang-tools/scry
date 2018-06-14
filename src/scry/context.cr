@@ -143,6 +143,7 @@ module Scry
       case msg.method
       when "textDocument/didClose"
         @workspace.drop_file(params)
+        return PublishDiagnostic.new(@workspace, params.text_document.uri).full_clean
       end
       nil
     end
