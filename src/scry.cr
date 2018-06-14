@@ -3,6 +3,7 @@ require "./scry/request"
 require "./scry/context"
 require "./scry/message"
 require "./scry/environment_config"
+# require "./scry/concurrent_rpc" # => Closing and comment this for now
 require "./scry/client"
 
 module Scry
@@ -11,12 +12,9 @@ module Scry
     Log.logger = Log::ClientLogger.new(client)
 
     Log.logger.info("Scry is looking into your code...")
-
-    at_exit do
-      Log.logger.info("...your session has ended")
-    end
-
     EnvironmentConfig.new.run
+
+    # ConcurrentRpc.new.run # => Concurrent requests are too complex, useful on cancelRequest, though
 
     context = Context.new
     loop do
