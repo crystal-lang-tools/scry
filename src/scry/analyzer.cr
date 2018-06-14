@@ -28,14 +28,10 @@ module Scry
       else
         # Crystal compiler needs a main file to compile
         # By default it uses .scry_main.cr on workspace root,
-        # if src dir exists and the error is caused by un undefined symbol,
-        # then it requires ./src/* files
-        # Otherwise You can create your own .scry_main.cr
+        # otherwise return the current diagnostic.
         main_file = File.join(root_uri, ".scry_main.cr")
         main_code = if File.exists?(main_file)
                       File.read(main_file)
-                    elsif Dir.exists?(File.join(root_uri, "src")) && response.includes?("undefined")
-                      %(require "./src/*")
                     else
                       return @diagnostic.from(response)
                     end
