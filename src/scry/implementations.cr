@@ -48,9 +48,9 @@ module Scry
     end
 
     private def analyze(filename, position, scope)
-      response = crystal_tool(filename, position, scope)
-      Log.logger.debug("response: #{response}")
-      response = (Array(BuildFailure) | ImplementationsResponse).from_json(response)
+      result = crystal_tool(filename, position, scope)
+      Log.logger.debug("result: #{result}")
+      response = (Array(BuildFailure) | ImplementationsResponse).from_json(result)
       case response
       when Array(BuildFailure)
         implementation_response
@@ -62,7 +62,7 @@ module Scry
         end
       end
     rescue ex
-      Log.logger.error("A error was found while searching implementations\n#{ex}")
+      Log.logger.error("A error was found while searching implementations\n#{ex}\n#{result}")
       implementation_response
     end
 
