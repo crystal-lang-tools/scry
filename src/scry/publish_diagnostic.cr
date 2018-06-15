@@ -29,6 +29,7 @@ module Scry
     # If the computed set is empty it has to push the empty array to clear former diagnostic
     # See: https://microsoft.github.io/language-server-protocol/specification#textDocument_publishDiagnostics
     def full_clean
+      Log.logger.debug(ALL_FILES_WITH_DIAGNOSTIC)
       clean_diagnostics = ALL_FILES_WITH_DIAGNOSTIC[@uri].map do |file|
         clean(file)
       end
