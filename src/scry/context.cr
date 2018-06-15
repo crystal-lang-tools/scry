@@ -104,6 +104,8 @@ module Scry
         response = symbol_processor.run
         Log.logger.debug(response)
         response
+      else
+        nil
       end
     end
 
@@ -116,6 +118,8 @@ module Scry
         response = workspace_symbol_processor.run
         Log.logger.debug(response)
         response
+      else
+        nil
       end
     end
 
@@ -127,6 +131,8 @@ module Scry
         response = ResponseMessage.new(msg.id, results)
         Log.logger.debug(response)
         response
+      else
+        nil
       end
     end
 
@@ -143,9 +149,10 @@ module Scry
       case msg.method
       when "textDocument/didClose"
         @workspace.drop_file(params)
-        return PublishDiagnostic.new(@workspace, params.text_document.uri).full_clean
+        PublishDiagnostic.new(@workspace, params.text_document.uri).full_clean
+      else
+        nil
       end
-      nil
     end
 
     private def dispatch_notification(params : DidChangeConfigurationParams, msg)
@@ -193,6 +200,8 @@ module Scry
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
         response
+      else
+        nil
       end
     end
 
