@@ -180,9 +180,8 @@ module Scry
     end
 
     private def dispatch_notification(params : DidChangeWatchedFilesParams, msg)
-      params.changes.map { |file_event|
-        handle_file_event(file_event)
-      }.compact
+      file_event = params.changes.first?
+      handle_file_event(file_event)
     end
 
     private def handle_file_event(file_event : FileEvent)
