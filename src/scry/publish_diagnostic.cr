@@ -33,7 +33,7 @@ module Scry
       clean_diagnostics = ALL_FILES_WITH_DIAGNOSTIC[@uri].map do |file|
         clean(file)
       end
-      ALL_FILES_WITH_DIAGNOSTIC[@uri].clear
+      ALL_FILES_WITH_DIAGNOSTIC.delete(@uri)
       clean_diagnostics << clean if clean_diagnostics.empty?
       clean_diagnostics
     end
