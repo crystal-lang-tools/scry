@@ -180,7 +180,8 @@ module Scry
     end
 
     private def dispatch_notification(params : DidChangeWatchedFilesParams, msg)
-      file_event = params.changes.first?
+      return if params.changes.empty?
+      file_event = params.changes.first
       handle_file_event(file_event)
     end
 
