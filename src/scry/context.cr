@@ -147,10 +147,11 @@ module Scry
       nil
     end
 
+    # Will be replaced by .scry.yml
     private def dispatch_notification(params : DidChangeConfigurationParams, msg)
-      updater = UpdateConfig.new(@workspace, params)
-      @workspace, response = updater.run
-      response
+      # updater = UpdateConfig.new(@workspace, params)
+      # @workspace, response = updater.run
+      # response
     end
 
     private def dispatch_notification(params : DidOpenTextDocumentParams, msg)

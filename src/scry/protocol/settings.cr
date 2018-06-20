@@ -1,9 +1,11 @@
 require "json"
 
 module Scry
+  # Will be replaced by .scry.yml
   struct Settings
     JSON.mapping({
-      crystal_config: {type: Customizations, key: /^crystal.*/, default: Customizations.from_json("{}")},
+      # crystal_config: {type: Customizations, key: /^crystal.*/, default: Customizations.from_json("{}")},
+      crystal_config: {type: Customizations, default: Customizations.from_json("{}")},
     })
   end
 
