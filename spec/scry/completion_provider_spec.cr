@@ -1,7 +1,7 @@
 require "../spec_helper"
 
 module Scry
-  BOOLEAN_METHODS = %w(!= & == ^ clone hash to_json to_s to_s to_yaml |)
+  BOOLEAN_METHODS = %w(!= & == ^ clone hash to_json to_s to_s to_unsafe to_yaml |)
   INT32_METHODS   = %w(- clone popcount)
 
   private macro it_completes(code, with_labels = nil)
@@ -60,7 +60,7 @@ module Scry
                       a."
 
         it_completes("a = true
-                      a.to_", %w(to_json to_s to_s to_yaml))
+                      a.to_", %w(to_json to_s to_s to_unsafe to_yaml))
       end
 
       context "int32" do
@@ -140,8 +140,8 @@ module Scry
       it_completes(" ::", %w())
       it_completes("JSON::P", %w(ParseException Parser PullParser))
       it_completes("JSON::Pa", %w(ParseException Parser))
-      it_completes("JSON::", %w(Any Builder Error Lexer Lexer::IOBased Lexer::StringBased ParseException Parser PullParser Token))
-      it_completes("JSO", %w(JSON JSON::Any JSON::Builder JSON::Error JSON::Lexer JSON::Lexer::IOBased JSON::Lexer::StringBased JSON::ParseException JSON::Parser JSON::PullParser JSON::Token))
+      it_completes("JSON::", %w(Any Builder Error Lexer Lexer::IOBased Lexer::StringBased MappingError ParseException Parser PullParser Serializable Serializable::Strict Serializable::Unmapped Token))
+      it_completes("JSO", %w(JSON JSON::Any JSON::Builder JSON::Error JSON::Lexer JSON::Lexer::IOBased JSON::Lexer::StringBased JSON::MappingError JSON::ParseException JSON::Parser JSON::PullParser JSON::Serializable JSON::Serializable::Strict JSON::Serializable::Unmapped JSON::Token))
     end
   end
 end
