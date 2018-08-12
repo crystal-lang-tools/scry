@@ -107,29 +107,15 @@ module Scry
         result.empty?.should be_true
       end
 
-      it "return Symbols list with query match" do
-        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "salut")
+      it "return Symbols list with query match for saluto (example file)" do
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "saluto")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Method).should be_true
       end
 
-      it "return Symbols list with regex query match" do
-        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "sal*")
-        response = processor.run
-        result = response.result.as(Array(SymbolInformation)).first
-        result.kind.is_a?(SymbolKind::Method).should be_true
-      end
-
-      it "return stdlib Symbol with regex query match for File" do
-        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "Fil*")
-        response = processor.run
-        result = response.result.as(Array(SymbolInformation)).first
-        result.kind.is_a?(SymbolKind::Class).should be_true
-      end
-
-      it "return stdlib symbol with regex query match for initialize" do
-        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "initializ*")
+      it "return stdlib symbol with query match for initialize" do
+        processor = WorkspaceSymbolProcessor.new(0, ROOT_PATH, "initialize")
         response = processor.run
         result = response.result.as(Array(SymbolInformation)).first
         result.kind.is_a?(SymbolKind::Method).should be_true
