@@ -51,9 +51,9 @@ module Scry
         .group_by(&.uri)
         .select { |file, diagnostics| !file.ends_with?(".scry_main.cr") }
         .map do |file, diagnostics|
-        ALL_FILES_WITH_DIAGNOSTIC[@uri] << file
-        unclean(file, diagnostics)
-      end
+          ALL_FILES_WITH_DIAGNOSTIC[@uri] << file
+          unclean(file, diagnostics)
+        end
     end
   end
 end
