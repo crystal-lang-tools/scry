@@ -40,8 +40,8 @@ module Scry
     end
 
     private def analyze(filename, position, scope)
-      response = crystal_tool(filename, position, scope)
-      response = (Array(BuildFailure) | HoverResponse).from_json(response)
+      result = crystal_tool(filename, position, scope)
+      response = (Array(BuildFailure) | HoverResponse).from_json(result)
       case response
       when Array(BuildFailure)
         hover_response
@@ -53,7 +53,7 @@ module Scry
         end
       end
     rescue ex
-      Log.logger.error("A error was found while searching contexts\n#{ex}")
+      Log.logger.error("A error was found while searching contexts\n#{ex}\n#{result}")
       hover_response
     end
 

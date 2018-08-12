@@ -29,7 +29,7 @@ module Scry
         ResponseMessage.new(@text_document.id, [TextEdit.new(range, result)])
       end
     rescue ex
-      Log.logger.error("A error was found while formatting\n#{ex}")
+      Log.logger.error("A error was found while formatting\n#{ex}\n#{result}")
       nil
     end
   end
