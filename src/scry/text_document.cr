@@ -17,6 +17,11 @@ module Scry
       @filename = uri_to_filename
     end
 
+    def initialize(@uri)
+      @filename = uri_to_filename
+      @text = [read_file]
+    end
+
     def initialize(params : DidOpenTextDocumentParams)
       @uri = params.text_document.uri
       @filename = uri_to_filename

@@ -101,7 +101,8 @@ module Scry
       when "textDocument/documentSymbol"
         text_document = TextDocument.new(params, msg.id)
         symbol_processor = SymbolProcessor.new(text_document)
-        response = symbol_processor.run
+        symbols = symbol_processor.run
+        response = ResponseMessage.new(msg.id, symbols)
         Log.logger.debug(response)
         response
       end
@@ -110,10 +111,9 @@ module Scry
     private def dispatch_request(params : WorkspaceSymbolParams, msg)
       case msg.method
       when "workspace/symbol"
-        query = params.query
-        root_path = TextDocument.uri_to_filename(@workspace.root_uri)
-        workspace_symbol_processor = WorkspaceSymbolProcessor.new(msg.id, root_path, query)
-        response = workspace_symbol_processor.run
+        workspace_symbol_processor = WorkspaceSymbolProcessor.new(@workspace.root_uri, params.query)
+        symbols = workspace_symbol_processor.run
+        response = ResponseMessage.new(msg.id, symbols)
         Log.logger.debug(response)
         response
       end

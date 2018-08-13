@@ -118,27 +118,24 @@ module Scry
       parser.filename = @text_document.filename
       node = parser.parse
       node.accept(visitor)
-
-      ResponseMessage.new(@text_document.id, visitor.symbols)
+      visitor.symbols
     rescue
-      ResponseMessage.new(@text_document.id, [] of SymbolInformation)
+      [] of SymbolInformation
     end
   end
 
   class WorkspaceSymbolProcessor
     @@crystal_path_symbols : Array(SymbolInformation)?
 
-    def initialize(@msg_id : Int32 | String, @root_path : String, @query : String)
+    def initialize(@root_path : String, @query : String)
       @workspace_files = Dir.glob(File.join(root_path, "**", "*.cr"))
     end
 
     def run
-      symbols = [] of SymbolInformation
-      unless @query.empty?
-        symbols.concat self.class.search_symbols(@workspace_files, @query)
-        symbols.concat self.class.crystal_path_symbols.select(&.name.includes?(@query))
-      end
-      ResponseMessage.new(@msg_id, symbols)
+      return [] of SymbolInformation if @query.empty?
+      self.class.search_symbols(@workspace_files, @query).concat(
+        self.class.crystal_path_symbols.select(&.name.includes?(@query))
+      )
     end
 
     def self.crystal_path_symbols
@@ -151,12 +148,8 @@ module Scry
     def self.search_symbols(files, query)
       symbols = [] of SymbolInformation
       files.each do |file|
-        visitor = SymbolVisitor.new("file://#{file}")
-        parser = Crystal::Parser.new(File.read(file))
-        parser.filename = file
-        node = parser.parse
-        node.accept(visitor)
-        symbols.concat visitor.symbols.select(&.name.includes?(query))
+        processor = SymbolProcessor.new(TextDocument.new("file://#{file}"))
+        symbols.concat processor.run.select(&.name.includes?(query))
       rescue
         next
       end
