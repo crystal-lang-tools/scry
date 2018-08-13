@@ -5,8 +5,8 @@ module Scry
     it "contains SymbolInformation" do
       text_document = TextDocument.new("uri", [""])
       processor = SymbolProcessor.new(text_document)
-      response = processor.run
-      response.is_a?(Array(SymbolInformation)).should be_true
+      symbols = processor.run
+      symbols.is_a?(Array(SymbolInformation)).should be_true
     end
 
     it "returns Class symbols" do
@@ -46,7 +46,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.as(SymbolInformation).kind.is_a?(SymbolKind::Variable).should be_true
+      result.kind.is_a?(SymbolKind::Variable).should be_true
     end
 
     describe "Property" do
@@ -54,24 +54,24 @@ module Scry
         text_document = TextDocument.new("uri", ["class Foo; getter bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
-        result = symbols.as(Array(SymbolInformation)).try { |r| r[1] }
-        result.as(SymbolInformation).kind.is_a?(SymbolKind::Property).should be_true
+        result = symbols[1]
+        result.kind.is_a?(SymbolKind::Property).should be_true
       end
 
       it "returns setters as Property symbols" do
         text_document = TextDocument.new("uri", ["class Foo; setter bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
-        result = symbols.as(Array(SymbolInformation)).try { |r| r[1] }
-        result.as(SymbolInformation).kind.is_a?(SymbolKind::Property).should be_true
+        result = symbols[1]
+        result.kind.is_a?(SymbolKind::Property).should be_true
       end
 
       it "returns properties as Property symbols" do
         text_document = TextDocument.new("uri", ["class Foo; property bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
-        result = symbols.as(Array(SymbolInformation)).try { |r| r[1] }
-        result.as(SymbolInformation).kind.is_a?(SymbolKind::Property).should be_true
+        result = symbols[1]
+        result.kind.is_a?(SymbolKind::Property).should be_true
       end
     end
 
