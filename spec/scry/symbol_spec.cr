@@ -6,7 +6,7 @@ module Scry
       text_document = TextDocument.new("uri", [""])
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
-      symbols.is_a?(Array(SymbolInformation)).should be_true
+      symbols.should be_a(Array(SymbolInformation))
     end
 
     it "returns Class symbols" do
@@ -14,7 +14,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.is_a?(SymbolKind::Class).should be_true
+      result.kind.should be_a(SymbolKind::Class)
     end
 
     it "returns Struct symbols as a Class" do
@@ -22,7 +22,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.is_a?(SymbolKind::Class).should be_true
+      result.kind.should be_a(SymbolKind::Class)
     end
 
     it "returns Module symbols" do
@@ -30,7 +30,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.is_a?(SymbolKind::Module).should be_true
+      result.kind.should be_a(SymbolKind::Module)
     end
 
     it "returns Method symbols" do
@@ -38,7 +38,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.is_a?(SymbolKind::Method).should be_true
+      result.kind.should be_a(SymbolKind::Method)
     end
 
     it "returns instance vars as Variable symbols" do
@@ -46,7 +46,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.is_a?(SymbolKind::Variable).should be_true
+      result.kind.should be_a(SymbolKind::Variable)
     end
 
     describe "Property" do
@@ -55,7 +55,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.is_a?(SymbolKind::Property).should be_true
+        result.kind.should be_a(SymbolKind::Property)
       end
 
       it "returns setters as Property symbols" do
@@ -63,7 +63,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.is_a?(SymbolKind::Property).should be_true
+        result.kind.should be_a(SymbolKind::Property)
       end
 
       it "returns properties as Property symbols" do
@@ -71,7 +71,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.is_a?(SymbolKind::Property).should be_true
+        result.kind.should be_a(SymbolKind::Property)
       end
     end
 
@@ -81,7 +81,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols.first
-        result.kind.is_a?(SymbolKind::Constant).should be_true
+        result.kind.should be_a(SymbolKind::Constant)
       end
 
       it "returns alias as Constant symbols" do
@@ -89,7 +89,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols.first
-        result.kind.is_a?(SymbolKind::Constant).should be_true
+        result.kind.should be_a(SymbolKind::Constant)
       end
     end
 
@@ -104,14 +104,14 @@ module Scry
         processor = WorkspaceSymbolProcessor.new(ROOT_PATH, "saluto")
         symbols = processor.run
         result = symbols.first
-        result.kind.is_a?(SymbolKind::Method).should be_true
+        result.kind.should be_a(SymbolKind::Method)
       end
 
       it "return stdlib symbol with query match for initialize" do
         processor = WorkspaceSymbolProcessor.new(ROOT_PATH, "initialize")
         symbols = processor.run
         result = symbols.first
-        result.kind.is_a?(SymbolKind::Method).should be_true
+        result.kind.should be_a(SymbolKind::Method)
       end
     end
   end
