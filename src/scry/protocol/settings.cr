@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   alias Settings = SettingsCrystalIDE | SettingsCrystalLang
 
   struct Customizations

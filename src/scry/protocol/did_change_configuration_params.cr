@@ -1,6 +1,4 @@
-require "./settings"
-
-module Scry
+module Scry::Protocol
   struct DidChangeConfigurationParams
     JSON.mapping({
       settings: Settings,

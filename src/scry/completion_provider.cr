@@ -5,7 +5,7 @@ require "./completion/*"
 module Scry
   class UnrecognizedContext < Completion::Context
     def find
-      [] of CompletionItem
+      [] of Protocol::CompletionItem
     end
   end
 
@@ -15,7 +15,7 @@ module Scry
     REQUIRE_MODULE_REGEX    = /require\s*\"(?<import>[a-zA-Z\/._]*)$/
     CLASS_NAME_REGEX        = /(?<target>[A-Z][a-zA-Z_:]*)$/
 
-    def initialize(@text_document : TextDocument, @context : CompletionContext | Nil, @position : Position, @method_db : Completion::MethodDB)
+    def initialize(@text_document : TextDocument, @context : Protocol::CompletionContext | Nil, @position : Protocol::Position, @method_db : Completion::MethodDB)
     end
 
     def run

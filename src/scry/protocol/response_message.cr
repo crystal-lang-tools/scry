@@ -1,11 +1,4 @@
-require "./response_error"
-require "./text_edit"
-require "./location"
-require "./symbol_information"
-require "./completion_item"
-require "./hover"
-
-module Scry
+module Scry::Protocol
   # Add a response type when needed
   alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation) | Array(CompletionItem) | CompletionItem | Hover
 

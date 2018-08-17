@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   struct Hover
     JSON.mapping({
       contents: MarkupContent,

@@ -27,12 +27,12 @@ module Scry
 
     # A request message to describe a request between the client and the server.
     # Every processed request must send a response back to the sender of the request.
-    def dispatch(msg : RequestMessage)
+    def dispatch(msg : Protocol::RequestMessage)
       Log.logger.debug(msg.method)
       dispatch_request(msg.params, msg)
     end
 
-    def dispatch(msg : NotificationMessage)
+    def dispatch(msg : Protocol::NotificationMessage)
       Log.logger.debug(msg.method)
       dispatch_notification(msg.params, msg)
     end
@@ -40,7 +40,7 @@ module Scry
     private def dispatch_request(params : Nil, msg)
       if msg.method == "shutdown"
         Scry.shutdown = true
-        ResponseMessage.new(msg.id, nil)
+        Protocol::ResponseMessage.new(msg.id, nil)
       end
     end
 
@@ -50,14 +50,14 @@ module Scry
       end
     end
 
-    private def dispatch_request(params : InitializeParams, msg)
+    private def dispatch_request(params : Protocol::InitializeParams, msg)
       initializer = Initializer.new(params, msg.id)
       @workspace, response = initializer.run
       response
     end
 
     # Also used by methods like Go to Definition
-    private def dispatch_request(params : TextDocumentPositionParams, msg)
+    private def dispatch_request(params : Protocol::TextDocumentPositionParams, msg)
       case msg.method
       when "textDocument/hover"
         text_document = TextDocument.new(params, msg.id)
@@ -75,7 +75,7 @@ module Scry
         text_document, method_db = @workspace.get_file(params.text_document)
         completion = CompletionProvider.new(text_document, params.context, params.position, method_db)
         results = completion.run
-        response = ResponseMessage.new(msg.id, results)
+        response = Protocol::ResponseMessage.new(msg.id, results)
         Log.logger.debug(response)
         response
       else
@@ -83,7 +83,7 @@ module Scry
       end
     end
 
-    private def dispatch_request(params : DocumentFormattingParams, msg)
+    private def dispatch_request(params : Protocol::DocumentFormattingParams, msg)
       text_document = TextDocument.new(params, msg.id)
 
       if open_file = @workspace.open_files[text_document.filename]?
@@ -96,35 +96,35 @@ module Scry
       response
     end
 
-    private def dispatch_request(params : TextDocumentParams, msg)
+    private def dispatch_request(params : Protocol::TextDocumentParams, msg)
       case msg.method
       when "textDocument/documentSymbol"
         text_document = TextDocument.new(params, msg.id)
         symbol_processor = SymbolProcessor.new(text_document)
         symbols = symbol_processor.run
-        response = ResponseMessage.new(msg.id, symbols)
+        response = Protocol::ResponseMessage.new(msg.id, symbols)
         Log.logger.debug(response)
         response
       end
     end
 
-    private def dispatch_request(params : WorkspaceSymbolParams, msg)
+    private def dispatch_request(params : Protocol::WorkspaceSymbolParams, msg)
       case msg.method
       when "workspace/symbol"
         workspace_symbol_processor = WorkspaceSymbolProcessor.new(@workspace.root_uri, params.query)
         symbols = workspace_symbol_processor.run
-        response = ResponseMessage.new(msg.id, symbols)
+        response = Protocol::ResponseMessage.new(msg.id, symbols)
         Log.logger.debug(response)
         response
       end
     end
 
-    private def dispatch_request(params : CompletionItem, msg)
+    private def dispatch_request(params : Protocol::CompletionItem, msg)
       case msg.method
       when "completionItem/resolve"
         resolver = CompletionResolver.new(msg.id, params)
         results = resolver.run
-        response = ResponseMessage.new(msg.id, results)
+        response = Protocol::ResponseMessage.new(msg.id, results)
         Log.logger.debug(response)
         response
       end
@@ -132,14 +132,14 @@ module Scry
 
     # Used by:
     # - $/cancelRequest
-    private def dispatch_notification(params : CancelParams, msg)
+    private def dispatch_notification(params : Protocol::CancelParams, msg)
       nil
     end
 
     # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`
-    private def dispatch_notification(params : TextDocumentParams, msg)
+    private def dispatch_notification(params : Protocol::TextDocumentParams, msg)
       case msg.method
       when "textDocument/didClose"
         @workspace.drop_file(params)
@@ -147,13 +147,13 @@ module Scry
       nil
     end
 
-    private def dispatch_notification(params : DidChangeConfigurationParams, msg)
+    private def dispatch_notification(params : Protocol::DidChangeConfigurationParams, msg)
       updater = UpdateConfig.new(@workspace, params)
       @workspace, response = updater.run
       response
     end
 
-    private def dispatch_notification(params : DidOpenTextDocumentParams, msg)
+    private def dispatch_notification(params : Protocol::DidOpenTextDocumentParams, msg)
       @workspace.put_file(params)
       text_document = TextDocument.new(params)
       unless text_document.in_memory?
@@ -163,7 +163,7 @@ module Scry
       end
     end
 
-    private def dispatch_notification(params : DidChangeTextDocumentParams, msg)
+    private def dispatch_notification(params : Protocol::DidChangeTextDocumentParams, msg)
       @workspace.update_file(params)
       text_document = TextDocument.new(params)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
@@ -171,23 +171,23 @@ module Scry
       response
     end
 
-    private def dispatch_notification(params : DidChangeWatchedFilesParams, msg)
+    private def dispatch_notification(params : Protocol::DidChangeWatchedFilesParams, msg)
       params.changes.map { |file_event|
         handle_file_event(file_event)
       }.compact
     end
 
-    private def handle_file_event(file_event : FileEvent)
+    private def handle_file_event(file_event : Protocol::FileEvent)
       text_document = TextDocument.new(file_event)
 
       case file_event.type
-      when FileEventType::Created
+      when Protocol::FileEventType::Created
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
         response
-      when FileEventType::Deleted
+      when Protocol::FileEventType::Deleted
         PublishDiagnostic.new(@workspace, text_document.uri).full_clean
-      when FileEventType::Changed
+      when Protocol::FileEventType::Changed
         @workspace.reopen_workspace(text_document)
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
@@ -195,7 +195,7 @@ module Scry
       end
     end
 
-    private def dispatch_notification(params : Trace, msg)
+    private def dispatch_notification(params : Protocol::Trace, msg)
       nil
     end
 
@@ -203,7 +203,7 @@ module Scry
     # - `handle_file_event`
     # - `DidOpenTextDocumentParams`
     # - `DidChangeTextDocumentParams`
-    private def dispatch_notification(params : PublishDiagnosticsParams, msg)
+    private def dispatch_notification(params : Protocol::PublishDiagnosticsParams, msg)
       nil
     end
 

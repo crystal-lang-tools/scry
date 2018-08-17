@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   struct DidOpenTextDocumentParams
     JSON.mapping({
       text_document: {type: TextDocumentItem, key: "textDocument"},

@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   enum FileEventType
     Created = 1
     Changed = 2

@@ -1,6 +1,4 @@
-require "./range"
-
-module Scry
+module Scry::Protocol
   struct Location
     JSON.mapping({
       uri:   String,

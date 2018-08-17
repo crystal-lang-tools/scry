@@ -1,7 +1,7 @@
 require "json"
 require "./location"
 
-module Scry
+module Scry::Protocol
   enum SymbolKind
     File        =  1
     Module      =  2

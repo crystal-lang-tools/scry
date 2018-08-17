@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   enum ErrorCodes
     # Defined by JSON RPC
     ParseError           = -32700

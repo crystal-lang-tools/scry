@@ -47,7 +47,7 @@ module Scry
         hover_response
       when HoverResponse
         if contexts = response.contexts
-          response_with(contexts, Range.new(position, position))
+          response_with(contexts, Protocol::Range.new(position, position))
         else
           hover_response
         end
@@ -57,15 +57,15 @@ module Scry
       hover_response
     end
 
-    def hover_response(context = Hover.new(MarkupContent.new("", "")))
-      ResponseMessage.new(@text_document.id, context)
+    def hover_response(context = Protocol::Hover.new(Protocol::MarkupContent.new("", "")))
+      Protocol::ResponseMessage.new(@text_document.id, context)
     end
 
     # NOTE: this Would be configurable in the future with scry.yml
     private def response_with(contexts, range)
       content = vertical_align(contexts)
       # content = horizontal_align(contexts)
-      hover_response(Hover.new(MarkupContent.new("markdown", content), range))
+      hover_response(Protocol::Hover.new(Protocol::MarkupContent.new("markdown", content), range))
     end
 
     # Aligns context output vertically. By example:

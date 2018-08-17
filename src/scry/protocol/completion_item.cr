@@ -1,6 +1,6 @@
 require "./markup_content"
 
-module Scry
+module Scry::Protocol
   enum CompletionItemKind
     Text          =  1
     Method        =  2

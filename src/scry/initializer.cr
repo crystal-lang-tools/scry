@@ -5,7 +5,7 @@ require "./protocol/server_capabilities"
 
 module Scry
   struct Initializer
-    def initialize(params : InitializeParams, @msg_id : Int32)
+    def initialize(params : Protocol::InitializeParams, @msg_id : Int32)
       @workspace = Workspace.new(
         root_uri: params.root_path || params.root_uri.to_s.sub("file://", ""),
         process_id: params.process_id,
@@ -20,7 +20,7 @@ module Scry
     end
 
     private def response
-      Initialize.new(@msg_id)
+      Protocol::Initialize.new(@msg_id)
     end
   end
 end

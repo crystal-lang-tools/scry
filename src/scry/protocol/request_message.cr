@@ -1,8 +1,4 @@
-require "./initialize_params"
-require "./text_document_position_params"
-require "./workspace_symbol_params"
-
-module Scry
+module Scry::Protocol
   struct RequestMessage
     alias RequestType = (TextDocumentPositionParams |
                          InitializeParams |

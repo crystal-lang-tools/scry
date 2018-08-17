@@ -6,7 +6,7 @@ module Scry
       workspace = Workspace.new("/foo", 1.to_i64, 10)
       updater = UpdateConfig.new(
         workspace,
-        DidChangeConfigurationParams.from_json(
+        Protocol::DidChangeConfigurationParams.from_json(
           JSON.build do |params|
             params.object do
               params.field "settings" do

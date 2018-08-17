@@ -1,6 +1,4 @@
-require "./position"
-
-module Scry
+module Scry::Protocol
   struct Range
     JSON.mapping({
       start: Position,

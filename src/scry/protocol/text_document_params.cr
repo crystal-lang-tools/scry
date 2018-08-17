@@ -2,7 +2,7 @@ require "json"
 require "./text_document_identifier"
 require "./versioned_text_document_identifier"
 
-module Scry
+module Scry::Protocol
   struct TextDocumentParams
     JSON.mapping({
       text_document: {type: (TextDocumentIdentifier | VersionedTextDocumentIdentifier), key: "textDocument"},

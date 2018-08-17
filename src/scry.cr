@@ -25,7 +25,7 @@ module Scry
         request = Message.new(content).parse
         results = context.dispatch(request)
       rescue ex
-        results = [ResponseMessage.new(ex)]
+        results = [Protocol::ResponseMessage.new(ex)]
       ensure
         response = [results].flatten.compact
         client.send_message(response)

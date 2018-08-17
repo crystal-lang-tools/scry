@@ -12,7 +12,7 @@ module Scry
       "fatal" => Logger::FATAL,
     }
 
-    def initialize(@workspace : Workspace, @settings : DidChangeConfigurationParams)
+    def initialize(@workspace : Workspace, @settings : Protocol::DidChangeConfigurationParams)
     end
 
     def initialize(@workspace : Workspace, @settings)

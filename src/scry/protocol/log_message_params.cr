@@ -1,7 +1,7 @@
 require "json"
 require "./message_type"
 
-module Scry
+module Scry::Protocol
   struct LogMessageParams
     JSON.mapping({
       type:    MessageType,

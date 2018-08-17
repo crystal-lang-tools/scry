@@ -1,6 +1,4 @@
-require "./range"
-
-module Scry
+module Scry::Protocol
   struct TextEdit
     JSON.mapping(
       range: Range,

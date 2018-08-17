@@ -1,6 +1,4 @@
-require "./range"
-
-module Scry
+module Scry::Protocol
   struct TextDocumentContentChangeEvent
     JSON.mapping({
       range:        Range?,

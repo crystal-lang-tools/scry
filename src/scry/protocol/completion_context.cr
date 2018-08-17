@@ -1,4 +1,4 @@
-module Scry
+module Scry::Protocol
   enum CompletionTriggerKind
     Invoked          = 1
     TriggerCharacter = 2

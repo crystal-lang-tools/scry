@@ -4,20 +4,20 @@ require "./protocol/notification_message"
 
 module Scry
   class Client
-    alias ClientMessage = Initialize | ResponseMessage | NotificationMessage
+    alias ClientMessage = Protocol::Initialize | Protocol::ResponseMessage | Protocol::NotificationMessage
 
     getter io
 
     def initialize(@io : IO)
     end
 
-    def send(method_name : String, params : NotificationType)
-      notification_message = NotificationMessage.new(method_name, params)
+    def send(method_name : String, params : Protocol::NotificationType)
+      notification_message = Protocol::NotificationMessage.new(method_name, params)
       send_message(notification_message)
     end
 
-    def send(method_name : String, params : ResponseTypes)
-      response_message = ResponseMessage.new(method_name, params)
+    def send(method_name : String, params : Protocol::ResponseTypes)
+      response_message = Protocol::ResponseMessage.new(method_name, params)
       send_message(response_message)
     end
 

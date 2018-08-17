@@ -1,7 +1,4 @@
-require "./range"
-require "./position"
-
-module Scry
+module Scry::Protocol
   enum DiagnosticSeverity
     Error       = 1
     Warning     = 2
