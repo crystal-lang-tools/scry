@@ -51,7 +51,7 @@ module Scry
     end
 
     def visit(node : Crystal::Alias)
-      process_node node, node.name, SymbolKind::Constant
+      process_node node, node.name.names.last, SymbolKind::Constant
       true
     end
 

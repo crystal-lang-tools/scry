@@ -1,4 +1,4 @@
-FROM crystallang/crystal:0.25.1
+FROM crystallang/crystal:0.26.0
 
 RUN apt-get update
 RUN apt-get clean
