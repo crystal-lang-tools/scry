@@ -1,7 +1,3 @@
-require "./protocol/initialize"
-require "./protocol/response_message"
-require "./protocol/notification_message"
-
 module Scry
   class Client
     alias ClientMessage = Protocol::Initialize | Protocol::ResponseMessage | Protocol::NotificationMessage

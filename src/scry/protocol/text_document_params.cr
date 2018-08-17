@@ -1,6 +1,4 @@
 require "json"
-require "./text_document_identifier"
-require "./versioned_text_document_identifier"
 
 module Scry::Protocol
   struct TextDocumentParams

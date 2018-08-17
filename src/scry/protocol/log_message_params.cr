@@ -1,5 +1,4 @@
 require "json"
-require "./message_type"
 
 module Scry::Protocol
   struct LogMessageParams

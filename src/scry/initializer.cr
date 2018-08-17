@@ -1,7 +1,5 @@
 require "./log"
 require "./workspace"
-require "./protocol/initialize_params"
-require "./protocol/server_capabilities"
 
 module Scry
   struct Initializer

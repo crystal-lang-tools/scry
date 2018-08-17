@@ -1,6 +1,3 @@
-require "./protocol/publish_diagnostics_params"
-require "./protocol/notification_message"
-require "./protocol/diagnostic"
 require "./build_failure"
 require "./workspace"
 

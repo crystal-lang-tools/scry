@@ -1,6 +1,5 @@
 require "./log"
 require "./workspace"
-require "./protocol/did_change_configuration_params"
 
 module Scry
   struct UpdateConfig

@@ -1,5 +1,4 @@
 require "./log"
-require "./protocol/location"
 require "./build_failure"
 require "./tool_helper"
 

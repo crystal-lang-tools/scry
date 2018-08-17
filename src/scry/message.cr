@@ -1,6 +1,3 @@
-require "./protocol/notification_message"
-require "./protocol/request_message"
-
 module Scry
   class InvalidContentError < Exception
   end

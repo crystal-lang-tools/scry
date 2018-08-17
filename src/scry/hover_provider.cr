@@ -1,6 +1,4 @@
 require "./log"
-require "./protocol/location"
-require "./protocol/hover"
 require "./build_failure"
 require "./tool_helper"
 

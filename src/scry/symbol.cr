@@ -1,5 +1,4 @@
 require "compiler/crystal/syntax"
-require "./protocol/workspace_symbol_params"
 
 module Scry
   class SymbolVisitor < Crystal::Visitor

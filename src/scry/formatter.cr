@@ -2,8 +2,6 @@ require "compiler/crystal/formatter"
 
 require "./workspace"
 require "./text_document"
-require "./protocol/text_edit"
-require "./protocol/response_message"
 
 module Scry
   struct Formatter

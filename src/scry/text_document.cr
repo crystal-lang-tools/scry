@@ -1,10 +1,3 @@
-require "./protocol/file_event"
-require "./protocol/document_formatting_params"
-require "./protocol/did_open_text_document_params"
-require "./protocol/did_change_text_document_params"
-require "./protocol/did_change_watched_files_params"
-require "./protocol/did_change_configuration_params"
-
 module Scry
   struct TextDocument
     getter id : Int32 | Nil

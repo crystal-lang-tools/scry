@@ -1,6 +1,5 @@
 require "logger"
 require "./client"
-require "./protocol/log_message_params"
 
 module Scry
   module Log

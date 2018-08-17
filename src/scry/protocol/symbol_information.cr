@@ -1,5 +1,4 @@
 require "json"
-require "./location"
 
 module Scry::Protocol
   enum SymbolKind
