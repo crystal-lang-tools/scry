@@ -12,10 +12,10 @@ module Scry::Completion
           label = label[(target_header_index + 1)..-1]
         end
 
-        CompletionItem.new(
+        Protocol::CompletionItem.new(
           label: label,
           insert_text: label,
-          kind: CompletionItemKind::Class,
+          kind: Protocol::CompletionItemKind::Class,
           detail: label,
           data: nil
         )

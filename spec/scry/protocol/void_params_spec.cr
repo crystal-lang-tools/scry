@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-module Scry
+module Scry::Protocol
   describe VoidParams do
     it "creates from json" do
       void_params = VoidParams.from_json("{}")

@@ -1,6 +1,5 @@
 require "logger"
 require "./client"
-require "./protocol/log_message_params"
 
 module Scry
   module Log
@@ -14,15 +13,15 @@ module Scry
       private def write(severity, datetime, progname, message)
         message_type = case severity
                        when INFO
-                         MessageType::Info
+                         Protocol::MessageType::Info
                        when WARN
-                         MessageType::Warning
+                         Protocol::MessageType::Warning
                        when ERROR, FATAL
-                         MessageType::Error
+                         Protocol::MessageType::Error
                        else
-                         MessageType::Log
+                         Protocol::MessageType::Log
                        end
-        @client.send("window/logMessage", LogMessageParams.new(message_type, message.to_s))
+        @client.send("window/logMessage", Protocol::LogMessageParams.new(message_type, message.to_s))
       end
     end
   end

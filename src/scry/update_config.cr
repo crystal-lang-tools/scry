@@ -1,6 +1,5 @@
 require "./log"
 require "./workspace"
-require "./protocol/did_change_configuration_params"
 
 module Scry
   struct UpdateConfig
@@ -12,7 +11,7 @@ module Scry
       "fatal" => Logger::FATAL,
     }
 
-    def initialize(@workspace : Workspace, @settings : DidChangeConfigurationParams)
+    def initialize(@workspace : Workspace, @settings : Protocol::DidChangeConfigurationParams)
     end
 
     def initialize(@workspace : Workspace, @settings)

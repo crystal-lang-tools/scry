@@ -5,13 +5,13 @@ module Scry
     describe "#send_message" do
       it "sends a valid NotificationMessage to the Client io" do
         build_failure = BuildFailure.from_json(BUILD_ERROR_EXAMPLE)
-        diagnostic = Diagnostic.new(build_failure)
+        diagnostic = Protocol::Diagnostic.new(build_failure)
 
-        params = PublishDiagnosticsParams.new(
+        params = Protocol::PublishDiagnosticsParams.new(
           "file:///Users/foo/project/some_file.cr",
           [diagnostic]
         )
-        message = NotificationMessage.new("textDocument/publishDiagnostics", params)
+        message = Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
 
         io = IO::Memory.new
         client = Client.new(io)
@@ -20,7 +20,7 @@ module Scry
       end
 
       it "sends a valid Initialize Reponse to the Client io" do
-        message = Initialize.new(32)
+        message = Protocol::Initialize.new(32)
 
         io = IO::Memory.new
         client = Client.new(io)
@@ -29,8 +29,8 @@ module Scry
       end
 
       it "sends a valid ResponseMessage to the Client io" do
-        result = [] of SymbolInformation
-        message = ResponseMessage.new(1, result)
+        result = [] of Protocol::SymbolInformation
+        message = Protocol::ResponseMessage.new(1, result)
 
         io = IO::Memory.new
         client = Client.new(io)
@@ -40,8 +40,8 @@ module Scry
 
       it "sends multiple ClientMessages" do
         messages = [] of Client::ClientMessage
-        messages << NotificationMessage.new("fake1", VoidParams.from_json("{}"))
-        messages << NotificationMessage.new("fake2", VoidParams.from_json("{}"))
+        messages << Protocol::NotificationMessage.new("fake1", Protocol::VoidParams.from_json("{}"))
+        messages << Protocol::NotificationMessage.new("fake2", Protocol::VoidParams.from_json("{}"))
 
         io = IO::Memory.new
         client = Client.new(io)

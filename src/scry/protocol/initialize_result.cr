@@ -1,6 +1,4 @@
-require "./server_capabilities"
-
-module Scry
+module Scry::Protocol
   struct InitializeResult
     JSON.mapping(
       capabilities: ServerCapabilities

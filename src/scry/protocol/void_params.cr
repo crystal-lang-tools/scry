@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   struct VoidParams
     def initialize(pull : JSON::PullParser)
       pull.read_begin_object

@@ -1,4 +1,4 @@
-module Scry
+module Scry::Protocol
   enum MessageType
     Error   = 1
     Warning = 2

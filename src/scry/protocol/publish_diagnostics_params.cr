@@ -1,6 +1,4 @@
-require "./diagnostic"
-
-module Scry
+module Scry::Protocol
   struct PublishDiagnosticsParams
     JSON.mapping({
       uri:         String,

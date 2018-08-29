@@ -1,4 +1,5 @@
 require "spec"
+require "../src/scry/protocol"
 require "../src/scry/**"
 require "./protocol_helper"
 

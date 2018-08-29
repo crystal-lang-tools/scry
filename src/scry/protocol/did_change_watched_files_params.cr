@@ -1,6 +1,4 @@
-require "./file_event"
-
-module Scry
+module Scry::Protocol
   struct DidChangeWatchedFilesParams
     JSON.mapping({
       changes: Array(FileEvent),

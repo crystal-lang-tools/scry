@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   struct InitializeParams
     JSON.mapping({
       process_id:   {type: Int64 | Int32 | Nil, key: "processId", nilable: true},

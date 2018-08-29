@@ -1,6 +1,4 @@
-require "./initialize_result"
-
-module Scry
+module Scry::Protocol
   struct Initialize
     JSON.mapping(
       jsonrpc: String,

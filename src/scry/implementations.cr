@@ -1,5 +1,4 @@
 require "./log"
-require "./protocol/location"
 require "./build_failure"
 require "./tool_helper"
 
@@ -66,15 +65,15 @@ module Scry
       implementation_response
     end
 
-    def implementation_response(locations = [] of Location)
-      ResponseMessage.new(@text_document.id, locations)
+    def implementation_response(locations = [] of Protocol::Location)
+      Protocol::ResponseMessage.new(@text_document.id, locations)
     end
 
     private def response_with(implementations)
       locations = implementations.map do |item|
-        pos = Position.new(item.line - 1, item.column - 1)
-        range = Range.new(pos, pos)
-        Location.new("file://" + item.filename, range)
+        pos = Protocol::Position.new(item.line - 1, item.column - 1)
+        range = Protocol::Range.new(pos, pos)
+        Protocol::Location.new("file://" + item.filename, range)
       end
       implementation_response(locations)
     end

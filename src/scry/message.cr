@@ -1,11 +1,8 @@
-require "./protocol/notification_message"
-require "./protocol/request_message"
-
 module Scry
   class InvalidContentError < Exception
   end
 
-  alias ProtocolMessage = RequestMessage | NotificationMessage
+  alias ProtocolMessage = Protocol::RequestMessage | Protocol::NotificationMessage
 
   struct Message
     def initialize(@json : String)

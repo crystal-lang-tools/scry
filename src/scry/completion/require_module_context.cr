@@ -22,12 +22,12 @@ module Scry::Completion
         label = File.directory?(path) ? File.basename(path) + "/" : File.basename(path, ".cr")
         insert_text = label
         root_path = paths.first
-        CompletionItem.new(
+        Protocol::CompletionItem.new(
           label: label,
           insert_text: insert_text,
-          kind: CompletionItemKind::Module,
+          kind: Protocol::CompletionItemKind::Module,
           detail: label,
-          data: RequireModuleContextData.new(path)
+          data: Protocol::RequireModuleContextData.new(path)
         )
       end
     end

@@ -1,6 +1,4 @@
-require "./formatting_options"
-
-module Scry
+module Scry::Protocol
   struct DocumentFormattingParams
     JSON.mapping({
       text_document: {type: TextDocumentIdentifier, key: "textDocument"},

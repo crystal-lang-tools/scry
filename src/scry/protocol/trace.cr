@@ -1,6 +1,6 @@
 require "json"
 
-module Scry
+module Scry::Protocol
   # The initial trace setting. If omitted trace is disabled ('off')
   # 'off' | 'messages' | 'verbose'
   struct Trace

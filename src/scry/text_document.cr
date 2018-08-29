@@ -1,16 +1,9 @@
-require "./protocol/file_event"
-require "./protocol/document_formatting_params"
-require "./protocol/did_open_text_document_params"
-require "./protocol/did_change_text_document_params"
-require "./protocol/did_change_watched_files_params"
-require "./protocol/did_change_configuration_params"
-
 module Scry
   struct TextDocument
     getter id : Int32 | Nil
     getter uri : String
     getter filename : String
-    getter position : Position?
+    getter position : Protocol::Position?
     property text : Array(String)
 
     def initialize(@uri, @text)
@@ -22,40 +15,40 @@ module Scry
       @text = [read_file]
     end
 
-    def initialize(params : DidOpenTextDocumentParams)
+    def initialize(params : Protocol::DidOpenTextDocumentParams)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [params.text_document.text]
     end
 
     # Used by ParseAnalyzer
-    def initialize(change : DidChangeTextDocumentParams)
+    def initialize(change : Protocol::DidChangeTextDocumentParams)
       @uri = change.text_document.uri
       @filename = uri_to_filename
       @text = change.content_changes.map { |change| change.text }
     end
 
     # Used by Analyzer
-    def initialize(file_event : FileEvent)
+    def initialize(file_event : Protocol::FileEvent)
       @uri = file_event.uri
       @filename = uri_to_filename
       @text = [read_file]
     end
 
-    def initialize(params : DocumentFormattingParams, @id)
+    def initialize(params : Protocol::DocumentFormattingParams, @id)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [""]
     end
 
-    def initialize(params : TextDocumentPositionParams, @id)
+    def initialize(params : Protocol::TextDocumentPositionParams, @id)
       @uri = params.text_document.uri
       @position = params.position
       @filename = uri_to_filename
       @text = [read_file]
     end
 
-    def initialize(params : TextDocumentParams, @id)
+    def initialize(params : Protocol::TextDocumentParams, @id)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [read_file]
