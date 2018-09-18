@@ -48,18 +48,14 @@ module Scry
       @text = [read_file]
     end
 
-    def initialize(params : Protocol::TextDocumentParams, @id)
+    def initialize(params : Protocol::TextDocumentParams, @id = nil)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [read_file]
     end
 
     def uri_to_filename
-      self.class.uri_to_filename(@uri)
-    end
-
-    def self.uri_to_filename(uri)
-      uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\//, "")
+      @uri.sub(/^file:\/\/|^inmemory:\/\/|^git:\/\//, "")
     end
 
     def in_memory?

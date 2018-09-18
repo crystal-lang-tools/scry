@@ -31,33 +31,29 @@ module Scry
       @open_files[file.filename] = {file, method_db}
     end
 
-    def put_file(params : Protocol::DidOpenTextDocumentParams)
-      file = TextDocument.new(params)
-      if @dependency_graph[file.filename]?
-        file_dependencies = @dependency_graph[file.filename].descendants.map &.value
+    def put_file(text_document : TextDocument)
+      if @dependency_graph[text_document.filename]?
+        file_dependencies = @dependency_graph[text_document.filename].descendants.map &.value
       else
         file_dependencies = @dependency_graph.prelude_node.descendants.map &.value
       end
-      file_dependencies << file.filename
+      file_dependencies << text_document.filename
       method_db = Completion::MethodDB.generate(file_dependencies.uniq!)
-      @open_files[file.filename] = {file, method_db}
+      @open_files[text_document.filename] = {text_document, method_db}
     end
 
-    def update_file(params : Protocol::DidChangeTextDocumentParams)
-      file = TextDocument.new params
-      _, node = @open_files[file.filename]
-      @open_files[file.filename] = {file, node}
+    def update_file(text_document : TextDocument)
+      _, node = @open_files[text_document.filename]
+      @open_files[text_document.filename] = {text_document, node}
     end
 
-    def drop_file(params : Protocol::TextDocumentParams)
-      filename = TextDocument.uri_to_filename(params.text_document.uri)
-      @open_files.delete(filename)
-      @dependency_graph.delete(filename)
+    def drop_file(text_document : TextDocument)
+      @open_files.delete(text_document.filename)
+      @dependency_graph.delete(text_document.filename)
     end
 
-    def get_file(text_document : Protocol::TextDocumentIdentifier)
-      filename = TextDocument.uri_to_filename(text_document.uri)
-      @open_files[filename]
+    def get_file(text_document : TextDocument)
+      @open_files[text_document.filename]
     end
   end
 end
