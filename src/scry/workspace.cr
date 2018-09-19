@@ -43,8 +43,12 @@ module Scry
     end
 
     def update_file(text_document : TextDocument)
-      _, node = @open_files[text_document.filename]
-      @open_files[text_document.filename] = {text_document, node}
+      original_document, node = @open_files[text_document.filename]
+      if original_document.text != text_document.text
+        put_file(text_document)
+      else
+        @open_files[text_document.filename]
+      end
     end
 
     def drop_file(text_document : TextDocument)
