@@ -79,7 +79,7 @@ module Scry
         _, method_db = workspace.put_file(text_document)
         workspace.open_files[source.path].should_not be_nil
 
-        document, method_db = workspace.get_file(text_document)
+        document, method_db = workspace.get_file(text_document.filename)
         document.filename.should eq(source.path)
         method_db.db["A"].size.should eq(1)
         method_db.db["A"][0].name.should eq("hello")
