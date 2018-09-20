@@ -72,7 +72,7 @@ module Scry
         Log.logger.debug(response)
         response
       when "textDocument/completion"
-        text_document, method_db = @workspace.get_file(TextDocument.new(params, msg.id))
+        text_document, method_db = @workspace.get_file(TextDocument.uri_to_filename(params.text_document.uri))
         completion = CompletionProvider.new(text_document, params.context, params.position, method_db)
         results = completion.run
         response = Protocol::ResponseMessage.new(msg.id, results)

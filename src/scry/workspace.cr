@@ -56,8 +56,8 @@ module Scry
       @dependency_graph.delete(text_document.filename)
     end
 
-    def get_file(text_document : TextDocument)
-      @open_files[text_document.filename]
+    def get_file(file_name)
+      @open_files[file_name]
     end
   end
 end
