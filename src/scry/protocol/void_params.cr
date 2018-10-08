@@ -1,5 +1,3 @@
-require "json"
-
 module Scry::Protocol
   struct VoidParams
     def initialize(pull : JSON::PullParser)

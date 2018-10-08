@@ -1,1 +1,2 @@
+require "json"
 require "./protocol/*"

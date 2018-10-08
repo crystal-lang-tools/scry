@@ -1,5 +1,3 @@
-require "json"
-
 module Scry::Protocol
   struct TextDocumentIdentifier
     JSON.mapping({

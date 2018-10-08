@@ -1,5 +1,3 @@
-require "json"
-
 module Scry::Protocol
   enum ErrorCodes
     # Defined by JSON RPC
