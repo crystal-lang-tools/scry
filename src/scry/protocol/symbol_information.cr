@@ -1,5 +1,3 @@
-require "json"
-
 module Scry::Protocol
   enum SymbolKind
     File        =  1

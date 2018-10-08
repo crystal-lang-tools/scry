@@ -1,5 +1,3 @@
-require "json"
-
 module Scry::Protocol
   alias Settings = SettingsCrystalIDE | SettingsCrystalLang
 
