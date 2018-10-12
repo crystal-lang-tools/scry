@@ -21,12 +21,12 @@ module Scry
 
     context = Context.new
     loop do
+      content = Request.new(STDIN).read
+      request = Message.new(content).parse
       begin
-        content = Request.new(STDIN).read
-        request = Message.new(content).parse
         results = context.dispatch(request)
       rescue ex
-        results = [Protocol::ResponseMessage.new(ex)]
+        results = process_error(request, ex)
       ensure
         response = [results].flatten.compact
         client.send_message(response)
@@ -38,6 +38,15 @@ module Scry
     ) unless Log.logger.nil?
   ensure
     Log.logger.close unless Log.logger.nil?
+  end
+
+  def self.process_error(request : Protocol::RequestMessage, error)
+    Protocol::ResponseMessage.new(request.id, error)
+  end
+
+  def self.process_error(request : Protocol::NotificationMessage, error)
+    Log.logger.error(%(#{error.message}\n#{error.backtrace.join('\n')}))
+    nil
   end
 end
 
