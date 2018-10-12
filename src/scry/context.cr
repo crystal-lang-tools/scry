@@ -131,12 +131,6 @@ module Scry
     end
 
     # Used by:
-    # - $/cancelRequest
-    private def dispatch_notification(params : Protocol::CancelParams, msg)
-      nil
-    end
-
-    # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`
     private def dispatch_notification(params : Protocol::TextDocumentParams, msg)
@@ -193,18 +187,6 @@ module Scry
         response = analyzer.run
         response
       end
-    end
-
-    private def dispatch_notification(params : Protocol::Trace, msg)
-      nil
-    end
-
-    # Used by:
-    # - `handle_file_event`
-    # - `DidOpenTextDocumentParams`
-    # - `DidChangeTextDocumentParams`
-    private def dispatch_notification(params : Protocol::PublishDiagnosticsParams, msg)
-      nil
     end
 
     private def dispatch_notification(params, msg)
