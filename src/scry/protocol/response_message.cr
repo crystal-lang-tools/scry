@@ -5,7 +5,7 @@ module Scry::Protocol
   struct ResponseMessage
     JSON.mapping({
       jsonrpc: String,
-      id:      Int32 | String | Nil,
+      id:      {type: Int32 | String | Nil, emit_null: true},
       result:  ResponseTypes?,
       error:   ResponseError?,
     }, true)
