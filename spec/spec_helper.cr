@@ -28,7 +28,7 @@ module Scry
 
   BUILD_ERROR_EXAMPLE = %({"file":"/home/aa.cr","line":4,"column":1,"size":1,"message":"Oh no!, an Error"})
 
-  FORMATTER_RESPONSE_EXAMPLE = %({"jsonrpc":"2.0","result":[{"range":{"start":{"line":0,"character":0},"end":{"line":1,"character":6}},"newText":"1 + 1\\n"}]})
+  FORMATTER_RESPONSE_EXAMPLE = %({"jsonrpc":"2.0","id":null,"result":[{"range":{"start":{"line":0,"character":0},"end":{"line":1,"character":6}},"newText":"1 + 1\\n"}]})
 
   TEXTDOCUMENT_POSITION_PARAM_EXAMPLE = %({"textDocument":{"uri":"#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
 
