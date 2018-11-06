@@ -1,5 +1,4 @@
 require "../spec_helper"
-require "tempfile"
 
 module Scry
   describe Workspace do
@@ -20,7 +19,7 @@ module Scry
 
     describe ".put_file" do
       it "adds a file and generates it's method db" do
-        source = Tempfile.new("test") # This will need to change w/ v0.27.0
+        source = File.tempfile("test")
         File.write(source.path, "class A; def hello; end; end;")
         text_document = TextDocument.new(source.path)
 
@@ -37,7 +36,7 @@ module Scry
 
     describe ".update_file" do
       it "updates an existing file and it's method db" do
-        source = Tempfile.new("test") # This will need to change w/ v0.27.0
+        source = File.tempfile("test")
         File.write(source.path, "class A; def hello; end; end;")
         text_document = TextDocument.new(source.path)
         workspace = Workspace.new("root", 0, 10)
@@ -56,7 +55,7 @@ module Scry
 
     describe ".drop_file" do
       it "removes a file from the workspace" do
-        source = Tempfile.new("test") # This will need to change w/ v0.27.0
+        source = File.tempfile("test")
         File.write(source.path, "class A; def hello; end; end;")
         text_document = TextDocument.new(source.path)
         workspace = Workspace.new("root", 0, 10)
@@ -71,7 +70,7 @@ module Scry
 
     describe ".get_file" do
       it "retrieves a file and its method db from the workspace" do
-        source = Tempfile.new("test") # This will need to change w/ v0.27.0
+        source = File.tempfile("test")
         File.write(source.path, "class A; def hello; end; end;")
         text_document = TextDocument.new(source.path)
         workspace = Workspace.new("root", 0, 10)
