@@ -72,7 +72,7 @@ module Scry
         Log.logger.debug(response)
         response
       when "textDocument/completion"
-        text_document, method_db = @workspace.get_file(params.text_document)
+        text_document, method_db = @workspace.get_file(TextDocument.uri_to_filename(params.text_document.uri))
         completion = CompletionProvider.new(text_document, params.context, params.position, method_db)
         results = completion.run
         response = Protocol::ResponseMessage.new(msg.id, results)
@@ -136,7 +136,7 @@ module Scry
     private def dispatch_notification(params : Protocol::TextDocumentParams, msg)
       case msg.method
       when "textDocument/didClose"
-        @workspace.drop_file(params)
+        @workspace.drop_file(TextDocument.new(params))
       end
       nil
     end
@@ -148,8 +148,8 @@ module Scry
     end
 
     private def dispatch_notification(params : Protocol::DidOpenTextDocumentParams, msg)
-      @workspace.put_file(params)
       text_document = TextDocument.new(params)
+      @workspace.put_file(text_document)
       unless text_document.in_memory?
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
@@ -158,8 +158,8 @@ module Scry
     end
 
     private def dispatch_notification(params : Protocol::DidChangeTextDocumentParams, msg)
-      @workspace.update_file(params)
       text_document = TextDocument.new(params)
+      @workspace.update_file(text_document)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
       response = analyzer.run
       response
