@@ -5,23 +5,23 @@ module Scry
     it "dispatches commands" do
       context = Context.new
 
-      procedure = Message.new(INITIALIZATION_EXAMPLE).parse
+      procedure = Message.from(INITIALIZATION_EXAMPLE)
       result = context.dispatch(procedure)
       result.is_a?(Protocol::Initialize).should be_true
 
-      procedure = Message.new(CONFIG_CHANGE_EXAMPLE).parse
+      procedure = Message.from(CONFIG_CHANGE_EXAMPLE)
       context.dispatch(procedure)
 
-      procedure = Message.new(DOC_OPEN_EXAMPLE).parse
+      procedure = Message.from(DOC_OPEN_EXAMPLE)
       context.dispatch(procedure)
 
-      procedure = Message.new(DOC_CHANGE_EXAMPLE).parse
+      procedure = Message.from(DOC_CHANGE_EXAMPLE)
       context.dispatch(procedure)
 
-      procedure = Message.new(WATCHED_FILE_CHANGED_EXAMPLE).parse
+      procedure = Message.from(WATCHED_FILE_CHANGED_EXAMPLE)
       context.dispatch(procedure)
 
-      procedure = Message.new(WATCHED_FILE_DELETED_EXAMPLE).parse
+      procedure = Message.from(WATCHED_FILE_DELETED_EXAMPLE)
       result = context.dispatch(procedure)
       result.to_json.should eq(%([[{"jsonrpc":"2.0","method":"textDocument/publishDiagnostics","params":{"uri":"file://#{SOME_FILE_PATH}","diagnostics":[]}}]]))
     end

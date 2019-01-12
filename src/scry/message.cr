@@ -5,15 +5,10 @@ module Scry
   alias ProtocolMessage = Protocol::RequestMessage | Protocol::NotificationMessage
 
   struct Message
-    def initialize(@json : String)
-    end
-
-    def initialize(@json : Nil)
-      raise InvalidContentError.new("Expected procedure content")
-    end
-
-    def parse
-      ProtocolMessage.from_json(@json || "")
+    def self.from(json : String?)
+      raise InvalidContentError.new("Expected procedure content") unless json
+      
+      ProtocolMessage.from_json(json)
     end
   end
 end
