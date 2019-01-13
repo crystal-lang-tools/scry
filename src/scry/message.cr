@@ -4,7 +4,7 @@ module Scry
 
   alias ProtocolMessage = Protocol::RequestMessage | Protocol::NotificationMessage
 
-  struct Message
+  module Message
     def self.from(json : String?)
       raise InvalidContentError.new("Expected procedure content") unless json
       
