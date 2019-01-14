@@ -7,7 +7,7 @@ module Scry
   module Message
     def self.from(json : String?)
       raise InvalidContentError.new("Expected procedure content") unless json
-      
+
       ProtocolMessage.from_json(json)
     end
   end
