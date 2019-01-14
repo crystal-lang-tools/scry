@@ -31,7 +31,7 @@ module Scry::Protocol
       data:    Array(String)?,
     }, true)
 
-    def initialize(@message, @data, @code = ErrorCodes::UnknownErrorCode)
+    def initialize(@message, @data = nil, @code = ErrorCodes::UnknownErrorCode)
     end
 
     def initialize(ex : Exception)
