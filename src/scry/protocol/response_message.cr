@@ -18,11 +18,8 @@ module Scry::Protocol
     def initialize(@result)
     end
 
-    def initialize(ex : Exception)
-      @error = ResponseError.new(
-        ex.message || "Unknown error",
-        ex.backtrace
-      )
+    def initialize(ex : Exception | ProtocolException)
+      @error = ResponseError.new(ex)
     end
   end
 end
