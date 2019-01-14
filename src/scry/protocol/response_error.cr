@@ -17,13 +17,12 @@ module Scry::Protocol
 
   struct ResponseError
     JSON.mapping({
-      code:    Int32,
+      code:    ErrorCodes,
       message: String,
       data:    Array(String)?,
     }, true)
 
-    def initialize(@message, @data)
-      @code = ErrorCodes::UnknownErrorCode.value
+    def initialize(@message, @data, @code = ErrorCodes::UnknownErrorCode)
     end
   end
 end
