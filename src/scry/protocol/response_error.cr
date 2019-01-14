@@ -14,13 +14,15 @@ module Scry::Protocol
     # Defined by the protocol.
     RequestCancelled = -32800
   end
-   
+
   class ProtocolException < Exception
     getter code
+
     def initialize(
       @message : String? = nil,
       @cause : Exception? = nil,
-      @code : ErrorCodes = ErrorCodes::UnknownErrorCode)
+      @code : ErrorCodes = ErrorCodes::UnknownErrorCode
+    )
     end
   end
 
