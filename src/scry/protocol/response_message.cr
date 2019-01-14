@@ -18,7 +18,7 @@ module Scry::Protocol
     def initialize(@result)
     end
 
-    def initialize(ex : Exception | ProtocolException)
+    def initialize(ex : Exception)
       @error = ResponseError.new(ex)
     end
   end
