@@ -21,7 +21,7 @@ module Scry
     end
 
     def test_send(message)
-      dispatch(Message.new(message).parse)
+      dispatch(Message.from(message))
     end
   end
 end

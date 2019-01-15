@@ -23,7 +23,7 @@ module Scry
     loop do
       begin
         content = Request.new(STDIN).read
-        request = Message.new(content).parse
+        request = Message.from(content)
         results = context.dispatch(request)
       rescue ex
         results = [Protocol::ResponseMessage.new(ex)]
