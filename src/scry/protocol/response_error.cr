@@ -15,15 +15,33 @@ module Scry::Protocol
     RequestCancelled = -32800
   end
 
+  class ProtocolException < Exception
+    getter code
+
+    def initialize(
+      @message : String? = nil,
+      @cause : Exception? = nil,
+      @code : ErrorCodes = ErrorCodes::UnknownErrorCode
+    )
+    end
+  end
+
   struct ResponseError
     JSON.mapping({
-      code:    Int32,
+      code:    ErrorCodes,
       message: String,
       data:    Array(String)?,
     }, true)
 
-    def initialize(@message, @data)
-      @code = ErrorCodes::UnknownErrorCode.value
+    def initialize(@message, @data = nil, @code = ErrorCodes::UnknownErrorCode)
+    end
+
+    def self.new(ex : Exception)
+      new(ex.message || "Unknown error", ex.backtrace?)
+    end
+
+    def self.new(ex : ProtocolException)
+      new(ex.message || "An error occurred", ex.backtrace?, ex.code)
     end
   end
 end
