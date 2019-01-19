@@ -81,6 +81,11 @@ module Scry
       @text.first
     end
 
+    def get_line(line_number)
+      lines = source.split("\n")
+      lines[line_number]
+    end
+
     private def read_file : String
       File.read(filename)
     rescue ex : IO::Error
