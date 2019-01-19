@@ -41,8 +41,8 @@ module Scry
     end
 
     LOCAL_REQUIRE_REGEX = /^require\s+"(\.{1,2}.*?)"\s*$/
-    POSITION_0 = Protocol::Position.new(0, 0)
-    RANGE_0 = Protocol::Range.new(POSITION_0, POSITION_0)
+    POSITION_0          = Protocol::Position.new(0, 0)
+    RANGE_0             = Protocol::Range.new(POSITION_0, POSITION_0)
 
     private def get_local_require(filename, position)
       line = @text_document.get_line(position.line)
