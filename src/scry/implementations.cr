@@ -34,8 +34,32 @@ module Scry
 
     # NOTE: compiler is a bit heavy in some projects.
     def search(filename, position)
+      local_require = get_local_require(filename, position)
+      return local_require if local_require
       scope = get_scope(@workspace.root_uri)
       analyze(filename, position, scope)
+    end
+
+    LOCAL_REQUIRE_REGEX = /^require\s+"(\.{1,2}.*?)"\s*$/
+    POSITION_0 = Protocol::Position.new(0, 0)
+    RANGE_0 = Protocol::Range.new(POSITION_0, POSITION_0)
+
+    private def get_local_require(filename, position)
+      line = @text_document.get_line(position.line)
+      if match = line.match(LOCAL_REQUIRE_REGEX)
+        requirement = match[1]
+        start_pos = line.index(requirement)
+        return unless start_pos
+        end_pos = start_pos + requirement.size - 1
+        if position.character > start_pos || position.character < end_pos
+          filepath = "#{File.expand_path(requirement, File.dirname(filename))}.cr"
+          if File.exists?(filepath)
+            uri = "file://#{filepath}"
+            location = Protocol::Location.new(uri, RANGE_0)
+            return [Protocol::ResponseMessage.new(@text_document.id, location)]
+          end
+        end
+      end
     end
 
     private def crystal_tool(filename, position, scope)

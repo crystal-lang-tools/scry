@@ -1,6 +1,6 @@
 module Scry::Protocol
   # Add a response type when needed
-  alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation) | Array(CompletionItem) | CompletionItem | Hover
+  alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation) | Array(CompletionItem) | CompletionItem | Hover | Location
 
   struct ResponseMessage
     JSON.mapping({
