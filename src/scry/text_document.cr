@@ -82,8 +82,8 @@ module Scry
     end
 
     def get_line(line_number)
-      lines = source.split("\n")
-      lines[line_number]
+      line = source.each_line.skip(line_number - 1).next
+      line.is_a?(String) ? line : nil
     end
 
     private def read_file : String

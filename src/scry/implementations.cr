@@ -46,14 +46,11 @@ module Scry
 
     private def get_local_require(filename, position)
       line = @text_document.get_line(position.line)
-      if match = line.match(LOCAL_REQUIRE_REGEX)
-        requirement = match[1]
-        start_pos = line.index(requirement)
-        return unless start_pos
-        end_pos = start_pos + requirement.size - 1
-        if position.character > start_pos || position.character < end_pos
-          filepath = "#{File.expand_path(requirement, File.dirname(filename))}.cr"
-          if File.exists?(filepath)
+      if line && (match = line.match(LOCAL_REQUIRE_REGEX))
+        if match.byte_begin(1) < position.character < match.byte_end(1)
+          expanded = File.expand_path(match[1], File.dirname(filename))
+          filepath = return_if_exists?(expanded) || return_if_exists?("#{expanded}.cr")
+          if filepath
             uri = "file://#{filepath}"
             location = Protocol::Location.new(uri, RANGE_0)
             return [Protocol::ResponseMessage.new(@text_document.id, location)]
@@ -100,6 +97,10 @@ module Scry
         Protocol::Location.new("file://" + item.filename, range)
       end
       implementation_response(locations)
+    end
+
+    private def return_if_exists?(path)
+      File.exists?(path) && path
     end
   end
 end
