@@ -4,7 +4,7 @@ require "../src/scry/**"
 require "./protocol_helper"
 
 module Scry
-  EnvironmentConfig.new.run
+  EnvironmentConfig.run
   ROOT_PATH      = File.expand_path("spec/fixtures/")
   SOME_FILE_PATH = File.expand_path("./fixtures/src/some_file.cr", __DIR__)
 
