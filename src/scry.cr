@@ -17,7 +17,7 @@ module Scry
       Log.logger.info("...your session has ended")
     end
 
-    EnvironmentConfig.new.run
+    EnvironmentConfig.run
 
     context = Context.new
     loop do

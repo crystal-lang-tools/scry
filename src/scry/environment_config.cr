@@ -1,26 +1,20 @@
 module Scry
-  struct EnvironmentConfig
-    @config : Hash(String, String)
-
-    def initialize
-      @config = initialize_from_crystal_env
-    end
-
-    def run
-      @config.each do |k, v|
+  module EnvironmentConfig
+    def self.run
+      initialize_from_crystal_env.each do |k, v|
         ENV[k] = v
       end
     end
 
-    private def initialize_from_crystal_env
+    private def self.initialize_from_crystal_env
       crystal_env
         .lines
-        .map { |line| line.split("=") }
-        .map { |pair| Tuple(String, String).from(pair) }
-        .reduce(Hash(String, String).new) { |memo, (k, v)| memo[k] = v.chomp[1..-2]; memo }
+        .map(&.split('='))
+        .map { |(k, v)| {k, v.chomp[1..-2]} }
+        .to_h
     end
 
-    private def crystal_env
+    private def self.crystal_env
       String.build do |io|
         Process.run("crystal", ["env"], output: io)
       end
