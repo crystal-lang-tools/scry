@@ -3,15 +3,12 @@ require "./headers"
 
 module Scry
   struct Request
-    def initialize(@io : IO)
-      @headers = Headers.new
-      @content = uninitialized String | Nil
-    end
+    getter headers = Headers.new
+    getter content : String?
 
-    def read
-      return @content if @content
+    def initialize(@io : IO)
       read_headers
-      read_content
+      @content = read_content
     end
 
     private def read_headers

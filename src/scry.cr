@@ -22,9 +22,9 @@ module Scry
     context = Context.new
     loop do
       begin
-        content = Request.new(STDIN).read
-        request = Message.from(content)
-        results = context.dispatch(request)
+        request = client.read
+        message = Message.from(request.content)
+        results = context.dispatch(message)
       rescue ex
         results = [Protocol::ResponseMessage.new(ex)]
       ensure

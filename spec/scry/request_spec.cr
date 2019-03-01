@@ -4,7 +4,10 @@ module Scry
   describe Request do
     it "reads content from IO" do
       io = IO::Memory.new(SIMPLE_MESSAGE)
-      Request.new(io).read.should eq("Hello")
+      request = Request.new(io)
+
+      request.content.should eq("Hello")
+      request.headers.content_length.should eq(5)
     end
   end
 

@@ -1,3 +1,5 @@
+require "./request"
+
 module Scry
   class Client
     alias ClientMessage = Protocol::Initialize | Protocol::ResponseMessage | Protocol::NotificationMessage
@@ -5,6 +7,10 @@ module Scry
     getter io
 
     def initialize(@io : IO)
+    end
+
+    def read
+      Request.new(@io)
     end
 
     def send(method_name : String, params : Protocol::NotificationType)

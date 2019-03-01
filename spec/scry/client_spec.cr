@@ -2,6 +2,18 @@ require "../spec_helper"
 
 module Scry
   describe Client do
+    describe "#read" do
+      it "reads request from io" do
+        input = %(Content-Length: 5\r\n\r\nHello\r\n)
+        io = IO::Memory.new(input)
+        client = Client.new(io)
+
+        request = client.read
+
+        request.content.should eq("Hello")
+      end
+    end
+
     describe "#send_message" do
       it "sends a valid NotificationMessage to the Client io" do
         build_failure = BuildFailure.from_json(BUILD_ERROR_EXAMPLE)
