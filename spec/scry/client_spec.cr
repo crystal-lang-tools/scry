@@ -6,7 +6,7 @@ module Scry
       it "reads request from io" do
         input = %(Content-Length: 5\r\n\r\nHello\r\n)
         io = IO::Memory.new(input)
-        client = Client.new(io)
+        client = Client.new(io, STDOUT)
 
         request = client.read
 
@@ -26,7 +26,7 @@ module Scry
         message = Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
 
         io = IO::Memory.new
-        client = Client.new(io)
+        client = Client.new(STDIN, io)
         client.send_message(message)
         io.to_s[0...19].should eq("Content-Length: 268")
       end
@@ -35,7 +35,7 @@ module Scry
         message = Protocol::Initialize.new(32)
 
         io = IO::Memory.new
-        client = Client.new(io)
+        client = Client.new(STDIN, io)
         client.send_message(message)
         io.to_s.should eq(%(Content-Length: 297\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true,"workspaceSymbolProvider":true,"completionProvider":{"resolveProvider":true,"triggerCharacters":[".","\\\"","/"]},"hoverProvider":true}}}))
       end
@@ -45,7 +45,7 @@ module Scry
         message = Protocol::ResponseMessage.new(1, result)
 
         io = IO::Memory.new
-        client = Client.new(io)
+        client = Client.new(STDIN, io)
         client.send_message(message)
         io.to_s.should eq(%(Content-Length: 36\r\n\r\n{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[]}))
       end
@@ -56,7 +56,7 @@ module Scry
         messages << Protocol::NotificationMessage.new("fake2", Protocol::VoidParams.from_json("{}"))
 
         io = IO::Memory.new
-        client = Client.new(io)
+        client = Client.new(STDIN, io)
         client.send_message(messages)
         messages.to_json
         io.to_s.should contain("fake1")

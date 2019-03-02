@@ -8,7 +8,7 @@ require "./scry/client"
 
 module Scry
   def self.start
-    client = Client.new(STDOUT)
+    client = Client.new
     Log.logger = Log::ClientLogger.new(client)
 
     Log.logger.info("Scry is looking into your code...")

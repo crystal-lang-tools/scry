@@ -7,7 +7,7 @@ module Scry
 
     class ClientLogger < Logger
       def initialize(@client : Client)
-        super(@client.io)
+        super(@client.io_out)
       end
 
       private def write(severity, datetime, progname, message)
