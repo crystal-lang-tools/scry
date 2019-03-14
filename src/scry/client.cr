@@ -9,10 +9,6 @@ module Scry
     def initialize(@io_in : IO, @io_out : IO)
     end
 
-    def self.new
-      new(STDIN, STDOUT)
-    end
-
     def read
       Request.new(@io_in)
     end
