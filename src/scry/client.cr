@@ -4,13 +4,13 @@ module Scry
   class Client
     alias ClientMessage = Protocol::Initialize | Protocol::ResponseMessage | Protocol::NotificationMessage
 
-    getter io_out
+    getter output
 
-    def initialize(@io_in : IO, @io_out : IO)
+    def initialize(@input : IO, @output : IO)
     end
 
     def read
-      Request.new(@io_in)
+      Request.new(@input)
     end
 
     def send(method_name : String, params : Protocol::NotificationType)
@@ -30,8 +30,8 @@ module Scry
     end
 
     def send_message(client_message : ClientMessage)
-      io_out << prepend_header(client_message.to_json)
-      io_out.flush
+      output << prepend_header(client_message.to_json)
+      output.flush
     end
 
     private def prepend_header(content : String)

@@ -4,13 +4,15 @@ module Scry
   describe Client do
     describe "#read" do
       it "reads request from io" do
-        input = %(Content-Length: 5\r\n\r\nHello\r\n)
-        io = IO::Memory.new(input)
-        client = Client.new(io, STDOUT)
+        request = %(Content-Length: 5\r\n\r\nHello\r\n)
+        input = IO::Memory.new(request)
+        output = IO::Memory.new
+        client = Client.new(input, output)
 
         request = client.read
 
         request.content.should eq("Hello")
+        output.to_s.should be_empty
       end
     end
 
@@ -25,29 +27,29 @@ module Scry
         )
         message = Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
 
-        io = IO::Memory.new
-        client = Client.new(STDIN, io)
+        output = IO::Memory.new
+        client = Client.new(IO::Memory.new, output)
         client.send_message(message)
-        io.to_s[0...19].should eq("Content-Length: 268")
+        output.to_s[0...19].should eq("Content-Length: 268")
       end
 
       it "sends a valid Initialize Reponse to the Client io" do
         message = Protocol::Initialize.new(32)
 
-        io = IO::Memory.new
-        client = Client.new(STDIN, io)
+        output = IO::Memory.new
+        client = Client.new(IO::Memory.new, output)
         client.send_message(message)
-        io.to_s.should eq(%(Content-Length: 297\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true,"workspaceSymbolProvider":true,"completionProvider":{"resolveProvider":true,"triggerCharacters":[".","\\\"","/"]},"hoverProvider":true}}}))
+        output.to_s.should eq(%(Content-Length: 297\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true,"workspaceSymbolProvider":true,"completionProvider":{"resolveProvider":true,"triggerCharacters":[".","\\\"","/"]},"hoverProvider":true}}}))
       end
 
       it "sends a valid ResponseMessage to the Client io" do
         result = [] of Protocol::SymbolInformation
         message = Protocol::ResponseMessage.new(1, result)
 
-        io = IO::Memory.new
-        client = Client.new(STDIN, io)
+        output = IO::Memory.new
+        client = Client.new(IO::Memory.new, output)
         client.send_message(message)
-        io.to_s.should eq(%(Content-Length: 36\r\n\r\n{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[]}))
+        output.to_s.should eq(%(Content-Length: 36\r\n\r\n{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[]}))
       end
 
       it "sends multiple ClientMessages" do
@@ -55,12 +57,12 @@ module Scry
         messages << Protocol::NotificationMessage.new("fake1", Protocol::VoidParams.from_json("{}"))
         messages << Protocol::NotificationMessage.new("fake2", Protocol::VoidParams.from_json("{}"))
 
-        io = IO::Memory.new
-        client = Client.new(STDIN, io)
+        output = IO::Memory.new
+        client = Client.new(IO::Memory.new, output)
         client.send_message(messages)
         messages.to_json
-        io.to_s.should contain("fake1")
-        io.to_s.should contain("fake2")
+        output.to_s.should contain("fake1")
+        output.to_s.should contain("fake2")
       end
     end
   end
