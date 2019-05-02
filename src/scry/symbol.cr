@@ -44,6 +44,12 @@ module Scry
       true
     end
 
+    def visit(node : Crystal::AnnotationDef)
+      process_node node, node.name.names.last, LSP::Protocol::SymbolKind::Property
+      @container << node.name.names.last
+      true
+    end
+
     def visit(node : Crystal::FunDef)
       process_node node, node.name, LSP::Protocol::SymbolKind::Function
       true
@@ -79,7 +85,7 @@ module Scry
       true
     end
 
-    def end_visit(node : Crystal::ClassDef | Crystal::ModuleDef | Crystal::CStructOrUnionDef | Crystal::LibDef | Crystal::EnumDef)
+    def end_visit(node : Crystal::ClassDef | Crystal::ModuleDef | Crystal::CStructOrUnionDef | Crystal::LibDef | Crystal::EnumDef | Crystal::AnnotationDef)
       return unless node.location
       @container.pop?
     end

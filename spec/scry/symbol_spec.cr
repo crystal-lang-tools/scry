@@ -49,6 +49,14 @@ module Scry
       result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
     end
 
+    it "returns annotation as Property symbols" do
+      text_document = TextDocument.new("uri", ["annotation Test; end"])
+      processor = SymbolProcessor.new(text_document)
+      symbols = processor.run
+      result = symbols.first
+      result.kind.should be_a(LSP::Protocol::SymbolKind::Property)
+    end
+
     describe "Property" do
       it "returns getters as Property symbols" do
         text_document = TextDocument.new("uri", ["class Foo; getter bar : Nil; end"])
