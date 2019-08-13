@@ -1,4 +1,5 @@
 require "compiler/crystal/syntax"
+require "compiler/crystal/codegen/target"
 require "compiler/crystal/crystal_path"
 require "./workspace"
 require "./text_document"

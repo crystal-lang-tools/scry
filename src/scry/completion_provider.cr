@@ -1,4 +1,5 @@
 require "./log"
+require "compiler/crystal/codegen/target"
 require "compiler/crystal/crystal_path"
 require "./completion/*"
 
