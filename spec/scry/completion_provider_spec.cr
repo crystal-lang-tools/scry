@@ -1,5 +1,22 @@
 require "../spec_helper"
 
+private struct ContainAtLeastExpectation(T)
+  def initialize(@elements : Array(T))
+  end
+
+  def match(actual_value)
+    (@elements - actual_value).empty?
+  end
+
+  def failure_message(actual_value)
+    "Expected:         #{actual_value.inspect}\nto have at least: #{@elements.inspect}"
+  end
+
+  def negative_failure_message(actual_value)
+    "Expected:             #{actual_value.inspect}\nto not have at least: #{@elements.inspect}"
+  end
+end
+
 module Scry
   BOOLEAN_METHODS = %w(!= & == ^ clone hash to_json to_s to_s to_unsafe to_yaml |)
   INT32_METHODS   = %w(- clone popcount)
@@ -20,7 +37,12 @@ module Scry
       response = _context_.test_send_completion(_file_path_, %({"line":#{cursor_location[0]},"character":#{cursor_location[1]}}))
       results = response.as(Protocol::ResponseMessage).result.as(Array(Protocol::CompletionItem))
       labels = results.map(&.label)
-      labels.sort.should eq(%expected.sort)
+
+      # NOTE: we can't use `eq` here, as that would be too much dependent
+      # on the current crystal's stdlib
+      #
+      # Here we use a custom expectation, to match when labels has AT LEAST the given methods
+      labels.should ContainAtLeastExpectation.new(%expected)
 
       results.each do |e|
         e.kind.should eq(_kind_)
