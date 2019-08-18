@@ -1,5 +1,4 @@
 require "./log"
-require "compiler/crystal/crystal_path"
 require "./completion/*"
 
 module Scry

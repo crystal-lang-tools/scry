@@ -1,5 +1,4 @@
 require "compiler/crystal/syntax"
-require "compiler/crystal/crystal_path"
 require "./workspace"
 require "./text_document"
 require "./publish_diagnostic"
