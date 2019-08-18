@@ -1,3 +1,8 @@
+## v0.8.1
+
+- Fix compilation error "undefined constant Crystal::Codegen::Target"
+- Update to crystal 0.30.1
+
 ## v0.8.0
 
 ### Scry
