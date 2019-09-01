@@ -1,19 +1,19 @@
 module Scry
   class Client
-    alias ClientMessage = Protocol::Initialize | Protocol::ResponseMessage | Protocol::NotificationMessage
+    alias ClientMessage = LSP::Protocol::Initialize | LSP::Protocol::ResponseMessage | LSP::Protocol::NotificationMessage
 
     getter io
 
     def initialize(@io : IO)
     end
 
-    def send(method_name : String, params : Protocol::NotificationType)
-      notification_message = Protocol::NotificationMessage.new(method_name, params)
+    def send(method_name : String, params : LSP::Protocol::NotificationType)
+      notification_message = LSP::Protocol::NotificationMessage.new(method_name, params)
       send_message(notification_message)
     end
 
-    def send(method_name : String, params : Protocol::ResponseTypes)
-      response_message = Protocol::ResponseMessage.new(method_name, params)
+    def send(method_name : String, params : LSP::Protocol::ResponseTypes)
+      response_message = LSP::Protocol::ResponseMessage.new(method_name, params)
       send_message(response_message)
     end
 

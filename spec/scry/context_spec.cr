@@ -7,7 +7,7 @@ module Scry
 
       procedure = Message.from(INITIALIZATION_EXAMPLE)
       result = context.dispatch(procedure)
-      result.is_a?(Protocol::Initialize).should be_true
+      result.is_a?(LSP::Protocol::Initialize).should be_true
 
       procedure = Message.from(CONFIG_CHANGE_EXAMPLE)
       context.dispatch(procedure)

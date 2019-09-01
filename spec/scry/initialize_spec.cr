@@ -4,7 +4,7 @@ module Scry
   describe Initializer do
     it "build a new workspace" do
       initer = Initializer.new(
-        Protocol::InitializeParams.from_json({
+        LSP::Protocol::InitializeParams.from_json({
           processId:    1,
           rootPath:     "/home/main/Projects/Experiment",
           capabilities: {} of String => String,

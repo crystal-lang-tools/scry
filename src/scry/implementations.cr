@@ -1,5 +1,4 @@
 require "./log"
-require "./build_failure"
 require "./tool_helper"
 
 module Scry
@@ -41,8 +40,8 @@ module Scry
     end
 
     LOCAL_REQUIRE_REGEX = /^require\s+"(\.{1,2}.*?)"\s*$/
-    POSITION_0          = Protocol::Position.new(0, 0)
-    RANGE_0             = Protocol::Range.new(POSITION_0, POSITION_0)
+    POSITION_0          = LSP::Protocol::Position.new(0, 0)
+    RANGE_0             = LSP::Protocol::Range.new(POSITION_0, POSITION_0)
 
     private def get_local_require(filename, position)
       line = @text_document.get_line(position.line)
@@ -52,8 +51,8 @@ module Scry
           filepath = return_if_exists?(expanded) || return_if_exists?("#{expanded}.cr")
           if filepath
             uri = "file://#{filepath}"
-            location = Protocol::Location.new(uri, RANGE_0)
-            return [Protocol::ResponseMessage.new(@text_document.id, location)]
+            location = LSP::Protocol::Location.new(uri, RANGE_0)
+            return [LSP::Protocol::ResponseMessage.new(@text_document.id, location)]
           end
         end
       end
@@ -70,9 +69,9 @@ module Scry
     private def analyze(filename, position, scope)
       result = crystal_tool(filename, position, scope)
       Log.logger.debug("result: #{result}")
-      response = (Array(BuildFailure) | ImplementationsResponse).from_json(result)
+      response = (Array(LSP::BuildFailure) | ImplementationsResponse).from_json(result)
       case response
-      when Array(BuildFailure)
+      when Array(LSP::BuildFailure)
         implementation_response
       when ImplementationsResponse
         if impls = response.implementations
@@ -86,15 +85,15 @@ module Scry
       implementation_response
     end
 
-    def implementation_response(locations = [] of Protocol::Location)
-      Protocol::ResponseMessage.new(@text_document.id, locations)
+    def implementation_response(locations = [] of LSP::Protocol::Location)
+      LSP::Protocol::ResponseMessage.new(@text_document.id, locations)
     end
 
     private def response_with(implementations)
       locations = implementations.map do |item|
-        pos = Protocol::Position.new(item.line - 1, item.column - 1)
-        range = Protocol::Range.new(pos, pos)
-        Protocol::Location.new("file://" + item.filename, range)
+        pos = LSP::Protocol::Position.new(item.line - 1, item.column - 1)
+        range = LSP::Protocol::Range.new(pos, pos)
+        LSP::Protocol::Location.new("file://" + item.filename, range)
       end
       implementation_response(locations)
     end

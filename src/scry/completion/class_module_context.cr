@@ -12,10 +12,10 @@ module Scry::Completion
           label = label[(target_header_index + 1)..-1]
         end
 
-        Protocol::CompletionItem.new(
+        LSP::Protocol::CompletionItem.new(
           label: label,
           insert_text: label,
-          kind: Protocol::CompletionItemKind::Class,
+          kind: LSP::Protocol::CompletionItemKind::Class,
           detail: label,
           data: nil
         )

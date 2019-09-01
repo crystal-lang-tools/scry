@@ -1,5 +1,4 @@
 require "./log"
-require "./build_failure"
 require "./tool_helper"
 
 module Scry
@@ -39,13 +38,13 @@ module Scry
 
     private def analyze(filename, position, scope)
       result = crystal_tool(filename, position, scope)
-      response = (Array(BuildFailure) | HoverResponse).from_json(result)
+      response = (Array(LSP::BuildFailure) | HoverResponse).from_json(result)
       case response
-      when Array(BuildFailure)
+      when Array(LSP::BuildFailure)
         hover_response
       when HoverResponse
         if contexts = response.contexts
-          response_with(contexts, Protocol::Range.new(position, position))
+          response_with(contexts, LSP::Protocol::Range.new(position, position))
         else
           hover_response
         end
@@ -55,15 +54,15 @@ module Scry
       hover_response
     end
 
-    def hover_response(context = Protocol::Hover.new(Protocol::MarkupContent.new("", "")))
-      Protocol::ResponseMessage.new(@text_document.id, context)
+    def hover_response(context = LSP::Protocol::Hover.new(LSP::Protocol::MarkupContent.new("", "")))
+      LSP::Protocol::ResponseMessage.new(@text_document.id, context)
     end
 
     # NOTE: this Would be configurable in the future with scry.yml
     private def response_with(contexts, range)
       content = vertical_align(contexts)
       # content = horizontal_align(contexts)
-      hover_response(Protocol::Hover.new(Protocol::MarkupContent.new("markdown", content), range))
+      hover_response(LSP::Protocol::Hover.new(LSP::Protocol::MarkupContent.new("markdown", content), range))
     end
 
     # Aligns context output vertically. By example:

@@ -6,7 +6,7 @@ module Scry
       workspace = Workspace.new("root_uri", 0, 10)
       text_document = TextDocument.new("uri", ["1+1"])
       format = Formatter.new(workspace, text_document)
-      format.run.is_a?(Protocol::ResponseMessage).should eq(true)
+      format.run.is_a?(LSP::Protocol::ResponseMessage).should eq(true)
     end
 
     it "check formatter response content" do
@@ -19,7 +19,7 @@ module Scry
 
     it "check formatter on untitled file" do
       workspace = Workspace.new("root_uri", 0, 10)
-      workspace.put_file(TextDocument.new(Protocol::DidOpenTextDocumentParams.from_json(UNTITLED_FORMATTER_EXAMPLE)))
+      workspace.put_file(TextDocument.new(LSP::Protocol::DidOpenTextDocumentParams.from_json(UNTITLED_FORMATTER_EXAMPLE)))
       text_document, empty_completion = workspace.open_files["untitled:Untitled-1"]
       format = Formatter.new(workspace, text_document)
       response = format.run

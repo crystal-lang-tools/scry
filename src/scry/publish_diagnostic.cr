@@ -1,4 +1,3 @@
-require "./build_failure"
 require "./workspace"
 
 module Scry
@@ -14,11 +13,11 @@ module Scry
     end
 
     private def notification(params)
-      Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
+      LSP::Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
     end
 
     private def unclean(file, diagnostics)
-      params = Protocol::PublishDiagnosticsParams.new(file, diagnostics)
+      params = LSP::Protocol::PublishDiagnosticsParams.new(file, diagnostics)
       notification(params)
     end
 
@@ -35,16 +34,16 @@ module Scry
     end
 
     def clean(uri = @uri)
-      params = Protocol::PublishDiagnosticsParams.new(uri, [] of Protocol::Diagnostic)
+      params = LSP::Protocol::PublishDiagnosticsParams.new(uri, [] of LSP::Protocol::Diagnostic)
       notification(params)
     end
 
-    def from(ex) : Array(Protocol::NotificationMessage)
-      build_failures = Array(BuildFailure).from_json(ex)
+    def from(ex) : Array(LSP::Protocol::NotificationMessage)
+      build_failures = Array(LSP::BuildFailure).from_json(ex)
       build_failures
         .uniq
         .first(@workspace.max_number_of_problems)
-        .map { |bf| Protocol::Diagnostic.new(bf) }
+        .map { |bf| LSP::Protocol::Diagnostic.new(bf) }
         .group_by(&.uri)
         .select { |file, diagnostics| !file.ends_with?(".scry_main.cr") }
         .map do |file, diagnostics|

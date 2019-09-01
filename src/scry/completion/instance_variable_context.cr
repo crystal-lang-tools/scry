@@ -6,12 +6,12 @@ module Scry::Completion
     def find : Array(Protocol::CompletionItem)
       # to_completion_items(["Results", "And", "more", "results"])
       # TODO implement instance variable completion
-      [] of Protocol::CompletionItem
+      [] of LSP::Protocol::CompletionItem
     end
 
     def to_completion_items(results : Array(String))
       results.map do |res|
-        Protocol::CompletionItem.new(res, Protocol::CompletionItemKind::Variable, res)
+        LSP::Protocol::CompletionItem.new(res, LSP::Protocol::CompletionItemKind::Variable, res)
       end
     end
   end

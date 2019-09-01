@@ -20,7 +20,7 @@ module Scry
       analyzer = ParseAnalyzer.new(workspace, text_document)
       results = analyzer.run
       publishable_diagnostic = results.first
-      params = publishable_diagnostic.params.as(Protocol::PublishDiagnosticsParams)
+      params = publishable_diagnostic.params.as(LSP::Protocol::PublishDiagnosticsParams)
       params.diagnostics.empty?.should be_false
     end
   end

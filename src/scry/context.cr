@@ -27,12 +27,12 @@ module Scry
 
     # A request message to describe a request between the client and the server.
     # Every processed request must send a response back to the sender of the request.
-    def dispatch(msg : Protocol::RequestMessage)
+    def dispatch(msg : LSP::Protocol::RequestMessage)
       Log.logger.debug(msg.method)
       dispatch_request(msg.params, msg)
     end
 
-    def dispatch(msg : Protocol::NotificationMessage)
+    def dispatch(msg : LSP::Protocol::NotificationMessage)
       Log.logger.debug(msg.method)
       dispatch_notification(msg.params, msg)
     end
@@ -40,7 +40,7 @@ module Scry
     private def dispatch_request(params : Nil, msg)
       if msg.method == "shutdown"
         Scry.shutdown = true
-        Protocol::ResponseMessage.new(msg.id, nil)
+        LSP::Protocol::ResponseMessage.new(msg.id, nil)
       end
     end
 
@@ -50,14 +50,14 @@ module Scry
       end
     end
 
-    private def dispatch_request(params : Protocol::InitializeParams, msg)
+    private def dispatch_request(params : LSP::Protocol::InitializeParams, msg)
       initializer = Initializer.new(params, msg.id)
       @workspace, response = initializer.run
       response
     end
 
     # Also used by methods like Go to Definition
-    private def dispatch_request(params : Protocol::TextDocumentPositionParams, msg)
+    private def dispatch_request(params : LSP::Protocol::TextDocumentPositionParams, msg)
       case msg.method
       when "textDocument/hover"
         text_document = TextDocument.new(params, msg.id)
@@ -78,7 +78,7 @@ module Scry
         return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         completion = CompletionProvider.new(text_document, params.context, params.position, method_db)
         results = completion.run
-        response = Protocol::ResponseMessage.new(msg.id, results)
+        response = LSP::Protocol::ResponseMessage.new(msg.id, results)
         Log.logger.debug(response)
         response
       else
@@ -86,7 +86,7 @@ module Scry
       end
     end
 
-    private def dispatch_request(params : Protocol::DocumentFormattingParams, msg)
+    private def dispatch_request(params : LSP::Protocol::DocumentFormattingParams, msg)
       text_document = TextDocument.new(params, msg.id)
 
       if open_file = @workspace.open_files[text_document.filename]?
@@ -99,36 +99,36 @@ module Scry
       response
     end
 
-    private def dispatch_request(params : Protocol::TextDocumentParams, msg)
+    private def dispatch_request(params : LSP::Protocol::TextDocumentParams, msg)
       case msg.method
       when "textDocument/documentSymbol"
         text_document = TextDocument.new(params, msg.id)
         return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         symbol_processor = SymbolProcessor.new(text_document)
         symbols = symbol_processor.run
-        response = Protocol::ResponseMessage.new(msg.id, symbols)
+        response = LSP::Protocol::ResponseMessage.new(msg.id, symbols)
         Log.logger.debug(response)
         response
       end
     end
 
-    private def dispatch_request(params : Protocol::WorkspaceSymbolParams, msg)
+    private def dispatch_request(params : LSP::Protocol::WorkspaceSymbolParams, msg)
       case msg.method
       when "workspace/symbol"
         workspace_symbol_processor = WorkspaceSymbolProcessor.new(@workspace.root_uri, params.query)
         symbols = workspace_symbol_processor.run
-        response = Protocol::ResponseMessage.new(msg.id, symbols)
+        response = LSP::Protocol::ResponseMessage.new(msg.id, symbols)
         Log.logger.debug(response)
         response
       end
     end
 
-    private def dispatch_request(params : Protocol::CompletionItem, msg)
+    private def dispatch_request(params : LSP::Protocol::CompletionItem, msg)
       case msg.method
       when "completionItem/resolve"
         resolver = CompletionResolver.new(msg.id, params)
         results = resolver.run
-        response = Protocol::ResponseMessage.new(msg.id, results)
+        response = LSP::Protocol::ResponseMessage.new(msg.id, results)
         Log.logger.debug(response)
         response
       end
@@ -137,7 +137,7 @@ module Scry
     # Used by:
     # - `textDocument/didSave`
     # - `textDocument/didClose`
-    private def dispatch_notification(params : Protocol::TextDocumentParams, msg)
+    private def dispatch_notification(params : LSP::Protocol::TextDocumentParams, msg)
       case msg.method
       when "textDocument/didClose"
         @workspace.drop_file(TextDocument.new(params))
@@ -145,13 +145,13 @@ module Scry
       nil
     end
 
-    private def dispatch_notification(params : Protocol::DidChangeConfigurationParams, msg)
+    private def dispatch_notification(params : LSP::Protocol::DidChangeConfigurationParams, msg)
       updater = UpdateConfig.new(@workspace, params)
       @workspace, response = updater.run
       response
     end
 
-    private def dispatch_notification(params : Protocol::DidOpenTextDocumentParams, msg)
+    private def dispatch_notification(params : LSP::Protocol::DidOpenTextDocumentParams, msg)
       text_document = TextDocument.new(params)
       return ignore_path_response(nil, text_document) if text_document.in_memory?
       @workspace.put_file(text_document)
@@ -162,7 +162,7 @@ module Scry
       end
     end
 
-    private def dispatch_notification(params : Protocol::DidChangeTextDocumentParams, msg)
+    private def dispatch_notification(params : LSP::Protocol::DidChangeTextDocumentParams, msg)
       text_document = TextDocument.new(params)
       return ignore_path_response(nil, text_document) if text_document.in_memory?
       @workspace.update_file(text_document)
@@ -171,23 +171,23 @@ module Scry
       response
     end
 
-    private def dispatch_notification(params : Protocol::DidChangeWatchedFilesParams, msg)
+    private def dispatch_notification(params : LSP::Protocol::DidChangeWatchedFilesParams, msg)
       params.changes.map { |file_event|
         handle_file_event(file_event)
       }.compact
     end
 
-    private def handle_file_event(file_event : Protocol::FileEvent)
+    private def handle_file_event(file_event : LSP::Protocol::FileEvent)
       text_document = TextDocument.new(file_event)
 
       case file_event.type
-      when Protocol::FileEventType::Created
+      when LSP::Protocol::FileEventType::Created
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
         response
-      when Protocol::FileEventType::Deleted
+      when LSP::Protocol::FileEventType::Deleted
         PublishDiagnostic.new(@workspace, text_document.uri).full_clean
-      when Protocol::FileEventType::Changed
+      when LSP::Protocol::FileEventType::Changed
         @workspace.reopen_workspace(text_document)
         analyzer = Analyzer.new(@workspace, text_document)
         response = analyzer.run
