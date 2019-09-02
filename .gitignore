@@ -7,4 +7,3 @@
 *.out
 build/
 linux_build.sh
-shard.lock
