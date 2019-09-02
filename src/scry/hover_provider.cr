@@ -1,5 +1,6 @@
 require "./log"
 require "./tool_helper"
+require "./build_failure"
 
 module Scry
   struct HoverProvider
@@ -38,9 +39,9 @@ module Scry
 
     private def analyze(filename, position, scope)
       result = crystal_tool(filename, position, scope)
-      response = (Array(LSP::BuildFailure) | HoverResponse).from_json(result)
+      response = (Array(BuildFailure) | HoverResponse).from_json(result)
       case response
-      when Array(LSP::BuildFailure)
+      when Array(BuildFailure)
         hover_response
       when HoverResponse
         if contexts = response.contexts

@@ -1,3 +1,4 @@
+require "lsp"
 require "./workspace"
 
 module Scry
@@ -39,11 +40,13 @@ module Scry
     end
 
     def from(ex) : Array(LSP::Protocol::NotificationMessage)
-      build_failures = Array(LSP::BuildFailure).from_json(ex)
+      build_failures = Array(BuildFailure).from_json(ex)
       build_failures
         .uniq
         .first(@workspace.max_number_of_problems)
-        .map { |bf| LSP::Protocol::Diagnostic.new(bf) }
+        .map do |bf|
+          LSP::Protocol::Diagnostic.new(bf.file, bf.line, bf.column, bf.size, bf.message, bf.source)
+        end
         .group_by(&.uri)
         .select { |file, diagnostics| !file.ends_with?(".scry_main.cr") }
         .map do |file, diagnostics|

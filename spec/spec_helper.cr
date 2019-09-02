@@ -26,7 +26,7 @@ module Scry
 
   SHUTDOWN_EXAMPLE = %({"jsonrpc":"2.0","id":1,"method":"shutdown"})
 
-  BUILD_ERROR_EXAMPLE = %({"file":"/home/aa.cr","line":4,"column":1,"size":1,"message":"Oh no!, an Error"})
+  BUILD_ERROR_EXAMPLE = %({"file":"/home/aa.cr","line":4,"column":1,"size":1,"message":"Oh no!, an Error","source":"Scry"})
 
   FORMATTER_RESPONSE_EXAMPLE = %({"jsonrpc":"2.0","id":null,"result":[{"range":{"start":{"line":0,"character":0},"end":{"line":1,"character":6}},"newText":"1 + 1\\n"}]})
 
