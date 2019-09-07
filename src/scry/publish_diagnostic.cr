@@ -44,9 +44,7 @@ module Scry
       build_failures
         .uniq
         .first(@workspace.max_number_of_problems)
-        .map do |bf|
-          LSP::Protocol::Diagnostic.new(bf.file, bf.line, bf.column, bf.size, bf.message, bf.source)
-        end
+        .map { |bf| bf.build_lsp_diagnostic }
         .group_by(&.uri)
         .select { |file, diagnostics| !file.ends_with?(".scry_main.cr") }
         .map do |file, diagnostics|

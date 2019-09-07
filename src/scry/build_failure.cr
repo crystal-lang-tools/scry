@@ -7,9 +7,10 @@ module Scry
       column:  Int32,
       size:    Int32?,
       message: String,
-      source:  String,
     }, true)
 
-    @source = "Scry"
+    def build_lsp_diagnostic
+      LSP::Protocol::Diagnostic.new(file, line, column, size, message, "Scry")
+    end
   end
 end

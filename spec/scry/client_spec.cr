@@ -5,10 +5,7 @@ module Scry
     describe "#send_message" do
       it "sends a valid NotificationMessage to the Client io" do
         build_failure = BuildFailure.from_json(BUILD_ERROR_EXAMPLE)
-        diagnostic = LSP::Protocol::Diagnostic.new(
-          build_failure.file, build_failure.line, build_failure.column,
-          build_failure.size, build_failure.message, build_failure.source
-        )
+        diagnostic = build_failure.build_lsp_diagnostic
 
         params = LSP::Protocol::PublishDiagnosticsParams.new(
           "file:///Users/foo/project/some_file.cr",
