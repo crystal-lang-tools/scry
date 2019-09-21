@@ -7,3 +7,4 @@
 *.out
 build/
 linux_build.sh
+.vscode/
