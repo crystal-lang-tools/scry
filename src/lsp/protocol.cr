@@ -1,2 +1,2 @@
 require "json"
-require "./lsp/protocol/*"
+require "./protocol/*"
