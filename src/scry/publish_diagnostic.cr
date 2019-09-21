@@ -1,4 +1,3 @@
-require "./build_failure"
 require "./workspace"
 
 module Scry

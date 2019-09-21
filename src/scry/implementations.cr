@@ -1,5 +1,4 @@
 require "./log"
-require "./build_failure"
 require "./tool_helper"
 
 module Scry
