@@ -1,5 +1,5 @@
 require "./lsp/protocol"
 
-alias LSP::Protocol::BuildFailure = Scry::BuildFailure
+alias Scry::BuildFailure = LSP::Protocol::BuildFailure
 
 module LSP; end

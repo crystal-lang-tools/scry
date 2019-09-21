@@ -1,4 +1,4 @@
-module Scry
+module LSP::Protocol
   # Failure JSON output by Crystal compiler
   struct BuildFailure
     JSON.mapping({
