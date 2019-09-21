@@ -1,4 +1,4 @@
-require "./scry/protocol"
+require "./protocol"
 require "./scry/log"
 require "./scry/request"
 require "./scry/context"
