@@ -15,11 +15,11 @@ The server is implemented in Crystal.
 
 ## Installation
 
-To install scry download it from [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile latest version using:
+To install Scry download it from the [releases page](https://github.com/crystal-lang-tools/scry/releases) or compile the latest version using:
 
-> **Note:** crystal is required in order to compile scry.
+> **Note:** Crystal is required in order to compile Scry.
 
-```
+```bash
 git clone https://github.com/crystal-lang-tools/scry.git
 cd scry
 shards build -v
@@ -31,14 +31,14 @@ Then setup `scry` binary path on your LSP client.
 
 - Completion feature is still experimental.
 - Unexpected diagnostics can appear on files using implicit `require`, try using explicit `require` at top of your files.
-- Go to definition only work for some methods and variables. Go to classes or macros definition is not supported yet.
+- Go to definition only works for some methods and variables. Go to classes or macros definition is not supported yet.
 - Symbol listing works per file, searching for workspace symbols is not supported yet.
 
 ## Roadmap
 
 Ongoing, in [our](https://github.com/kofno/scry#contributors) free time.
 
-The goal is too implement all of the currently supported Language Server Features.
+The goal is to implement all of the currently supported Language Server features.
 
 - [Completion](https://microsoft.github.io/language-server-protocol/specification#textDocument_completion) **(WIP)**: compute completion items at a given cursor position.
 - [Diagnostics](https://microsoft.github.io/language-server-protocol/specification#textDocument_publishDiagnostics) **(WIP)**: provides problem detection for text document.
@@ -70,4 +70,4 @@ The goal is too implement all of the currently supported Language Server Feature
 - [@laginha87](https://github.com/laginha87) Filipe Correia - contributor
 - [@bmulvihill](https://github.com/bmulvihill) Bryan Mulvihill - contributor
 
-[See all scry's contributors](https://github.com/crystal-lang-tools/scry/graphs/contributors)
+[See all of Scry's contributors](https://github.com/crystal-lang-tools/scry/graphs/contributors)
