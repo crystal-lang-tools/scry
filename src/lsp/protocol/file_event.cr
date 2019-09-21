@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   enum FileEventType
     Created = 1
     Changed = 2

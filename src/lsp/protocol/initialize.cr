@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct Initialize
     JSON.mapping(
       jsonrpc: String,

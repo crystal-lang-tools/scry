@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   # Add a response type when needed
   alias ResponseTypes = Array(TextEdit) | Array(Location) | Array(SymbolInformation) | Array(CompletionItem) | CompletionItem | Hover | Location
 

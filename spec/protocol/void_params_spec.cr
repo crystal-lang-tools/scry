@@ -1,6 +1,6 @@
 require "../protocol_spec_helper.cr"
 
-module Scry::Protocol
+module LSP::Protocol
   describe VoidParams do
     it "creates from json" do
       void_params = VoidParams.from_json("{}")

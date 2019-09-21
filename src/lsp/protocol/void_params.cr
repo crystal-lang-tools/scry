@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct VoidParams
     def initialize(pull : JSON::PullParser)
       pull.read_begin_object

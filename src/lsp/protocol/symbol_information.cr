@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   enum SymbolKind
     File        =  1
     Module      =  2

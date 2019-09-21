@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct Location
     JSON.mapping({
       uri:   String,

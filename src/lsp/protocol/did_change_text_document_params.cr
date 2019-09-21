@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct DidChangeTextDocumentParams
     JSON.mapping({
       text_document:   {type: VersionedTextDocumentIdentifier, key: "textDocument"},

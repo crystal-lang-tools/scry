@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct DidOpenTextDocumentParams
     JSON.mapping({
       text_document: {type: TextDocumentItem, key: "textDocument"},

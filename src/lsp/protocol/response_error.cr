@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   enum ErrorCodes
     # Defined by JSON RPC
     ParseError           = -32700

@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct FormattingOptions
     JSON.mapping({
       tabSize:      Int32,

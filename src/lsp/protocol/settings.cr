@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   alias Settings = SettingsCrystalIDE | SettingsCrystalLang
 
   struct Customizations

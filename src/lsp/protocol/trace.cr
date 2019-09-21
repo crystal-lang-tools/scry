@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   # The initial trace setting. If omitted trace is disabled ('off')
   # 'off' | 'messages' | 'verbose'
   struct Trace

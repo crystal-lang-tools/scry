@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct TextDocumentParams
     JSON.mapping({
       text_document: {type: (TextDocumentIdentifier | VersionedTextDocumentIdentifier), key: "textDocument"},

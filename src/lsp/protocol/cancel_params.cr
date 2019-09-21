@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct CancelParams
     JSON.mapping({
       id: Int32 | String,

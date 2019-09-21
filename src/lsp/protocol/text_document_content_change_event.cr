@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct TextDocumentContentChangeEvent
     JSON.mapping({
       range:        Range?,

@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct Position
     JSON.mapping({
       line:      Int32,

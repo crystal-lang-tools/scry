@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   alias NotificationType = (DidChangeConfigurationParams |
                             DidChangeTextDocumentParams |
                             DidChangeWatchedFilesParams |

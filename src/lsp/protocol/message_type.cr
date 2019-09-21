@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   enum MessageType
     Error   = 1
     Warning = 2

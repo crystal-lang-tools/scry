@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct DidChangeWatchedFilesParams
     JSON.mapping({
       changes: Array(FileEvent),

@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct MarkupContent
     JSON.mapping({
       kind:  String,

@@ -1,6 +1,6 @@
 require "../protocol_spec_helper.cr"
 
-module Scry::Protocol
+module LSP::Protocol
   describe ResponseError do
     it "sets UnkownErrorCode if no code provided" do
       response_error = ResponseError.new("something happened")

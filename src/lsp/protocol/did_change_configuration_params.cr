@@ -1,4 +1,4 @@
-module Scry::Protocol
+module LSP::Protocol
   struct DidChangeConfigurationParams
     JSON.mapping({
       settings: Settings,
