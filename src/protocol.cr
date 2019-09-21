@@ -1,2 +1,2 @@
 require "json"
-require "./scry/protocol/*"
+require "./protocol/*"
