@@ -1,2 +1,2 @@
 require "spec"
-require "../src/protocol"
+require "../src/lsp/protocol"
