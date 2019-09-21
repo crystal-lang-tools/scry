@@ -1,7 +1,7 @@
 require "spec"
 require "../src/protocol"
 require "../src/scry/**"
-require "./protocol_helper"
+require "./support/context_helper"
 
 module Scry
   EnvironmentConfig.run

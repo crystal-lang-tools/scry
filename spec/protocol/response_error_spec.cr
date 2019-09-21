@@ -1,4 +1,4 @@
-require "../spec_helper.cr"
+require "../protocol_spec_helper.cr"
 
 module Scry::Protocol
   describe ResponseError do

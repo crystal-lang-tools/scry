@@ -1,4 +1,4 @@
-require "../spec_helper"
+require "../protocol_spec_helper.cr"
 
 module Scry::Protocol
   describe VoidParams do
