@@ -39,7 +39,7 @@ module Scry
     end
 
     def from(ex) : Array(LSP::Protocol::NotificationMessage)
-      build_failures = Array(BuildFailure).from_json(ex)
+      build_failures = Array(LSP::Protocol::BuildFailure).from_json(ex)
       build_failures
         .uniq
         .first(@workspace.max_number_of_problems)

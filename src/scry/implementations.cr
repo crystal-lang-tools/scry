@@ -69,9 +69,9 @@ module Scry
     private def analyze(filename, position, scope)
       result = crystal_tool(filename, position, scope)
       Log.logger.debug("result: #{result}")
-      response = (Array(BuildFailure) | ImplementationsResponse).from_json(result)
+      response = (Array(LSP::Protocol::BuildFailure) | ImplementationsResponse).from_json(result)
       case response
-      when Array(BuildFailure)
+      when Array(LSP::Protocol::BuildFailure)
         implementation_response
       when ImplementationsResponse
         if impls = response.implementations

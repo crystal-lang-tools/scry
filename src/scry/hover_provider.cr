@@ -38,9 +38,9 @@ module Scry
 
     private def analyze(filename, position, scope)
       result = crystal_tool(filename, position, scope)
-      response = (Array(BuildFailure) | HoverResponse).from_json(result)
+      response = (Array(LSP::Protocol::BuildFailure) | HoverResponse).from_json(result)
       case response
-      when Array(BuildFailure)
+      when Array(LSP::Protocol::BuildFailure)
         hover_response
       when HoverResponse
         if contexts = response.contexts

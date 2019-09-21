@@ -4,7 +4,7 @@ module Scry
   describe Client do
     describe "#send_message" do
       it "sends a valid NotificationMessage to the Client io" do
-        build_failure = BuildFailure.from_json(BUILD_ERROR_EXAMPLE)
+        build_failure = LSP::Protocol::BuildFailure.from_json(BUILD_ERROR_EXAMPLE)
         diagnostic = LSP::Protocol::Diagnostic.new(build_failure)
 
         params = LSP::Protocol::PublishDiagnosticsParams.new(
