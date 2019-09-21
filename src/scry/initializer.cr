@@ -3,7 +3,7 @@ require "./workspace"
 
 module Scry
   struct Initializer
-    def initialize(params : Protocol::InitializeParams, @msg_id : Int32)
+    def initialize(params : LSP::Protocol::InitializeParams, @msg_id : Int32)
       @workspace = Workspace.new(
         root_uri: params.root_path || params.root_uri.to_s.sub("file://", ""),
         process_id: params.process_id,
@@ -18,7 +18,7 @@ module Scry
     end
 
     private def response
-      Protocol::Initialize.new(@msg_id)
+      LSP::Protocol::Initialize.new(@msg_id)
     end
   end
 end

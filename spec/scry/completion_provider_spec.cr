@@ -35,7 +35,7 @@ module Scry
 
       _context_.test_send_did_open(_file_path_, %code)
       response = _context_.test_send_completion(_file_path_, %({"line":#{cursor_location[0]},"character":#{cursor_location[1]}}))
-      results = response.as(Protocol::ResponseMessage).result.as(Array(Protocol::CompletionItem))
+      results = response.as(LSP::Protocol::ResponseMessage).result.as(Array(LSP::Protocol::CompletionItem))
       labels = results.map(&.label)
 
       # NOTE: we can't use `eq` here, as that would be too much dependent
@@ -57,14 +57,14 @@ module Scry
     _file_path_ = File.join(root_path, "sample.cr")
 
     context "module completion" do
-      _kind_ = Protocol::CompletionItemKind::Module
+      _kind_ = LSP::Protocol::CompletionItemKind::Module
 
       it_completes("require \"arr", ["array"])
       it_completes("require \"./tr", ["tree"])
     end
 
     context "method completion" do
-      _kind_ = Protocol::CompletionItemKind::Method
+      _kind_ = LSP::Protocol::CompletionItemKind::Method
       context "boolean methods" do
         _expected_labels_ = BOOLEAN_METHODS
         it_completes "a = true
@@ -156,7 +156,7 @@ module Scry
     end
 
     context "module, struct and class name completion" do
-      _kind_ = Protocol::CompletionItemKind::Class
+      _kind_ = LSP::Protocol::CompletionItemKind::Class
       it_completes("A", %w(Array Atomic ArgumentError AtExitHandlers))
       it_completes(" ::A", %w(Array Atomic ArgumentError AtExitHandlers))
       it_completes(" ::", %w())
