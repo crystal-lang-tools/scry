@@ -5,7 +5,7 @@ module Scry::Completion
     def initialize(@text : String, @target : String, @method_db : Completion::MethodDB)
     end
 
-    def find
+    def find : Array(Protocol::CompletionItem)
       target_header_index = @target.rindex(":")
       @method_db.type_match(@target).map do |label|
         if target_header_index

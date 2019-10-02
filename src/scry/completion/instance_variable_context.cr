@@ -3,7 +3,7 @@ module Scry::Completion
     def initialize(@var : String, @line : String, @text_document : TextDocument)
     end
 
-    def find
+    def find : Array(Protocol::CompletionItem)
       # to_completion_items(["Results", "And", "more", "results"])
       # TODO implement instance variable completion
       [] of Protocol::CompletionItem
