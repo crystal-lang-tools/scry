@@ -180,15 +180,15 @@ module Scry
 
     private def dispatch_notification(params : Protocol::DidChangeTextDocumentParams, msg)
       text_document = TextDocument.new(params)
-	  if text_document.in_memory?
+      if text_document.in_memory?
         Log.logger.debug("Ignoring path: #{text_document.filename}")
         return Protocol::ResponseMessage.new(nil)
-	  else
-		@workspace.update_file(text_document)
-		analyzer = ParseAnalyzer.new(@workspace, text_document)
-		response = analyzer.run
-		response
-	  end
+      else
+        @workspace.update_file(text_document)
+        analyzer = ParseAnalyzer.new(@workspace, text_document)
+        response = analyzer.run
+        response
+      end
     end
 
     private def dispatch_notification(params : Protocol::DidChangeWatchedFilesParams, msg)
