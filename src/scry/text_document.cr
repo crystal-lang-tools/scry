@@ -1,4 +1,5 @@
 module Scry
+  IGNORED_FILE_PREFIXES = ["git:/", "private:/"]
   struct TextDocument
     getter id : Int32 | Nil
     getter uri : String
@@ -85,6 +86,12 @@ module Scry
       line = source.each_line.skip(line_number - 1).next
       line.is_a?(String) ? line : nil
     end
+
+	def should_be_ignored?
+		Scry::IGNORED_FILE_PREFIXES.any? do |ignore_prefix|
+			@uri.starts_with?(ignore_prefix)
+		end
+	end
 
     private def read_file : String
       File.read(filename)

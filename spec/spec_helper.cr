@@ -32,9 +32,15 @@ module Scry
 
   TEXTDOCUMENT_POSITION_PARAM_EXAMPLE = %({"textDocument":{"uri":"#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
 
+  PRIVATE_TEXTDOCUMENT_POSITION_PARAM_EXAMPLE = %({"textDocument":{"uri":"private:/#{SOME_FILE_PATH}"},"position":{"line":4,"character":2}})
+
   INITIALIZED_EXAMPLE = %({"jsonrpc": "2.0", "method": "initialized", "params": {}})
 
   COMPLETION_EXAMPLE = %({"jsonrpc": "2.0", "method": "textDocument/completion", "params": #{TEXTDOCUMENT_POSITION_PARAM_EXAMPLE}})
 
   UNTITLED_FORMATTER_EXAMPLE = %({"textDocument":{"uri":"untitled:Untitled-1","languageId":"crystal","version":1,"text":"1+1"}})
+end
+
+def get_example_textDocument_message_json(method : String, uri : String) : String 
+  %({"jsonrpc":"2.0","method":"#{method}","params":{"textDocument":{"uri":"#{uri}","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
 end
