@@ -1,5 +1,5 @@
 module Scry
-  IGNORED_FILE_PREFIXES = ["git:/", "private:/"]
+  IN_MEMORY_URI_PREFIXES = ["git:/", "private:/", "private:/"]
   struct TextDocument
     getter id : Int32 | Nil
     getter uri : String
@@ -64,7 +64,9 @@ module Scry
     end
 
     def in_memory?
-      uri.starts_with?("inmemory://") || uri.starts_with?("git://")
+	  Scry::IN_MEMORY_URI_PREFIXES.any? do |prefix|
+	    @uri.starts_with?(prefix)
+	  end
     end
 
     def untitled?
@@ -86,12 +88,6 @@ module Scry
       line = source.each_line.skip(line_number - 1).next
       line.is_a?(String) ? line : nil
     end
-
-	def should_be_ignored?
-		Scry::IGNORED_FILE_PREFIXES.any? do |ignore_prefix|
-			@uri.starts_with?(ignore_prefix)
-		end
-	end
 
     private def read_file : String
       File.read(filename)
