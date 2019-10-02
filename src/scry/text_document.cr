@@ -64,9 +64,9 @@ module Scry
     end
 
     def in_memory?
-	  Scry::IN_MEMORY_URI_PREFIXES.any? do |prefix|
-	    @uri.starts_with?(prefix)
-	  end
+      Scry::IN_MEMORY_URI_PREFIXES.any? do |prefix|
+        @uri.starts_with?(prefix)
+      end
     end
 
     def untitled?
