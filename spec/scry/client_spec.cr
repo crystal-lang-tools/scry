@@ -20,7 +20,13 @@ module Scry
       end
 
       it "sends a valid Initialize Reponse to the Client io" do
-        message = LSP::Protocol::Initialize.new(32)
+        server_capabilities = LSP::Protocol::ServerCapabilities.new(
+          textDocumentSync: LSP::Protocol::TextDocumentSyncKind::Full, documentFormattingProvider: true,
+          definitionProvider: true, documentSymbolProvider: true, workspaceSymbolProvider: true,
+          completionProvider: LSP::Protocol::CompletionOptions.new, hoverProvider: true
+        )
+
+        message = LSP::Protocol::Initialize.new(32, server_capabilities)
 
         io = IO::Memory.new
         client = Client.new(io)

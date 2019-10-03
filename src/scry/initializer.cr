@@ -17,8 +17,16 @@ module Scry
       {@workspace, response}
     end
 
+    def server_capabilities
+      LSP::Protocol::ServerCapabilities.new(
+        textDocumentSync: LSP::Protocol::TextDocumentSyncKind::Full, documentFormattingProvider: true,
+        definitionProvider: true, documentSymbolProvider: true, workspaceSymbolProvider: true,
+        completionProvider: LSP::Protocol::CompletionOptions.new, hoverProvider: true
+      )
+    end
+
     private def response
-      LSP::Protocol::Initialize.new(@msg_id)
+      LSP::Protocol::Initialize.new(@msg_id, server_capabilities)
     end
   end
 end

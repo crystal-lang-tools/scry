@@ -1,5 +1,6 @@
 require "./log"
 require "./workspace"
+require "./settings"
 
 module Scry
   struct UpdateConfig
