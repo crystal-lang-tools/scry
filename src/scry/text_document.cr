@@ -1,5 +1,5 @@
 module Scry
-  IN_MEMORY_URI_PREFIXES = ["git:/", "private:/", "private:/"]
+  IN_MEMORY_URI_PREFIXES = ["git:/", "private:/", "inmemory:/"]
   struct TextDocument
     getter id : Int32 | Nil
     getter uri : String
