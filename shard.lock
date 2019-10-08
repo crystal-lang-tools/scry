@@ -1,0 +1,6 @@
+version: 1.0
+shards:
+  lsp:
+    github: crystal-lang-tools/lsp
+    commit: 19e5f71fb64fa79c5e077e45b60802c06b807353
+
