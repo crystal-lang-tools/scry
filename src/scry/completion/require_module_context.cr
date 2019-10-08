@@ -3,7 +3,7 @@ module Scry::Completion
     def initialize(@import : String, @text_document : TextDocument)
     end
 
-    def find : Array(Protocol::CompletionItem)
+    def find : Array(LSP::Protocol::CompletionItem)
       case @import
       when .starts_with? '.'
         file_dir = File.dirname(@text_document.filename)
