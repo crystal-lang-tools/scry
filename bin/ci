@@ -67,12 +67,12 @@ prepare_build() {
 
   on_osx brew update
   on_osx brew install crystal-lang
+  with_build_env 'shards update'
 }
 
 
 deploy() {
     on_both mkdir -p ${DEPLOY_DIR}
-    with_build_env shards install
     with_build_env "crystal build src/scry.cr -s --release ${DEPLOY_STATIC} --no-debug -o ${DEPLOY_DIR}/scry"
     on_both tar -cvzf ${DEPLOY_FILENAME} ${DEPLOY_DIR}/scry
 }
