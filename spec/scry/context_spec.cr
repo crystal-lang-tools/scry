@@ -26,20 +26,20 @@ module Scry
       result.to_json.should eq(%([[{"jsonrpc":"2.0","method":"textDocument/publishDiagnostics","params":{"uri":"file://#{SOME_FILE_PATH}","diagnostics":[]}}]]))
     end
 
-    # Test a variety of LSP "methods" to ensure that they ignore files with prefixes that 
+    # Test a variety of LSP "methods" to ensure that they ignore files with prefixes that
     # denote a file not physically present (like git:/ or private:/)
     Scry::IN_MEMORY_URI_PREFIXES.each do |ignored_prefix|
       [
-        "textDocument/hover", 
-        "textDocument/definition", 
-        "textDocument/completion", 
-        "textDocument/documentSymbol", 
-        "textDocument/didOpen"
+        "textDocument/hover",
+        "textDocument/definition",
+        "textDocument/completion",
+        "textDocument/documentSymbol",
+        "textDocument/didOpen",
       ].each do |method|
         it "#{method} ignores files prefixed with #{ignored_prefix}" do
           context = Context.new
           procedure = Message.from(get_example_textDocument_message_json(method, "#{ignored_prefix}#{Scry::SOME_FILE_PATH}"))
-          expected_response = 
+          expected_response =
             case procedure
             when Protocol::NotificationMessage # ignored Notification messages just get a nil response
               nil
