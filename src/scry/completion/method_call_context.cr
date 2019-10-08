@@ -8,7 +8,7 @@ module Scry::Completion
     def initialize(@text : String, @target : String, @method : String, @method_db : MethodDB)
     end
 
-    def find
+    def find : Array(Protocol::CompletionItem)
       t = get_type
       res = t ? @method_db.matches([t], @method) : [] of MethodDBEntry
       to_completion_items res

@@ -3,7 +3,7 @@ require "./completion/*"
 
 module Scry
   class UnrecognizedContext < Completion::Context
-    def find
+    def find : Array(Protocol::CompletionItem)
       [] of Protocol::CompletionItem
     end
   end
