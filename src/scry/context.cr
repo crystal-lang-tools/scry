@@ -61,18 +61,21 @@ module Scry
       case msg.method
       when "textDocument/hover"
         text_document = TextDocument.new(params, msg.id)
+        return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         hover = HoverProvider.new(@workspace, text_document)
         response = hover.run
         Log.logger.debug(response)
         response
       when "textDocument/definition"
         text_document = TextDocument.new(params, msg.id)
+        return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         definitions = Implementations.new(@workspace, text_document)
         response = definitions.run
         Log.logger.debug(response)
         response
       when "textDocument/completion"
         text_document, method_db = @workspace.get_file(TextDocument.uri_to_filename(params.text_document.uri))
+        return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         completion = CompletionProvider.new(text_document, params.context, params.position, method_db)
         results = completion.run
         response = Protocol::ResponseMessage.new(msg.id, results)
@@ -100,6 +103,7 @@ module Scry
       case msg.method
       when "textDocument/documentSymbol"
         text_document = TextDocument.new(params, msg.id)
+        return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         symbol_processor = SymbolProcessor.new(text_document)
         symbols = symbol_processor.run
         response = Protocol::ResponseMessage.new(msg.id, symbols)
@@ -149,6 +153,7 @@ module Scry
 
     private def dispatch_notification(params : Protocol::DidOpenTextDocumentParams, msg)
       text_document = TextDocument.new(params)
+      return ignore_path_response(nil, text_document) if text_document.in_memory?
       @workspace.put_file(text_document)
       unless text_document.in_memory?
         analyzer = Analyzer.new(@workspace, text_document)
@@ -159,6 +164,7 @@ module Scry
 
     private def dispatch_notification(params : Protocol::DidChangeTextDocumentParams, msg)
       text_document = TextDocument.new(params)
+      return ignore_path_response(nil, text_document) if text_document.in_memory?
       @workspace.update_file(text_document)
       analyzer = ParseAnalyzer.new(@workspace, text_document)
       response = analyzer.run
@@ -191,6 +197,15 @@ module Scry
 
     private def dispatch_notification(params, msg)
       nil
+    end
+
+    private def ignore_path_response(msg_id : Int32?, text_document : TextDocument) : Protocol::ResponseMessage?
+      Log.logger.debug("Ignoring path: #{text_document.filename}")
+      if msg_id
+        return Protocol::ResponseMessage.new(msg_id, nil)
+      else # Notification messages don't require a response
+        return nil
+      end
     end
   end
 end

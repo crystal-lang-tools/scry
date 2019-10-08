@@ -1,4 +1,6 @@
 module Scry
+  IN_MEMORY_URI_PREFIXES = ["git:/", "private:/", "inmemory:/"]
+
   struct TextDocument
     getter id : Int32 | Nil
     getter uri : String
@@ -63,7 +65,9 @@ module Scry
     end
 
     def in_memory?
-      uri.starts_with?("inmemory://") || uri.starts_with?("git://")
+      Scry::IN_MEMORY_URI_PREFIXES.any? do |prefix|
+        @uri.starts_with?(prefix)
+      end
     end
 
     def untitled?

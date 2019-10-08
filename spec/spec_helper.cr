@@ -38,3 +38,7 @@ module Scry
 
   UNTITLED_FORMATTER_EXAMPLE = %({"textDocument":{"uri":"untitled:Untitled-1","languageId":"crystal","version":1,"text":"1+1"}})
 end
+
+def get_example_textDocument_message_json(method : String, uri : String) : String
+  %({"jsonrpc":"2.0","method":"#{method}","params":{"textDocument":{"uri":"#{uri}","languageId":"crystal","version":1,"text":"put \\"hello\\"; Thing.new"}}})
+end
