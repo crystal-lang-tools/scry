@@ -41,10 +41,10 @@ module Scry
           procedure = Message.from(get_example_textDocument_message_json(method, "#{ignored_prefix}#{Scry::SOME_FILE_PATH}"))
           expected_response =
             case procedure
-            when Protocol::NotificationMessage # ignored Notification messages just get a nil response
+            when LSP::Protocol::NotificationMessage # ignored Notification messages just get a nil response
               nil
             else
-              Protocol::ResponseMessage.new(procedure.id, nil)
+              LSP::Protocol::ResponseMessage.new(procedure.id, nil)
             end
 
           result = context.dispatch(procedure)
