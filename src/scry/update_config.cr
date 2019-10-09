@@ -1,5 +1,6 @@
 require "./log"
 require "./workspace"
+require "./settings"
 
 module Scry
   struct UpdateConfig
@@ -11,7 +12,7 @@ module Scry
       "fatal" => Logger::FATAL,
     }
 
-    def initialize(@workspace : Workspace, @settings : Protocol::DidChangeConfigurationParams)
+    def initialize(@workspace : Workspace, @settings : LSP::Protocol::DidChangeConfigurationParams)
     end
 
     def initialize(@workspace : Workspace, @settings)
@@ -26,7 +27,7 @@ module Scry
     end
 
     private def customizations
-      @settings.settings.crystal_config
+      Settings.from_json(@settings.settings.to_json).crystal_config
     end
 
     private def log_level(level : String)

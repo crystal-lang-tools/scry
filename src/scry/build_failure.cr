@@ -8,5 +8,9 @@ module Scry
       size:    Int32?,
       message: String,
     }, true)
+
+    def build_lsp_diagnostic
+      LSP::Protocol::Diagnostic.new(file, line, column, size, message, "Scry")
+    end
   end
 end

@@ -1,5 +1,5 @@
 require "spec"
-require "../src/scry/protocol"
+require "lsp"
 require "../src/scry/**"
 require "./protocol_helper"
 

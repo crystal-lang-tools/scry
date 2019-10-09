@@ -5,13 +5,13 @@ module Scry
     describe "#send_message" do
       it "sends a valid NotificationMessage to the Client io" do
         build_failure = BuildFailure.from_json(BUILD_ERROR_EXAMPLE)
-        diagnostic = Protocol::Diagnostic.new(build_failure)
+        diagnostic = build_failure.build_lsp_diagnostic
 
-        params = Protocol::PublishDiagnosticsParams.new(
+        params = LSP::Protocol::PublishDiagnosticsParams.new(
           "file:///Users/foo/project/some_file.cr",
           [diagnostic]
         )
-        message = Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
+        message = LSP::Protocol::NotificationMessage.new("textDocument/publishDiagnostics", params)
 
         io = IO::Memory.new
         client = Client.new(io)
@@ -20,7 +20,13 @@ module Scry
       end
 
       it "sends a valid Initialize Reponse to the Client io" do
-        message = Protocol::Initialize.new(32)
+        server_capabilities = LSP::Protocol::ServerCapabilities.new(
+          textDocumentSync: LSP::Protocol::TextDocumentSyncKind::Full, documentFormattingProvider: true,
+          definitionProvider: true, documentSymbolProvider: true, workspaceSymbolProvider: true,
+          completionProvider: LSP::Protocol::CompletionOptions.new, hoverProvider: true
+        )
+
+        message = LSP::Protocol::Initialize.new(32, server_capabilities)
 
         io = IO::Memory.new
         client = Client.new(io)
@@ -29,8 +35,8 @@ module Scry
       end
 
       it "sends a valid ResponseMessage to the Client io" do
-        result = [] of Protocol::SymbolInformation
-        message = Protocol::ResponseMessage.new(1, result)
+        result = [] of LSP::Protocol::SymbolInformation
+        message = LSP::Protocol::ResponseMessage.new(1, result)
 
         io = IO::Memory.new
         client = Client.new(io)
@@ -40,8 +46,8 @@ module Scry
 
       it "sends multiple ClientMessages" do
         messages = [] of Client::ClientMessage
-        messages << Protocol::NotificationMessage.new("fake1", Protocol::VoidParams.from_json("{}"))
-        messages << Protocol::NotificationMessage.new("fake2", Protocol::VoidParams.from_json("{}"))
+        messages << LSP::Protocol::NotificationMessage.new("fake1", LSP::Protocol::VoidParams.from_json("{}"))
+        messages << LSP::Protocol::NotificationMessage.new("fake2", LSP::Protocol::VoidParams.from_json("{}"))
 
         io = IO::Memory.new
         client = Client.new(io)

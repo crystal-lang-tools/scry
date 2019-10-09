@@ -13,15 +13,15 @@ module Scry
       private def write(severity, datetime, progname, message)
         message_type = case severity
                        when INFO
-                         Protocol::MessageType::Info
+                         LSP::Protocol::MessageType::Info
                        when WARN
-                         Protocol::MessageType::Warning
+                         LSP::Protocol::MessageType::Warning
                        when ERROR, FATAL
-                         Protocol::MessageType::Error
+                         LSP::Protocol::MessageType::Error
                        else
-                         Protocol::MessageType::Log
+                         LSP::Protocol::MessageType::Log
                        end
-        @client.send("window/logMessage", Protocol::LogMessageParams.new(message_type, message.to_s))
+        @client.send("window/logMessage", LSP::Protocol::LogMessageParams.new(message_type, message.to_s))
       end
     end
   end

@@ -2,7 +2,7 @@ module Scry
   class InvalidContentError < Exception
   end
 
-  alias ProtocolMessage = Protocol::RequestMessage | Protocol::NotificationMessage
+  alias ProtocolMessage = LSP::Protocol::RequestMessage | LSP::Protocol::NotificationMessage
 
   module Message
     def self.from(json : String?)

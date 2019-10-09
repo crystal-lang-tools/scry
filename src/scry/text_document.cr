@@ -5,7 +5,7 @@ module Scry
     getter id : Int32 | Nil
     getter uri : String
     getter filename : String
-    getter position : Protocol::Position?
+    getter position : LSP::Protocol::Position?
     property text : Array(String)
 
     def initialize(@uri, @text)
@@ -17,40 +17,40 @@ module Scry
       @text = [read_file]
     end
 
-    def initialize(params : Protocol::DidOpenTextDocumentParams)
+    def initialize(params : LSP::Protocol::DidOpenTextDocumentParams)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [params.text_document.text]
     end
 
     # Used by ParseAnalyzer
-    def initialize(change : Protocol::DidChangeTextDocumentParams)
+    def initialize(change : LSP::Protocol::DidChangeTextDocumentParams)
       @uri = change.text_document.uri
       @filename = uri_to_filename
       @text = change.content_changes.map { |change| change.text }
     end
 
     # Used by Analyzer
-    def initialize(file_event : Protocol::FileEvent)
+    def initialize(file_event : LSP::Protocol::FileEvent)
       @uri = file_event.uri
       @filename = uri_to_filename
       @text = [read_file]
     end
 
-    def initialize(params : Protocol::DocumentFormattingParams, @id)
+    def initialize(params : LSP::Protocol::DocumentFormattingParams, @id)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [""]
     end
 
-    def initialize(params : Protocol::TextDocumentPositionParams, @id)
+    def initialize(params : LSP::Protocol::TextDocumentPositionParams, @id)
       @uri = params.text_document.uri
       @position = params.position
       @filename = uri_to_filename
       @text = [read_file]
     end
 
-    def initialize(params : Protocol::TextDocumentParams, @id = nil)
+    def initialize(params : LSP::Protocol::TextDocumentParams, @id = nil)
       @uri = params.text_document.uri
       @filename = uri_to_filename
       @text = [read_file]

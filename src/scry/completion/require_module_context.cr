@@ -3,7 +3,7 @@ module Scry::Completion
     def initialize(@import : String, @text_document : TextDocument)
     end
 
-    def find : Array(Protocol::CompletionItem)
+    def find : Array(LSP::Protocol::CompletionItem)
       case @import
       when .starts_with? '.'
         file_dir = File.dirname(@text_document.filename)
@@ -22,12 +22,12 @@ module Scry::Completion
         label = File.directory?(path) ? File.basename(path) + "/" : File.basename(path, ".cr")
         insert_text = label
         root_path = paths.first
-        Protocol::CompletionItem.new(
+        LSP::Protocol::CompletionItem.new(
           label: label,
           insert_text: insert_text,
-          kind: Protocol::CompletionItemKind::Module,
+          kind: LSP::Protocol::CompletionItemKind::Module,
           detail: label,
-          data: Protocol::RequireModuleContextData.new(path)
+          data: LSP::Protocol::RequireModuleContextData.new(path)
         )
       end
     end

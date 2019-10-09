@@ -9,3 +9,8 @@ license: MIT
 targets:
   scry:
     main: src/scry.cr
+
+dependencies:
+  lsp:
+    github: crystal-lang-tools/lsp
+    version: 0.1.0

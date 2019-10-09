@@ -8,7 +8,7 @@ module Scry::Completion
     def initialize(@text : String, @target : String, @method : String, @method_db : MethodDB)
     end
 
-    def find : Array(Protocol::CompletionItem)
+    def find : Array(LSP::Protocol::CompletionItem)
       t = get_type
       res = t ? @method_db.matches([t], @method) : [] of MethodDBEntry
       to_completion_items res
@@ -54,10 +54,10 @@ module Scry::Completion
 
     def to_completion_items(results : Array(MethodDBEntry))
       results.map do |res|
-        Protocol::CompletionItem.new(res.name,
-          Protocol::CompletionItemKind::Method,
+        LSP::Protocol::CompletionItem.new(res.name,
+          LSP::Protocol::CompletionItemKind::Method,
           "#{res.name}#{res.signature}",
-          Protocol::MethodCallContextData.new(res.file_path, res.location))
+          LSP::Protocol::MethodCallContextData.new(res.file_path, res.location))
       end
     end
   end

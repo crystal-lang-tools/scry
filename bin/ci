@@ -67,6 +67,7 @@ prepare_build() {
 
   on_osx brew update
   on_osx brew install crystal-lang
+  with_build_env 'shards install'
 }
 
 

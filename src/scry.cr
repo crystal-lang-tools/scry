@@ -1,4 +1,4 @@
-require "./scry/protocol"
+require "lsp"
 require "./scry/log"
 require "./scry/request"
 require "./scry/context"
@@ -26,7 +26,7 @@ module Scry
         request = Message.from(content)
         results = context.dispatch(request)
       rescue ex
-        results = [Protocol::ResponseMessage.new(ex)]
+        results = [LSP::Protocol::ResponseMessage.new(ex)]
       ensure
         response = [results].flatten.compact
         client.send_message(response)
