@@ -13,4 +13,4 @@ targets:
 dependencies:
   lsp:
     github: crystal-lang-tools/lsp
-    tag: 0.1.0
+    version: 0.1.0
