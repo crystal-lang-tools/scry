@@ -76,7 +76,7 @@ module Scry
     end
 
     def visit(node : Crystal::Var)
-      process_node node, node.name, LSP::Protocol::SymbolKind::Property
+      process_node node, node.name, LSP::Protocol::SymbolKind::Variable
       true
     end
 

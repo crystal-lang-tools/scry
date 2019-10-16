@@ -57,29 +57,29 @@ module Scry
       result.kind.should be_a(LSP::Protocol::SymbolKind::Property)
     end
 
-    describe "Property" do
-      it "returns getters as Property symbols" do
+    describe "Variable" do
+      it "returns getters as Variable symbols" do
         text_document = TextDocument.new("uri", ["class Foo; getter bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Property)
+        result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
       end
 
-      it "returns setters as Property symbols" do
+      it "returns setters as Variable symbols" do
         text_document = TextDocument.new("uri", ["class Foo; setter bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Property)
+        result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
       end
 
-      it "returns properties as Property symbols" do
+      it "returns properties as Variable symbols" do
         text_document = TextDocument.new("uri", ["class Foo; property bar : Nil; end"])
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Property)
+        result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
       end
     end
 
