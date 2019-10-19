@@ -14,7 +14,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.should be_a(LSP::Protocol::SymbolKind::Class)
+      result.kind.should eq(LSP::Protocol::SymbolKind::Class)
     end
 
     it "returns Struct symbols as a Class" do
@@ -22,7 +22,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.should be_a(LSP::Protocol::SymbolKind::Class)
+      result.kind.should eq(LSP::Protocol::SymbolKind::Class)
     end
 
     it "returns Module symbols" do
@@ -30,7 +30,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.should be_a(LSP::Protocol::SymbolKind::Module)
+      result.kind.should eq(LSP::Protocol::SymbolKind::Module)
     end
 
     it "returns Method symbols" do
@@ -38,7 +38,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.should be_a(LSP::Protocol::SymbolKind::Method)
+      result.kind.should eq(LSP::Protocol::SymbolKind::Method)
     end
 
     it "returns instance vars as Variable symbols" do
@@ -46,7 +46,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
+      result.kind.should eq(LSP::Protocol::SymbolKind::Variable)
     end
 
     it "returns annotation as Property symbols" do
@@ -54,7 +54,7 @@ module Scry
       processor = SymbolProcessor.new(text_document)
       symbols = processor.run
       result = symbols.first
-      result.kind.should be_a(LSP::Protocol::SymbolKind::Property)
+      result.kind.should eq(LSP::Protocol::SymbolKind::Property)
     end
 
     describe "Variable" do
@@ -63,7 +63,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Variable)
       end
 
       it "returns setters as Variable symbols" do
@@ -71,7 +71,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Variable)
       end
 
       it "returns properties as Variable symbols" do
@@ -79,7 +79,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols[1]
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Variable)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Variable)
       end
     end
 
@@ -89,7 +89,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols.first
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Constant)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Constant)
       end
 
       it "returns alias as Constant symbols" do
@@ -97,7 +97,7 @@ module Scry
         processor = SymbolProcessor.new(text_document)
         symbols = processor.run
         result = symbols.first
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Constant)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Constant)
       end
     end
 
@@ -112,14 +112,14 @@ module Scry
         processor = WorkspaceSymbolProcessor.new(ROOT_PATH, "saluto")
         symbols = processor.run
         result = symbols.first
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Method)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Method)
       end
 
       it "return stdlib symbol with query match for initialize" do
         processor = WorkspaceSymbolProcessor.new(ROOT_PATH, "initialize")
         symbols = processor.run
         result = symbols.first
-        result.kind.should be_a(LSP::Protocol::SymbolKind::Method)
+        result.kind.should eq(LSP::Protocol::SymbolKind::Method)
       end
     end
   end
