@@ -22,10 +22,10 @@ To install Scry download it from the [releases page](https://github.com/crystal-
 ```bash
 git clone https://github.com/crystal-lang-tools/scry.git
 cd scry
-shards build -v
+shards build --verbose --release
 ```
 
-Then setup `scry` binary path on your LSP client.
+Then, set your LSP client's `scry` binary path to point to `scry/bin/scry`.
 
 ## Known issues
 
