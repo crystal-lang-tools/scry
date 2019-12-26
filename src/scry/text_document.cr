@@ -27,7 +27,7 @@ module Scry
     def initialize(change : LSP::Protocol::DidChangeTextDocumentParams)
       @uri = change.text_document.uri
       @filename = uri_to_filename
-      @text = change.content_changes.map { |change| change.text }
+      @text = change.content_changes.map &.text
     end
 
     # Used by Analyzer

@@ -50,9 +50,9 @@ module Scry
         raise MalformedHeaderError.new(
           "Content-Length expect an integer value. Got --> #{value}"
         ) if num.nil?
-        return ContentLength.new(num)
+        ContentLength.new(num)
       when "Content-Type"
-        return ContentType.new(value)
+        ContentType.new(value)
       else
         raise MalformedHeaderError.new(
           "Unrecognized header. Expected one of [Content-Length, Content-Type] --> #{name}"

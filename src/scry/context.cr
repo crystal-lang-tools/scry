@@ -202,9 +202,9 @@ module Scry
     private def ignore_path_response(msg_id : Int32?, text_document : TextDocument) : LSP::Protocol::ResponseMessage?
       Log.logger.debug("Ignoring path: #{text_document.filename}")
       if msg_id
-        return LSP::Protocol::ResponseMessage.new(msg_id, nil)
+        LSP::Protocol::ResponseMessage.new(msg_id, nil)
       else # Notification messages don't require a response
-        return nil
+        nil
       end
     end
   end
