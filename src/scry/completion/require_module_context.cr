@@ -21,7 +21,6 @@ module Scry::Completion
       found_paths.map do |path|
         label = File.directory?(path) ? File.basename(path) + "/" : File.basename(path, ".cr")
         insert_text = label
-        root_path = paths.first
         LSP::Protocol::CompletionItem.new(
           label: label,
           insert_text: insert_text,

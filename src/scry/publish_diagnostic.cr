@@ -46,7 +46,7 @@ module Scry
         .first(@workspace.max_number_of_problems)
         .map(&.build_lsp_diagnostic)
         .group_by(&.uri)
-        .select { |file, diagnostics| !file.ends_with?(".scry_main.cr") }
+        .select { |file, _diagnostics| !file.ends_with?(".scry_main.cr") }
         .map do |file, diagnostics|
           ALL_FILES_WITH_DIAGNOSTIC[@uri] << file
           unclean(file, diagnostics)

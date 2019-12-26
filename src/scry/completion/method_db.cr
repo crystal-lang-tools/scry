@@ -40,11 +40,9 @@ module Scry::Completion
     end
 
     def self.parse(path)
-      begin
-        Crystal::Parser.parse(File.read path)
-      rescue exception
-        Crystal::Nop.new
-      end
+      Crystal::Parser.parse(File.read path)
+    rescue exception
+      Crystal::Nop.new
     end
   end
 

@@ -41,7 +41,7 @@ module Scry::Completion::DependencyGraph
 
   describe Graph do
     it ".new" do
-      graph = Graph.new
+      Graph.new
     end
 
     it "#[String]" do
@@ -63,7 +63,7 @@ module Scry::Completion::DependencyGraph
       graph.add_edge("value_1", "value_2")
       keys = [] of String
 
-      graph.each do |k, v|
+      graph.each do |k, _v|
         keys << k
       end
 
@@ -72,7 +72,7 @@ module Scry::Completion::DependencyGraph
   end
   describe Builder do
     it ".new" do
-      builder = Builder.new([] of String)
+      Builder.new([] of String)
     end
 
     it "#build" do

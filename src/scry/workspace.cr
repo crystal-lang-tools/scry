@@ -43,7 +43,7 @@ module Scry
     end
 
     def update_file(text_document : TextDocument)
-      original_document, node = @open_files[text_document.filename]
+      original_document, _node = @open_files[text_document.filename]
       if original_document.text != text_document.text
         put_file(text_document)
       else
