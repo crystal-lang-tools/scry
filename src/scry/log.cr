@@ -1,11 +1,11 @@
-require "logger"
+require "log"
 require "./client"
 
 module Scry
   module Log
-    class_property logger : Logger = Logger.new(nil)
+    class_property logger : ::Log = ::Log.for("")
 
-    class ClientLogger < Logger
+    class ClientLogger
       def initialize(@client : Client)
         super(@client.io)
       end

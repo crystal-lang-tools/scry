@@ -43,7 +43,7 @@ module Scry
         end
       end
     rescue ex
-      Log.logger.error("A error was found while searching diagnostics\n#{ex}\n#{response}")
+      Log.logger.error { "A error was found while searching diagnostics\n#{ex}\n#{response}" }
       nil
     end
 

@@ -11,10 +11,10 @@ module Scry
     client = Client.new(STDOUT)
     Log.logger = Log::ClientLogger.new(client)
 
-    Log.logger.info("Scry is looking into your code...")
+    Log.logger.info { "Scry is looking into your code..." }
 
     at_exit do
-      Log.logger.info("...your session has ended")
+      Log.logger.info {"...your session has ended" }
     end
 
     EnvironmentConfig.run
