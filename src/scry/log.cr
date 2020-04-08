@@ -1,13 +1,19 @@
 require "log"
 require "./client"
+require "logger"
+require "log/entry"
 
 module Scry
   module Log
     class_property logger : ::Log = ::Log.for("")
 
-    class ClientLogger
+    class ClientLogger < ::Log::Backend
       def initialize(@client : Client)
-        super(@client.io)
+        # super(@client.io)
+      end
+
+      def write(entry : ::Log::Entry)
+        printf("#{entry}")
       end
 
       private def write(severity, datetime, progname, message)
