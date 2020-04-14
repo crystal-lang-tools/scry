@@ -9,12 +9,8 @@ require "./scry/client"
 module Scry
   def self.start
     client = Client.new(STDOUT)
-    client_logger = Log::ClientLogger.new(client)
-    ::Log.builder.bind "*", :warning, client_logger
-    ::Log.builder.bind "*", :debug, client_logger
-    ::Log.builder.bind "*", :info, client_logger
-    Log.logger = ::Log.for("db")
-    # Log.logger.builder.bind "*", :debug, Log::ClientLogger.new(client)
+    Log.logger.level = ::Log::Severity::Debug
+    Log.logger.backend = Log::ClientLogger.new(client)
 
     Log.logger.info { "Scry is looking into your code..." }
 
