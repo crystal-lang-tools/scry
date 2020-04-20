@@ -95,7 +95,7 @@ module Scry
     rescue ex : IO::Error
       Log.logger.warn(ex.message)
       ""
-    rescue ex : Errno
+    rescue ex : RuntimeError
       Log.logger.warn(ex.message)
       ""
     end
