@@ -157,8 +157,8 @@ module Scry
 
     context "module, struct and class name completion" do
       _kind_ = LSP::Protocol::CompletionItemKind::Class
-      it_completes("A", %w(Array Atomic ArgumentError AtExitHandlers))
-      it_completes(" ::A", %w(Array Atomic ArgumentError AtExitHandlers))
+      it_completes("A", %w(Array Atomic Atomic::Flag ArgumentError))
+      it_completes(" ::A", %w(Array Atomic Atomic::Flag ArgumentError))
       it_completes(" ::", %w())
       it_completes("JSON::P", %w(ParseException Parser PullParser))
       it_completes("JSON::Pa", %w(ParseException Parser))
