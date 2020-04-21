@@ -31,7 +31,7 @@ module Scry
         io = IO::Memory.new
         client = Client.new(io)
         client.send_message(message)
-        io.to_s.should eq(%(Content-Length: 297\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true,"workspaceSymbolProvider":true,"completionProvider":{"resolveProvider":true,"triggerCharacters":[".","\\\"","/"]},"hoverProvider":true}}}))
+        io.to_s.should eq(%(Content-Length: 297\r\n\r\n{"jsonrpc":"2.0","id":32,"result":{"capabilities":{"textDocumentSync":1,"documentFormattingProvider":true,"definitionProvider":true,"documentSymbolProvider":true,"workspaceSymbolProvider":true,"completionProvider":{"resolveProvider":true,"triggerCharacters":[".","\\"","/"]},"hoverProvider":true}}}))
       end
 
       it "sends a valid ResponseMessage to the Client io" do
@@ -41,7 +41,7 @@ module Scry
         io = IO::Memory.new
         client = Client.new(io)
         client.send_message(message)
-        io.to_s.should eq(%(Content-Length: 36\r\n\r\n{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[]}))
+        io.to_s.should eq(%(Content-Length: 36\r\n\r\n{"jsonrpc":"2.0","id":1,"result":[]}))
       end
 
       it "sends multiple ClientMessages" do

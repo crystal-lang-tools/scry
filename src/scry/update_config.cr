@@ -5,12 +5,12 @@ require "./settings"
 module Scry
   struct UpdateConfig
     LOG_LEVELS = {
-      "debug" => ::Log::Severity::Debug,
-      "info"  => ::Log::Severity::Info,
-      "warn"  => ::Log::Severity::Warning,
-      "warning"  => ::Log::Severity::Warning,
-      "error" => ::Log::Severity::Error,
-      "fatal" => ::Log::Severity::Fatal,
+      "debug"   => ::Log::Severity::Debug,
+      "info"    => ::Log::Severity::Info,
+      "warn"    => ::Log::Severity::Warning,
+      "warning" => ::Log::Severity::Warning,
+      "error"   => ::Log::Severity::Error,
+      "fatal"   => ::Log::Severity::Fatal,
     }
 
     def initialize(@workspace : Workspace, @settings : LSP::Protocol::DidChangeConfigurationParams)
