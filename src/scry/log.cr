@@ -1,5 +1,4 @@
 require "log"
-require "log/io_backend"
 require "./client"
 
 module Scry
