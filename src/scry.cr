@@ -9,12 +9,10 @@ require "./scry/client"
 module Scry
   def self.start
     client = Client.new(STDOUT)
-    Log.logger = Log::ClientLogger.new(client)
-
-    Log.logger.info("Scry is looking into your code...")
+    Log.logger.info { "Scry is looking into your code..." }
 
     at_exit do
-      Log.logger.info("...your session has ended")
+      Log.logger.info { "...your session has ended" }
     end
 
     EnvironmentConfig.run
@@ -33,11 +31,7 @@ module Scry
       end
     end
   rescue ex
-    Log.logger.error(
-      %(#{ex.message || "Unknown error"}\n#{ex.backtrace.join('\n')})
-    ) unless Log.logger.nil?
-  ensure
-    Log.logger.close unless Log.logger.nil?
+    Log.logger.error(exception: ex) { %(#{ex.message || "Unknown error"}\n#{ex.backtrace.join('\n')}) } unless Log.logger.nil?
   end
 end
 

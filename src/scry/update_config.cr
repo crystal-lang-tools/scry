@@ -5,11 +5,12 @@ require "./settings"
 module Scry
   struct UpdateConfig
     LOG_LEVELS = {
-      "debug" => Logger::DEBUG,
-      "info"  => Logger::INFO,
-      "warn"  => Logger::WARN,
-      "error" => Logger::ERROR,
-      "fatal" => Logger::FATAL,
+      "debug" => ::Log::Severity::Debug,
+      "info"  => ::Log::Severity::Info,
+      "warn"  => ::Log::Severity::Warning,
+      "warning"  => ::Log::Severity::Warning,
+      "error" => ::Log::Severity::Error,
+      "fatal" => ::Log::Severity::Fatal,
     }
 
     def initialize(@workspace : Workspace, @settings : LSP::Protocol::DidChangeConfigurationParams)
@@ -22,7 +23,7 @@ module Scry
     def run
       @workspace.max_number_of_problems = customizations.max_number_of_problems
       Log.logger.level = log_level(customizations.log_level || "error")
-      Log.logger.info("Scry Configuration Updated:\n #{@settings.to_json}")
+      Log.logger.info { "Scry Configuration Updated:\n #{@settings.to_json}" }
       {@workspace, nil}
     end
 

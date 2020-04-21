@@ -27,7 +27,7 @@ module Scry
         LSP::Protocol::ResponseMessage.new(@text_document.id, [LSP::Protocol::TextEdit.new(range, result)])
       end
     rescue ex
-      Log.logger.error("A error was found while formatting\n#{ex}\n#{result}")
+      Log.logger.error { "A error was found while formatting\n#{ex}\n#{result}" }
       nil
     end
   end
