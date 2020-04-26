@@ -92,10 +92,7 @@ module Scry
 
     private def read_file : String
       File.read(filename)
-    rescue ex : IO::Error
-      Log.logger.warn(ex.message)
-      ""
-    rescue ex : Errno
+    rescue ex : Exception
       Log.logger.warn(ex.message)
       ""
     end
