@@ -28,12 +28,12 @@ module Scry
     # A request message to describe a request between the client and the server.
     # Every processed request must send a response back to the sender of the request.
     def dispatch(msg : LSP::Protocol::RequestMessage)
-      Log.logger.debug { msg.method }
+      Log.debug { msg.method }
       dispatch_request(msg.params, msg)
     end
 
     def dispatch(msg : LSP::Protocol::NotificationMessage)
-      Log.logger.debug { msg.method }
+      Log.debug { msg.method }
       dispatch_notification(msg.params, msg)
     end
 
@@ -64,14 +64,14 @@ module Scry
         return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         hover = HoverProvider.new(@workspace, text_document)
         response = hover.run
-        Log.logger.debug { response }
+        Log.debug { response }
         response
       when "textDocument/definition"
         text_document = TextDocument.new(params, msg.id)
         return ignore_path_response(msg.id, text_document) if text_document.in_memory?
         definitions = Implementations.new(@workspace, text_document)
         response = definitions.run
-        Log.logger.debug { response }
+        Log.debug { response }
         response
       when "textDocument/completion"
         text_document, method_db = @workspace.get_file(TextDocument.uri_to_filename(params.text_document.uri))
@@ -79,7 +79,7 @@ module Scry
         completion = CompletionProvider.new(text_document, params.context, params.position, method_db)
         results = completion.run
         response = LSP::Protocol::ResponseMessage.new(msg.id, results)
-        Log.logger.debug { response }
+        Log.debug { response }
         response
       else
         raise UnrecognizedProcedureError.new("Didn't recognize procedure: #{msg.method}")
@@ -95,7 +95,7 @@ module Scry
 
       formatter = Formatter.new(@workspace, text_document)
       response = formatter.run
-      Log.logger.debug { response }
+      Log.debug { response }
       response
     end
 
@@ -107,7 +107,7 @@ module Scry
         symbol_processor = SymbolProcessor.new(text_document)
         symbols = symbol_processor.run
         response = LSP::Protocol::ResponseMessage.new(msg.id, symbols)
-        Log.logger.debug { response }
+        Log.debug { response }
         response
       end
     end
@@ -118,7 +118,7 @@ module Scry
         workspace_symbol_processor = WorkspaceSymbolProcessor.new(@workspace.root_uri, params.query)
         symbols = workspace_symbol_processor.run
         response = LSP::Protocol::ResponseMessage.new(msg.id, symbols)
-        Log.logger.debug { response }
+        Log.debug { response }
         response
       end
     end
@@ -129,7 +129,7 @@ module Scry
         resolver = CompletionResolver.new(msg.id, params)
         results = resolver.run
         response = LSP::Protocol::ResponseMessage.new(msg.id, results)
-        Log.logger.debug { response }
+        Log.debug { response }
         response
       end
     end
@@ -200,7 +200,7 @@ module Scry
     end
 
     private def ignore_path_response(msg_id : Int32?, text_document : TextDocument) : LSP::Protocol::ResponseMessage?
-      Log.logger.debug { "Ignoring path: #{text_document.filename}" }
+      Log.debug { "Ignoring path: #{text_document.filename}" }
       if msg_id
         LSP::Protocol::ResponseMessage.new(msg_id, nil)
       else # Notification messages don't require a response

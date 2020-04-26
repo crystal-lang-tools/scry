@@ -22,8 +22,8 @@ module Scry
 
     def run
       @workspace.max_number_of_problems = customizations.max_number_of_problems
-      Log.logger.level = log_level(customizations.log_level || "error")
-      Log.logger.info { "Scry Configuration Updated:\n #{@settings.to_json}" }
+      Log.level = log_level(customizations.log_level || "error")
+      Log.info { "Scry Configuration Updated:\n #{@settings.to_json}" }
       {@workspace, nil}
     end
 
