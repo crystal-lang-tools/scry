@@ -24,14 +24,14 @@ module Scry
 
     private def read_header
       raw_header = @io.gets
-      Log.logger.debug(raw_header)
+      Log.debug { raw_header }
 
       if raw_header.nil?
         if Scry.shutdown
-          Log.logger.info("Server has shut down, no more request are accepted")
+          Log.info { "Server has shut down, no more request are accepted" }
           exit(0)
         else
-          Log.logger.warn("Connection with client lost")
+          Log.warn { "Connection with client lost" }
           nil
         end
       else
@@ -42,7 +42,7 @@ module Scry
 
     private def read_content
       @content = @io.gets(content_length)
-      Log.logger.debug(@content)
+      Log.debug { @content }
       @content
     end
 

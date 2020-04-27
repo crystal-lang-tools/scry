@@ -72,7 +72,7 @@ module Scry::Completion::DependencyGraph
     end
 
     def build
-      Log.logger.debug("Starting to build dependancy graph for these paths: #{@lookup_paths.join("\n")}")
+      Log.debug { "Starting to build dependancy graph for these paths: #{@lookup_paths.join("\n")}" }
       graph = Graph.new
       @lookup_paths
         .map { |e| File.join(File.expand_path(e), "**", "*.cr") }

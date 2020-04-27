@@ -1,28 +1,27 @@
-require "logger"
+require "log"
+require "log/entry"
 require "./client"
 
 module Scry
-  module Log
-    class_property logger : Logger = Logger.new(nil)
+  Log = ::Log.for(self)
 
-    class ClientLogger < Logger
-      def initialize(@client : Client)
-        super(@client.io)
-      end
+  class ClientLogBackend < ::Log::IOBackend
+    def initialize(@client : Client)
+      super(@client.io)
+    end
 
-      private def write(severity, datetime, progname, message)
-        message_type = case severity
-                       when INFO
-                         LSP::Protocol::MessageType::Info
-                       when WARN
-                         LSP::Protocol::MessageType::Warning
-                       when ERROR, FATAL
-                         LSP::Protocol::MessageType::Error
-                       else
-                         LSP::Protocol::MessageType::Log
-                       end
-        @client.send("window/logMessage", LSP::Protocol::LogMessageParams.new(message_type, message.to_s))
-      end
+    def write(entry : ::Log::Entry)
+      message_type = case entry.severity
+                     when ::Log::Severity::Info
+                       LSP::Protocol::MessageType::Info
+                     when ::Log::Severity::Warning
+                       LSP::Protocol::MessageType::Warning
+                     when ::Log::Severity::Error, ::Log::Severity::Fatal
+                       LSP::Protocol::MessageType::Error
+                     else
+                       LSP::Protocol::MessageType::Log
+                     end
+      @client.send("window/logMessage", LSP::Protocol::LogMessageParams.new(message_type, entry.message))
     end
   end
 end

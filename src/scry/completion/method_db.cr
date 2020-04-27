@@ -14,7 +14,7 @@ module Scry::Completion
         if res
           res
         else
-          Log.logger.debug("Couldn't find type #{e}")
+          Log.debug { "Couldn't find type #{e}" }
           [] of MethodDBEntry
         end
       end.select(&.name.starts_with? text).to_a

@@ -51,7 +51,7 @@ module Scry
         end
       end
     rescue ex
-      Log.logger.error("A error was found while searching contexts\n#{ex}\n#{result}")
+      Log.error { "A error was found while searching contexts\n#{ex}\n#{result}" }
       hover_response
     end
 
