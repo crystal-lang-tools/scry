@@ -1,6 +1,6 @@
 module Scry
   module EnvironmentConfig
-    private enum EnvVars
+    enum EnvVars
       CRYSTAL_CACHE_DIR
       CRYSTAL_PATH
       CRYSTAL_VERSION
