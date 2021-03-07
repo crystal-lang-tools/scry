@@ -19,7 +19,7 @@ module Scry
       parser.filename = @text_document.filename
       parser.parse
       [@diagnostic.clean]
-    rescue ex : Crystal::Exception
+    rescue ex : Crystal::CodeError
       @diagnostic.from(ex.to_json)
     end
   end
