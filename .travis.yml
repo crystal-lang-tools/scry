@@ -11,6 +11,7 @@ matrix:
         - DEPLOY_DIR=bin/linux
         - DEPLOY_STATIC="--static"
     - os: osx
+      osx_image: xcode12.2
       env:
         - DEPLOY_FILENAME=scry_macOS.tar.gz
         - DEPLOY_DIR=bin/darwin
@@ -28,7 +29,7 @@ after_success:
 notifications:
   webhooks:
     urls:
-    - https://webhooks.gitter.im/e/94bc44167f5a3d9fa7a8
+      - https://webhooks.gitter.im/e/94bc44167f5a3d9fa7a8
     on_success: change
     on_failure: always
     on_start: never
