@@ -10,7 +10,11 @@ targets:
   scry:
     main: src/scry.cr
 
+crystal: ">= 0.36.1"
+
 dependencies:
   lsp:
-    github: crystal-lang-tools/lsp
+    # Workaround repository and branch. Use `master` branch of `crystal-lang-tools/lsp` after merging https://github.com/crystal-lang-tools/lsp/pull/6
+    github: kachick/lsp
+    branch: follow-crystal-0361
     version: 0.1.0
