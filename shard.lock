@@ -1,6 +1,10 @@
-version: 1.0
+version: 2.0
 shards:
-  lsp:
-    github: crystal-lang-tools/lsp
+  json_mapping:
+    git: https://github.com/crystal-lang/json_mapping.cr.git
     version: 0.1.0
+
+  lsp:
+    git: https://github.com/kachick/lsp.git
+    version: 0.1.0+git.commit.ea568acc53956a691f44a6e9305db0e829c48c45
 

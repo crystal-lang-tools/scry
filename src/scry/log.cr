@@ -14,7 +14,7 @@ module Scry
       message_type = case entry.severity
                      when ::Log::Severity::Info
                        LSP::Protocol::MessageType::Info
-                     when ::Log::Severity::Warning
+                     when ::Log::Severity::Warn
                        LSP::Protocol::MessageType::Warning
                      when ::Log::Severity::Error, ::Log::Severity::Fatal
                        LSP::Protocol::MessageType::Error

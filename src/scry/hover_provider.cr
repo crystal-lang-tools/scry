@@ -70,14 +70,14 @@ module Scry
     #
     # **Context 1**
     #
-    # ```crystal
+    # ```
     # arg1 : String
     # arg2 : Int32 ∣ Nil
     # ```
     #
     # **Context 2**
     #
-    # ```crystal
+    # ```
     # arg1 : String
     # arg2 : Bool
     # ```
