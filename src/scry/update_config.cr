@@ -7,8 +7,8 @@ module Scry
     LOG_LEVELS = {
       "debug"   => ::Log::Severity::Debug,
       "info"    => ::Log::Severity::Info,
-      "warn"    => ::Log::Severity::Warning,
-      "warning" => ::Log::Severity::Warning,
+      "warn"    => ::Log::Severity::Warn,
+      "warning" => ::Log::Severity::Warn,
       "error"   => ::Log::Severity::Error,
       "fatal"   => ::Log::Severity::Fatal,
     }
