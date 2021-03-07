@@ -14,7 +14,5 @@ crystal: ">= 0.36.1"
 
 dependencies:
   lsp:
-    # Workaround repository and branch. Use `master` branch of `crystal-lang-tools/lsp` after merging https://github.com/crystal-lang-tools/lsp/pull/6
-    github: kachick/lsp
-    branch: follow-crystal-0361
+    github: crystal-lang-tools/lsp
     version: 0.1.0
