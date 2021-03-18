@@ -1,5 +1,5 @@
 name: scry
-version: 0.8.0
+version: 0.9.0
 
 authors:
   - Scry Team <https://github.com/crystal-lang-tools/scry>
@@ -15,4 +15,4 @@ crystal: ">= 0.36.1"
 dependencies:
   lsp:
     github: crystal-lang-tools/lsp
-    version: 0.1.0
+    version: 0.2.0
