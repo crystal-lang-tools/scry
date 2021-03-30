@@ -6,5 +6,5 @@ shards:
 
   lsp:
     git: https://github.com/crystal-lang-tools/lsp.git
-    version: 0.1.0+git.commit.ea568acc53956a691f44a6e9305db0e829c48c45
+    version: 0.2.0
 
