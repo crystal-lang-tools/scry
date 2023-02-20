@@ -1,10 +1,15 @@
 # Scry
 
-[![Join the chat at https://gitter.im/crystal-scry/Lobby](https://badges.gitter.im/crystal-scry/Lobby.svg)](https://gitter.im/crystal-scry/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+> Please see https://github.com/elbywan/crystalline ✨ Thanks to [@elbywan](https://github.com/elbywan)
+
+[![image](https://user-images.githubusercontent.com/3067335/220186770-d8d90178-500e-478c-87a2-5ff5fef2d4da.png)](https://github.com/elbywan/crystalline)
+
+
+<!-- [![Join the chat at https://gitter.im/crystal-scry/Lobby](https://badges.gitter.im/crystal-scry/Lobby.svg)](https://gitter.im/crystal-scry/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/crystal-lang-tools/scry.svg?branch=master)](https://travis-ci.org/crystal-lang-tools/scry)
 
-![Scry logo](https://i.imgur.com/ticTfT8.png)
+![Scry logo](https://i.imgur.com/ticTfT8.png) -->
 
 Scry is a code analysis server for [Crystal](http://crystal-lang.org).
 It is an implementation of a [common language protocol](https://code.visualstudio.com/blogs/2016/06/27/common-language-protocol).
